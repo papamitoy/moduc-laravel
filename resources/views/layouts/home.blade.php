@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="{{ asset("pages/css/style.css")}}" />
     <link rel="stylesheet" href="{{ asset("pages/css/colors/default.css")}}" id="colorSkinCSS">
 </head>
-<body class="crm_body_bg">
+<body class="crm_body_bg" >
 
 
  <!-- sidebar  -->
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-        <div class="row ">
+        <div class="row " id="app">
 
             @yield("content")
 
@@ -101,7 +101,7 @@
     </div>
 </div>
 
-<x-join-class></x-join-class>
+<join-class user="{{ Auth::user() }}" img="{{ asset("pages/img/messages/1.png")}}"></join-class>
  <x-create-class></x-create-class>
 <!-- footer part -->
 <div class="footer_part">
@@ -310,6 +310,7 @@
 <!-- custom js -->
 <script src="{{ asset("pages/js/dashboard_init.js")}}"></script>
 <script src="{{ asset("pages/js/custom.js")}}"></script>
+<script src="{{ asset("js/app.js") }}"></script>
 </body>
 
 <!-- Mirrored from demo.dashboardpack.com/analytic-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Aug 2021 13:40:30 GMT -->

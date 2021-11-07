@@ -44,6 +44,20 @@
 
         @else
         <h4 class="menu-text"><span>Enrolled</span> <i class="fas fa-ellipsis-h"></i> </h4>
+
+        @foreach (Auth::user()->enroll as $subject)
+        <li>
+            <a href="/subject/{{ $subject->subject->id }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset("pages/img/menu-icon/2.svg")}}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>{{ $subject->subject->subject_name }}</span>
+                </div>
+            </a>
+        </li>
+        @endforeach
+
        @endif
 
 

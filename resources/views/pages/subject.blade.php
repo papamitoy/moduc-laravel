@@ -145,7 +145,10 @@
     <div class="col-lg-5">
         <div class="card_box box_shadow position-relative mb_30">
             <div class="white_box_tittle ">
-                <div class="main-title2 ">
+                <div class="main-title2 position-relative" style="width:100%">
+                    <div class="position-absolute" style="right:0;">
+                        <a href="{{ route("subject.create.assessment",['id'=>$subject->id]) }}" class="btn btn-primary">Add Assessment</a>
+                    </div>
                     <h4 class="mb-2 nowrap">Module 1</h4>
                     <p>Preliminary stage</p>
                     <p><span style="color: red">*NOTE:</span> you need to pass previous modules to procced to the next modules!</p>

@@ -27,9 +27,23 @@ class ClassController extends Controller
             "section_name" => $request->sectionName,
             "subject_name" => $request->subjectName,
             "room" => $request->room,
-            "subject_code" => $request->className,
+            "subject_code" => $subjectCode,
             "description" => $request->description,
         ]);
         return redirect("/");
+    }
+    public function joinClass(Request $request){
+        $this->validate($request,[
+            'subject_code' => 'required'
+        ]);
+
+       $subject = Subject::where("subject_code",$request->subject_code)->first();
+        if(empty($subject)) return response()->json(['success'=>false,"message"=>"No Subject found"]);
+        $enrolled =  Auth::user()->enroll()->create([
+            "subject_id" => $subject->id
+        ]);
+        if(empty($enrolled)) return response()->json(['success'=>false,"message"=>"Failed to enroll"]);
+
+       return response()->json(['success'=>true,"message"=>"Enrolled Successfully"]);
     }
 }

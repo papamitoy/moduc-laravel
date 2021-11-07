@@ -8,10 +8,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/api/createclass" method="post" >
+        <form action="/api/class/create" method="post" >
             @csrf
         <div class="modal-body">
-        
+
                 <div class="form-group">
                     <label for="exampleInputEmail1">Class name <span class="small">(required)</span></label>
                     <input type="text" name="className" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -32,9 +32,9 @@
                     <label for="exampleInputEmail1">Description </label>
                     <textarea type="email" name="description" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></textarea>
                 </div>
-                
-                                
-                            
+
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
