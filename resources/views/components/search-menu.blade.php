@@ -1,3 +1,4 @@
+
 <div class="container-fluid no-gutters">
     <div class="row">
         <div class="col-lg-12 p-0 ">
@@ -29,7 +30,7 @@
                             </div>
                         </li>
                         <li>
-                            <a class="bell_notification_clicker" href="#"> <img src="pages/img/icon/bell.svg" alt="">
+                            <a class="bell_notification_clicker" href="#"> <img src="{{ asset("pages/img/icon/bell.svg")}}" alt="">
                                 <span>2</span>
                             </a>
                             <!-- Menu_NOtification_Wrap  -->
@@ -41,7 +42,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/2.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -51,7 +52,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/4.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -61,7 +62,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/3.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -71,7 +72,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/2.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/2.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Cool Marketing </h5></a>
@@ -81,7 +82,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/4.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/4.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>Awesome packages</h5></a>
@@ -91,7 +92,7 @@
                                 <!-- single_notify  -->
                                 <div class="single_notify d-flex align-items-center">
                                     <div class="notify_thumb">
-                                        <a href="#"><img src="pages/img/staf/3.png" alt=""></a>
+                                        <a href="#"><img src="{{ asset("pages/img/staf/3.png")}}" alt=""></a>
                                     </div>
                                     <div class="notify_content">
                                         <a href="#"><h5>what a packages</h5></a>
@@ -108,15 +109,16 @@
                         <!--/ Menu_NOtification_Wrap  -->
                         </li>
                         <li>
-                            <a class="CHATBOX_open" href="#"> <img src="pages/img/icon/msg.svg" alt=""> <span>2</span>  </a>
+                            <a class="CHATBOX_open" href="#"> <img src="{{ asset("pages/img/icon/msg.svg")}}" alt=""> <span>2</span>  </a>
                         </li>
                     </div>
+
                     <div class="profile_info">
-                        <img src="pages/img/client_img.png" alt="#">
+                        <img src="{{ asset("pages/img/client_img.png")}}" alt="#">
                         <div class="profile_info_iner">
                             <div class="profile_author_name">
-                                <p>Neurologist </p>
-                                <h5>Dr. Robar Smith</h5>
+                                <p style="font-size: 12px; opacity: .9;">{{Auth::user()->type}}</p>
+                                <h5 style="font-size: 15px;" >{{Auth::user()->fullname}}</h5>
                             </div>
                             <div class="profile_info_details">
                                 <a href="#">My Profile </a>
@@ -130,3 +132,4 @@
         </div>
     </div>
 </div>
+

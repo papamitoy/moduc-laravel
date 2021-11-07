@@ -20,6 +20,11 @@ class HomeController extends Controller
     public function subjectView(Request $request, $subject)
     {
         $subject =  Subject::where("id", $subject)->first();
-        return view("pages.subject", compact('subject'));
+        $subject->load(["user","enroll"]);
+        $adviser = $subject->user;
+        $students = $subject->enroll->load("student");
+
+        return view("pages.subject", compact('subject','adviser','students'));
     }
 }
+

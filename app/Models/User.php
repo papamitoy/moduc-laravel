@@ -52,4 +52,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subject::class, "user_id", "id");
     }
+    public function enroll(){
+        return $this->hasMany(Enroll::class,"student_id","id");
+    }
 }

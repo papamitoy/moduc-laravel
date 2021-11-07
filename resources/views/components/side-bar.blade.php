@@ -33,7 +33,7 @@
         <li>
             <a href="/subject/{{ $subject->id }}" aria-expanded="false">
                 <div class="nav_icon_small">
-                    <img src="pages/img/menu-icon/2.svg" alt="">
+                    <img src="{{ asset("pages/img/menu-icon/2.svg")}}" alt="">
                 </div>
                 <div class="nav_title">
                     <span>{{ $subject->subject_name }}</span>
@@ -41,11 +41,11 @@
             </a>
         </li>
         @endforeach
-         
+
         @else
         <h4 class="menu-text"><span>Enrolled</span> <i class="fas fa-ellipsis-h"></i> </h4>
        @endif
 
-        
+
       </ul>
 </nav>

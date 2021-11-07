@@ -9,14 +9,14 @@
             @endif
           <!-- Brand Box -->
           <div class="col-sm-6 brand">
-              
-             <img style=" width: 100%;" src="assets/img/banner log in.jpg">
-          </div>
+
+            <img style=" width: 100%;" src="img/banner log in.jpg">
+         </div>
           <!-- Form Box -->
 <div class="col-sm-6 form">
 
     <!-- Login Form -->
-    <div class="login form-peice switched">
+    <div class="login form-peice">
        <form class="login-form" action="/login" method="post" id="loginForm" >
         @csrf
           <div class="form-group">
@@ -38,20 +38,21 @@
 
 
     <!-- Signup Form -->
-    <div class="signup form-peice">
+    <div class="signup form-peice switched">
        <form class="signup-form" action="/register" method="post" id="registerForm">
          @csrf
+        <div class="dropdown">
+            <select class="btn btn-secondary dropdown-toggle" name="type" aria-label="Default select example">
+                <option selected value="user">Register as Student</option>
+                <option value="adviser">Register as Teacher</option>
+            </select>
+        </div>
+
           <div class="form-group">
              <label for="name">Full Name</label>
              <input type="text" name="name" id="name" class="name">
              <span class="error"></span>
           </div>
-
-          <select class="form-select" name="type" aria-label="Default select example">
-          <option selected value="user">Register as Student</option>
-          <option value="adviser">Register as Teacher</option>
-          </select>
-
           <div class="form-group">
              <label for="email">Email Adderss</label>
              <input type="email" name="emailAdress" id="email" class="email">
@@ -69,11 +70,7 @@
              <span class="error"></span>
           </div>
 
-          <div class="form-group">
-             <label for="passwordCon">Confirm Password</label>
-             <input type="password" name="passwordCon" id="passwordCon" class="passConfirm">
-             <span class="error"></span>
-          </div>
+
 
           <div class="CTA">
              <input type="submit" value="Signup Now" id="submit">

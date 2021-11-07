@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
 
 
-    
+
 
     // Reload page
     $('a.profile').on('click', function () {

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Analytic</title>
-    <link rel="icon" href="pages/img/mini_logo.png" type="image/png">
+    <link rel="icon" href="{{ asset("pages/img/mini_logo.png")}}" type="image/png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset("pages/css/bootstrap.min.css") }}" />
     <!-- themefy CSS -->
@@ -27,7 +27,7 @@
      <link rel="stylesheet" href="{{ asset("pages/vendors/datepicker/date-picker.css")}}" />
 
      <link rel="stylesheet" href="{{ asset("pages/vendors/vectormap-home/vectormap-2.0.2.css")}}" />
-     
+
      <!-- scrollabe  -->
      <link rel="stylesheet" href="{{ asset("pages/vendors/scroll/scrollable.css")}}" />
     <!-- datatable CSS -->
@@ -48,7 +48,7 @@
     <link rel="stylesheet" href="{{ asset("pages/css/colors/default.css")}}" id="colorSkinCSS">
 </head>
 <body class="crm_body_bg">
-    
+
 
  <!-- sidebar  -->
     <x-side-bar></x-side-bar>
@@ -70,10 +70,10 @@
                                 <ol class="breadcrumb page_bradcam mb-0">
                                     <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
                                     <li class="breadcrumb-item active">Subjects</li>
-                                </ol>     
+                                </ol>
                             </div>
                             <div class="page_title_right">
-                                
+
                                 <div class="page_date_button">
                                     August 1, 2020 | 01:30 PM
                                 </div>
@@ -96,7 +96,7 @@
         <div class="row ">
 
             @yield("content")
-     
+
         </div>
     </div>
 </div>
@@ -134,35 +134,35 @@
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                         <img src="pages/img/staf/1.png" alt="">
+                         <img src="{{ asset("pages/img/staf/1.png")}}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                         <img src="pages/img/staf/2.png" alt="">
+                         <img src="{{ asset("pages/img/staf/2.png")}}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                         <img src="pages/img/staf/3.png" alt="">
+                         <img src="{{ asset("pages/img/staf/3.png")}}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                         <img src="pages/img/staf/4.png" alt="">
+                         <img src="{{ asset("pages/img/staf/4.png")}}" alt="">
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <div class="member_thumb">
-                         <img src="pages/img/staf/5.png" alt="">
+                         <img src="{{ asset("pages/img/staf/5.png")}}" alt="">
                         </div>
                     </a>
                 </li>
@@ -182,34 +182,34 @@
         <p class="mesaged_send_date">
         Sunday, 12 January
         </p>
-    
+
     <div class="CHATING_SENDER">
         <div class="SMS_thumb">
-            <img src="pages/img/staf/1.png" alt="">
+            <img src="{{ asset("pages/img/staf/1.png")}}" alt="">
         </div>
         <div class="SEND_SMS_VIEW">
             <P>Hi! Welcome .
             How can I help you?</P>
         </div>
     </div>
-    
+
     <div class="CHATING_SENDER CHATING_RECEIVEr">
-        
+
         <div class="SEND_SMS_VIEW">
             <P>Hello</P>
         </div>
         <div class="SMS_thumb">
-            <img src="pages/img/staf/1.png" alt="">
+            <img src="{{ asset("pages/img/staf/1.png")}}" alt="">
         </div>
     </div>
-    
+
     </div>
     <div class="CHAT_POPUP_BOTTOM">
         <div class="chat_input_box d-flex align-items-center">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Write your message" aria-label="Recipient's username" aria-describedby="basic-addon2">
                 <div class="input-group-append">
-                    <button class="btn " type="button"> 
+                    <button class="btn " type="button">
                         <!-- svg      -->
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18.7821 3.21895C14.4908 -1.07281 7.50882 -1.07281 3.2183 3.21792C-1.07304 7.50864 -1.07263 14.4908 3.21872 18.7824C7.50882 23.0729 14.4908 23.0729 18.7817 18.7815C23.0726 14.4908 23.0724 7.50906 18.7821 3.21895ZM17.5813 17.5815C13.9525 21.2103 8.04773 21.2108 4.41871 17.5819C0.78907 13.9525 0.789485 8.04714 4.41871 4.41832C8.04752 0.789719 13.9521 0.789304 17.5817 4.41874C21.2105 8.04755 21.2101 13.9529 17.5813 17.5815ZM6.89503 8.02162C6.89503 7.31138 7.47107 6.73534 8.18131 6.73534C8.89135 6.73534 9.46739 7.31117 9.46739 8.02162C9.46739 8.73228 8.89135 9.30811 8.18131 9.30811C7.47107 9.30811 6.89503 8.73228 6.89503 8.02162ZM12.7274 8.02162C12.7274 7.31138 13.3038 6.73534 14.0141 6.73534C14.7241 6.73534 15.3002 7.31117 15.3002 8.02162C15.3002 8.73228 14.7243 9.30811 14.0141 9.30811C13.3038 9.30811 12.7274 8.73228 12.7274 8.02162ZM15.7683 13.2898C14.9712 15.1332 13.1043 16.3243 11.0126 16.3243C8.8758 16.3243 6.99792 15.1272 6.22834 13.2744C6.09642 12.9573 6.24681 12.593 6.56438 12.4611C6.64238 12.4289 6.72328 12.4136 6.80293 12.4136C7.04687 12.4136 7.27836 12.5577 7.37772 12.7973C7.95376 14.1842 9.38048 15.0799 11.0126 15.0799C12.6077 15.0799 14.0261 14.1836 14.626 12.7959C14.7625 12.4804 15.1288 12.335 15.4441 12.4717C15.7594 12.6084 15.9048 12.9745 15.7683 13.2898Z" fill="#707DB7"/>

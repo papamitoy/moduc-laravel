@@ -13,21 +13,21 @@
                         <div class="form-group border_bottom_1px">
                                     <label style="opacity: .5;" for="exampleInputEmail1">You are currently logged in us: </label>
                                     <div class="messages_chat mb_30">
-                            
+
 										<div class="single_message_chat ">
 											<div class="message_pre_left">
 												<div class="message_preview_thumb">
-													<img style="float: left; width: 60px; border-radius: 50px;" src="pages/img/messages/1.png" alt="">
+													<img style="float: left; width: 60px; border-radius: 50px;" src="{{ asset("pages/img/messages/1.png")}}" alt="">
 													<div class="messges_info m-2">
 													<h4 class="l-4">&nbsp;&nbsp;&nbsp;</h4>
-													<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lydon.charles.abiero@gmail.com</label>
+													<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{Auth::user()->email}}</label>
 													<button class="btn btn-light p-1" style="display: inline-block; font-size: 13px;">Switch Account</button>
 												</div>
 </div>
-												
+
 											</div>
 										</div>
-                            
+
                         			</div>
                         </div>
 
@@ -39,18 +39,18 @@
                         		</div>
 								<h6>*Before joining a class</h6>
 								<ul class="p-3">
-									
+
 									<li><i class="fas fa-check"></i> Double check your code</li>
 									<li><i class="fas fa-check"></i> Use an authorized account</li>
 									<li><i class="fas fa-check"></i> Use a class code with 5-7 letters or numbers, and no spaces or symbols</li>
-									
+
 								</ul>
                         </div>
-                                
-                                
+
+
                     </form>
-		
-		
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -60,6 +60,6 @@
     </div>
   </div>
 
-  
-	
+
+
 	<!-- end modal popup -->
