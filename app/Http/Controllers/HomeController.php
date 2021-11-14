@@ -15,19 +15,23 @@ class HomeController extends Controller
     public function homeView()
     {
         $enrolled = Auth::user()->enroll->load("subject");
-        return view("pages.home",compact('enrolled'));
+        return view("pages.home", compact('enrolled'));
     }
     public function subjectView(Request $request, $subject)
     {
         $subject =  Subject::where("id", $subject)->first();
-        $subject->load(["user","enroll"]);
+        $subject->load(["user", "enroll"]);
         $adviser = $subject->user;
         $students = $subject->enroll->load("student");
 
-        return view("pages.subject", compact('subject','adviser','students'));
+        return view("pages.subject", compact('subject', 'adviser', 'students'));
     }
-    public function createAssessment(){
-        return view("pages.createassesment");
+    public function createAssessment(Request $request, Subject $subject)
+    {
+        return view("pages.createassesment", compact('subject'));
+    }
+    public function viewAssessment(Request $request, Subject $subject)
+    {
+        $subject->load(["assessments"]);
     }
 }
-

@@ -24,7 +24,7 @@
                     <h3 class="counter">54</h3>
                 </div>
                     <div class="col-4 col-sm-8">
-                    <button onclick="" class="btn_1 w-100 mb-2 btn-lg email-gradient gradient-9-hover email__btn waves-effect">View</button>
+                    <a href="/subject/{{ $subject->id }}" class="btn_1 w-100 mb-2 btn-lg email-gradient gradient-9-hover email__btn waves-effect">View</a>
                 </div>
 
                 </div>

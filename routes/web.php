@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get("/", [HomeController::class, "homeView"]);
-Route::get("/subject/{id}/assessment/create", [HomeController::class, "createAssessment"])->name("subject.create.assessment");
+Route::get("/subject/{subject}/assessment/create", [HomeController::class, "createAssessment"])->name("subject.create.assessment");
+Route::get("/subject/{subject}/assessment/view", [HomeController::class, "viewAssessment"]);
 Route::get("/subject/{id}", [HomeController::class, "subjectView"]);
 
 Route::get('/login', [LoginController::class, "authView"])->name("login");
@@ -29,3 +30,4 @@ Route::get("/logout", [LoginController::class, "logout"]);
 
 Route::post("/api/class/create", [ClassController::class, "createClass"]);
 Route::post("/api/class/join", [ClassController::class, "joinClass"]);
+Route::post("/api/class/create/assessment", [ClassController::class, "createAssessment"]);

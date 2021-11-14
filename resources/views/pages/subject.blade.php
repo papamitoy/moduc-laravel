@@ -147,7 +147,7 @@
             <div class="white_box_tittle ">
                 <div class="main-title2 position-relative" style="width:100%">
                     <div class="position-absolute" style="right:0;">
-                        <a href="{{ route("subject.create.assessment",['id'=>$subject->id]) }}" class="btn btn-primary">Add Assessment</a>
+                        <a href="/subject/{{ $subject->id }}/assessment/create" class="btn btn-primary">Add Assessment</a>
                     </div>
                     <h4 class="mb-2 nowrap">Module 1</h4>
                     <p>Preliminary stage</p>
