@@ -7,6 +7,6 @@ import { createApp } from "vue";
 
 const app = createApp({});
 app.config.globalProperties.$Swal = Swal;
-app.component("join-class", joinClass);
+app.component("join-class", joinClass );
 app.component("create-assessment", createAssessment);
 app.mount("#app");
