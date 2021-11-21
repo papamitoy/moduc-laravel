@@ -137,18 +137,16 @@
                     </div>
                     <!--classwork -->
 <div class="tab-pane fade" id="page" role="tabpanel" aria-labelledby="page-tab">
-
-
-
-    <div class="row justify-content-center">
-
+  <div class="row justify-content-center">
     <div class="col-lg-5">
         <div class="card_box box_shadow position-relative mb_30">
             <div class="white_box_tittle ">
                 <div class="main-title2 position-relative" style="width:100%">
+                    @if(Auth::user()->isAdviser())
                     <div class="position-absolute" style="right:0;">
                         <a href="/subject/{{ $subject->id }}/assessment/create" class="btn btn-primary">Add Assessment</a>
                     </div>
+                    @endif
                     <h4 class="mb-2 nowrap">Module 1</h4>
                     <p>Preliminary stage</p>
                     <p><span style="color: red">*NOTE:</span> you need to pass previous modules to procced to the next modules!</p>

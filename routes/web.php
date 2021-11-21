@@ -31,3 +31,5 @@ Route::get("/logout", [LoginController::class, "logout"]);
 Route::post("/api/class/create", [ClassController::class, "createClass"]);
 Route::post("/api/class/join", [ClassController::class, "joinClass"]);
 Route::post("/api/class/create/assessment", [ClassController::class, "createAssessment"]);
+Route::post("/api/class/post/assessment", [ClassController::class, "postAssessment"]);
+Route::post("/api/get/assessment", [ClassController::class, "getAssessment"]);

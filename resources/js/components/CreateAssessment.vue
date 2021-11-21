@@ -26,10 +26,10 @@
         <div class="box_body">
           <!-- lol  -->
           <div class="default-according" id="accordion1">
-            <div v-for="question in questions" :key="question.question">
-              <Essay v-if="question.type == 'essay'" :question="question" />
-              <MultipleChoice v-else-if="question.type == 'multiple-choice'" :question="question" />
-              <ShortAnswer v-else-if="question.type=='short-answer'" :question="question" />
+            <div v-for="(question,index) in questions" :key="question.question">
+              <Essay @removeQuestion="removeQuestion" :number="index+1" @updateQuestion="updateQuestion" v-if="question.type == 'essay'" :question="question" />
+              <MultipleChoice @removeQuestion="removeQuestion" :number="index+1" @updateQuestion="updateQuestion" v-else-if="question.type == 'multiple-choice'" :question="question" />
+              <ShortAnswer @removeQuestion="removeQuestion" :number="index+1" @updateQuestion="updateQuestion" v-else-if="question.type=='short-answer'" :question="question" />
             </div>
             <nav aria-label=" Page navigation example">
               <ul class="pagination justify-content-end">
@@ -47,7 +47,7 @@
 
           </div>
           <!-- lol  -->
-          <button class="btn btn-primary" @click="saveAssessment">Save</button>
+          <button class="btn btn-primary" @click="postAssessment">Publish</button>
         </div>
       </div>
     </div>
@@ -81,6 +81,12 @@
               </select>
               <small id="emailHelp" class="form-text text-muted">Choose what type of question.</small>
             </div>
+            <div class="form-group col-md-4">
+              <input v-model="shuffle" type="checkbox" />
+              <label for="inputState">Shuffle</label>
+              <small id="emailHelp" class="form-text text-muted">Whether the question is shuffled.</small>
+            </div>
+
           </div>
 
           <div v-if="questionType == 'sa'" style="border-top: 1px solid rgb(211, 211, 211); padding: 15px 0px 15px 0px;">
@@ -207,9 +213,29 @@ export default {
     MultipleChoice,
     ShortAnswer,
   },
-
+  mounted() {
+    var url = new URL(location.href);
+    var id = url.searchParams.get("u");
+    if (id) {
+      axios
+        .post("/api/get/assessment", {
+          id,
+        })
+        .then((res) => {
+          console.log(res.data.data.questions);
+          if (res.data.success) {
+            this.selectedId = res.data.data.id;
+            this.questions = JSON.parse(res.data.data.questions);
+            this.deadline = res.data.data.deadline;
+            this.shuffle = res.data.data.shuffle == 1;
+            this.title = res.data.data.title;
+          }
+        });
+    }
+  },
   data() {
     return {
+      selectedId: null,
       title: "Untitled Form",
       description: "",
       questionType: "e",
@@ -221,20 +247,40 @@ export default {
       choices: [],
       deadline: null,
       assessmentType: "assessment",
+      shuffle: false,
     };
   },
   methods: {
+    updateQuestion(pquestion) {
+      const { oldQuestion, newQuestion } = pquestion;
+      this.questions = this.questions.map((question) => {
+        if (oldQuestion.id == question.id) {
+          question = newQuestion;
+        }
+        return question;
+      });
+      this.saveAssessment();
+    },
+    removeQuestion(pquestion) {
+      this.questions = this.questions.filter((question) => {
+        return question.id != pquestion.id;
+      });
+      this.saveAssessment();
+    },
     submitEssay() {
       this.questionE = {
+        id: new Date().getTime(),
         ...this.questionE,
         type: "essay",
       };
       this.questions.push(this.questionE);
       this.questionE = {};
       console.log(this.questions);
+      this.saveAssessment();
     },
     submitMultipleChoice() {
       this.questionMC = {
+        id: new Date().getTime(),
         ...this.questionMC,
         type: "multiple-choice",
       };
@@ -243,15 +289,18 @@ export default {
       this.choices = [];
       this.setChoice = {};
       console.log(this.questions);
+      this.saveAssessment();
     },
     submitShortAnswer() {
       this.questionSA = {
+        id: new Date().getTime(),
         ...this.questionSA,
         type: "short-answer",
       };
       this.questions.push(this.questionSA);
       this.questionSA = {};
       console.log(this.questions);
+      this.saveAssessment();
     },
     addChoice() {
       if (this.choices.find((choice) => choice.choice == this.setChoice.choice))
@@ -264,10 +313,41 @@ export default {
       this.choices = this.choices.filter((choice) => choice.choice != selected);
       this.questionMC.choices = this.choices;
     },
-
-    saveAssessment() {
-      if (!this.deadline) return alert("please add a deadline");
+    postAssessment() {
       if (this.questions.length == 0) return alert("Please add a questions");
+      axios
+        .post("/api/class/post/assessment", {
+          id: this.subject.id,
+          questions: this.questions,
+          title: this.title,
+          description: this.description,
+          deadline: this.deadline,
+          assessmentType: this.assessmentType,
+          shuffle: this.shuffle,
+          selectedId: this.selectedId,
+        })
+        .then((res) => {
+          if (res.data.success) {
+            this.$Swal
+              .fire("Success", "You've successfully posted.", "success")
+              .then(() => {
+                location.href = res.data.redirect;
+              });
+          }
+        })
+        .catch((err) => {
+          conosle.log(err);
+          return;
+          this.$Swal
+            .fire("Warning", "An error occur please try again later", "warning")
+            .then(() => {
+              location.reload();
+            });
+        });
+    },
+    saveAssessment() {
+      let that = this;
+      console.log(that.selectedId, "SEEREFSEFSFSEF");
       axios
         .post("/api/class/create/assessment", {
           id: this.subject.id,
@@ -276,15 +356,23 @@ export default {
           description: this.description,
           deadline: this.deadline,
           assessmentType: this.assessmentType,
+          shuffle: this.shuffle,
+          selectedId: this.selectedId,
         })
         .then((res) => {
+          console.log(res);
           if (res.data.success) {
-            this.$Swal.fire("Success", res.data.message, "success").then(() => {
-              location.reload();
-            });
+            that.selectedId = res.data.data.id;
+            if (res.data.reload) {
+              var url = new URL(location.href);
+              url.searchParams.set("u", res.data.data.id);
+              location.href = url;
+            }
           }
         })
         .catch((err) => {
+          conosle.log(err);
+          return;
           this.$Swal
             .fire("Warning", "An error occur please try again later", "warning")
             .then(() => {

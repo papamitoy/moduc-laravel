@@ -53,7 +53,7 @@
  <!-- sidebar  -->
     <x-side-bar></x-side-bar>
  <!--/ sidebar  -->
-
+<div  id="app">
   <!-- main content part here -->
   <section class="main_content dashboard_part large_header_bg">
     <!-- menu  -->
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-        <div class="row " id="app">
+        <div class="row ">
 
             @yield("content")
 
@@ -102,7 +102,8 @@
 </div>
 
 <join-class user="{{ Auth::user() }}" img="{{ asset("pages/img/messages/1.png")}}"></join-class>
- <x-create-class></x-create-class>
+<x-create-class></x-create-class>
+</div>
 <!-- footer part -->
 <div class="footer_part">
 <div class="container-fluid">

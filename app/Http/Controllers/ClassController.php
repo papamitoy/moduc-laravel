@@ -54,14 +54,64 @@ class ClassController extends Controller
         if (empty($subject)) return response()->json(['success' => false, "message" => "No Subject found"]);
 
         $subject->load("assessments");
+        if ($request->selectedId != null) {
+            $selectedSubject =  $subject->assessments()->where("id", $request->selectedId)->first();
+            if (!empty($selectedSubject)) {
+                $selectedSubject->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'questions' => json_encode($request->questions),
+                    'deadline' => $request->deadline,
+                    'type' => $request->assessmentType,
+                    "published" =>  $selectedSubject->published,
+                    "shuffle" => $request->shuffle
+                ]);
 
-        $subject->assessments()->create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'questions' => json_encode($request->questions),
-            'deadline' => $request->deadline,
-            'type' => $request->assessmentType
-        ]);
-        return response()->json(['success' => true, 'message' => "You've successfully created a questionaire"]);
+                if (collect(json_decode($selectedSubject->questions))->count() == 0) {
+                    $selectedSubject->published = false;
+                    $selectedSubject->save();
+                }
+                return response()->json(['success' => true, 'message' => "You've successfully created a questionaire", "data" => $selectedSubject]);
+            } else {
+                return response()->json(['success' => false, 'message' => "No assessment found"]);
+            }
+        } else {
+            $newAssessment = $subject->assessments()->create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'questions' => json_encode($request->questions),
+                'deadline' => isset($request->deadline) ? $request->deadline : null,
+                'type' => $request->assessmentType,
+                "published" => 0,
+                "shuffle" => $request->shuffle
+            ]);
+            return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire", "data" => $newAssessment]);
+        }
+    }
+
+    public function getAssessment(Request $request)
+    {
+        $assessment = Assessment::where("id", $request->id)->first();
+        if (!empty($assessment))
+            return response()->json(['success' => true,  "data" => $assessment]);
+        return response()->json(['success' => false]);
+    }
+    public function postAssessment(Request $request)
+    {
+        $assessment = Assessment::where("id", $request->selectedId)->first();
+        if (!empty($assessment)) {
+            $assessment->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'questions' => json_encode($request->questions),
+                'deadline' => $request->deadline,
+                'type' => $request->assessmentType,
+                "published" => 0,
+                "shuffle" => $request->shuffle,
+                "published" => true
+            ]);
+            return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
+        }
+        return response()->json(['success' => false]);
     }
 }
