@@ -21,4 +21,8 @@ class Subject extends Model
     {
         return $this->hasMany(Assessment::class, "subject_id", "id");
     }
+    public function moduleSection()
+    {
+        return $this->hasMany(ModuleSection::class, "subject_id", "id");
+    }
 }

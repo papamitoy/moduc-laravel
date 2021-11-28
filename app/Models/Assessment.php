@@ -18,4 +18,12 @@ class Assessment extends Model
     {
         return $this->belongsTo(Subject::class, "subject_id", "id");
     }
+    public function module()
+    {
+        return $this->belongsTo(ModuleSection::class, "module_section_id", "id");
+    }
+    public function files()
+    {
+        return $this->hasMany(AssessmentFiles::class, "assessment_id", "id");
+    }
 }

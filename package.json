@@ -19,6 +19,9 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
+        "dropzone": "^6.0.0-beta.1",
+        "dropzone-vue": "^0.1.10",
+        "moment": "^2.29.1",
         "sweetalert2": "^11.1.9"
     }
 }

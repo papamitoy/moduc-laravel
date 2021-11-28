@@ -1,4 +1,4 @@
 @extends("layouts.home")
-@section("content")
-    <create-assessment :subject={{ $subject }}></create-assessment>
+@section('content')
+    <create-assessment :section="{{ $section }}" :subject={{ $subject }}></create-assessment>
 @endsection

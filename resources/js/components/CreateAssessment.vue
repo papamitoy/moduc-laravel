@@ -89,6 +89,13 @@
 
           </div>
 
+          <div class="form-row" style="width:100%">
+            <div>Update files:</div>
+
+            <DropZone v-if="selectedId" :acceptedFiles="['pdf','docx','pptx','ppt','xlsx','png','jpg']" paramName="fileZone" :maxFiles="Number(10000000000)" :url="uploadZoneUrl" :uploadOnDrop="true" :multipleUpload="true" :parallelUpload="3" />
+
+          </div>
+
           <div v-if="questionType == 'sa'" style="border-top: 1px solid rgb(211, 211, 211); padding: 15px 0px 15px 0px;">
 
             <div class="form-group">
@@ -193,11 +200,13 @@
               </div>
             </div>
             <button type="submit" class="btn btn-primary" @click="submitMultipleChoice()">Submit</button>
+
           </div>
 
         </div>
       </div>
     </div>
+
   </div>
 
 </template>
@@ -207,15 +216,23 @@ import Essay from "./util/Essay.vue";
 import MultipleChoice from "./util/MultipleChoice.vue";
 import ShortAnswer from "./util/ShortAnswer.vue";
 export default {
-  props: ["subject"],
+  props: ["subject", "section"],
   components: {
     Essay,
     MultipleChoice,
     ShortAnswer,
   },
+  computed: {
+    uploadZoneUrl() {
+      return `/api/update-file-assessment?id=${
+        this.selectedId ? this.selectedId : ""
+      }`;
+    },
+  },
   mounted() {
     var url = new URL(location.href);
     var id = url.searchParams.get("u");
+    let that = this;
     if (id) {
       axios
         .post("/api/get/assessment", {
@@ -224,11 +241,11 @@ export default {
         .then((res) => {
           console.log(res.data.data.questions);
           if (res.data.success) {
-            this.selectedId = res.data.data.id;
-            this.questions = JSON.parse(res.data.data.questions);
-            this.deadline = res.data.data.deadline;
-            this.shuffle = res.data.data.shuffle == 1;
-            this.title = res.data.data.title;
+            that.selectedId = res.data.data.id;
+            that.questions = JSON.parse(res.data.data.questions);
+            that.deadline = res.data.data.deadline;
+            that.shuffle = res.data.data.shuffle == 1;
+            that.title = res.data.data.title;
           }
         });
     }
@@ -319,6 +336,7 @@ export default {
         .post("/api/class/post/assessment", {
           id: this.subject.id,
           questions: this.questions,
+          module_section_id: this.section.id,
           title: this.title,
           description: this.description,
           deadline: this.deadline,
@@ -347,11 +365,12 @@ export default {
     },
     saveAssessment() {
       let that = this;
-      console.log(that.selectedId, "SEEREFSEFSFSEF");
+
       axios
         .post("/api/class/create/assessment", {
           id: this.subject.id,
           questions: this.questions,
+          module_section_id: this.section.id,
           title: this.title,
           description: this.description,
           deadline: this.deadline,
@@ -384,5 +403,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.dropzone.dropzone__box.dropzone-clickable {
+  width: 100%;
+}
 </style>
