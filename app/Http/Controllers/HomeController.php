@@ -38,6 +38,7 @@ class HomeController extends Controller
     }
     public function createAssessment(Request $request, Subject $subject, ModuleSection $section)
     {
+
         $create =  $request->query("u");
         if (!$create) {
             $assessment = $subject->assessments()->create([

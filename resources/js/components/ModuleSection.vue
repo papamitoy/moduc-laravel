@@ -14,17 +14,30 @@
       </div>
 
       <div class="white_box_tittle ">
+
         <div class="main-title2 position-relative" style="width:100%">
 
           <div v-if="is_adviser" class="position-absolute" style="right:0;">
             <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn btn-primary">Add Assessment</a>
           </div>
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Disable Section</a>
+    <a class="dropdown-item" href="#">Delete</a>
+  </div>
+</div>
 
           <h4 class="mb-2 nowrap">{{ section.title }}</h4>
           <p>Preliminary stage</p>
-          <p><span style="color: red">*NOTE:</span> you need to pass previous modules
-            to
-            procced to the next modules!</p>
+          <p><span style="color: red">*NOTE:</span> you need to upload Module soft-copy for students</p><br>
+
+                <div class="form-group mb-0 typography form-inline">
+                    <p><mark>Upload your module here...</mark></p><br><br>
+                    <input style="font-size: 10px;" type="file" class="form-control-file" id="exampleFormControlFile1">
+                </div>
         </div>
       </div>
       <div class="box_body">
@@ -35,7 +48,11 @@
               <h5 class="mb-0">
 
                 <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
-                <span v-if="assessment.deadline">Due {{ getDate(assessment.deadline,"lll") }}</span>
+                <span  style="font-size: 12px; font-weight: normal; ">Due January 14, 2019</span>
+                <a style="padding-left: 10px; margin-top: 10px;" class="float-right">...</a>
+                <p style="margin-top: 12px;" class="badge badge-warning float-right">Published</p>
+
+
               </h5>
             </div>
             <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
@@ -50,14 +67,14 @@
                     </div>
                   </div>
                 </div>
-                <p>Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
+                <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
                 <p>{{ assessment.description }}</p><br><br>
                 <div v-for="file in assessment.files" :key="file.id">
                   <a :href="file.file"><i class="fa fa-file" aria-hidden="true"> &nbsp; &nbsp;</i>{{ file.name }}</a><br><br>
                 </div>
 
                 <div class="border_bottom_1px"></div><br>
-                <a href="#">View Comments</a>
+                <a href="#">Check Respond</a>
               </div>
             </div>
           </div>

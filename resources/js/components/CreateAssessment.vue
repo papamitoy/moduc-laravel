@@ -204,6 +204,7 @@
           </div>
 
         </div>
+          <button type="submit" class="btn btn-primary" @click="save()">Save</button>
       </div>
     </div>
 
@@ -234,12 +235,13 @@ export default {
     var id = url.searchParams.get("u");
     let that = this;
     if (id) {
+    console.log("has ID")
       axios
         .post("/api/get/assessment", {
           id,
         })
         .then((res) => {
-          console.log(res.data.data.questions);
+          console.log(res);
           if (res.data.success) {
             that.selectedId = res.data.data.id;
             that.questions = JSON.parse(res.data.data.questions);
@@ -362,6 +364,12 @@ export default {
               location.reload();
             });
         });
+    },
+    save(){
+    this.saveAssessment();
+     this.$Swal
+            .fire("Success", "Saved successfully", "success")
+
     },
     saveAssessment() {
       let that = this;
