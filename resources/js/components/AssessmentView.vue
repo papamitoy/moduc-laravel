@@ -95,11 +95,28 @@ export default {
             }
             console.log({...this.answers})
 
+
+
             axios.post("/api/assessment/response",{
                 id:this.assessment.id,
                 answers:{...this.answers}
             }
             ).then(res=>{
+                if(res.data.success){
+                    this.$Swal.fire(
+                    "Success",
+                    "Successfully submitted",
+                    "success"
+                    ).then(()=>{
+                        location.href = `/subject/${this.assessment.subject_id}`
+                    });
+                    return;
+                }
+                return this.$Swal.fire(
+                "Warning",
+                res.data.message,
+                "warning"
+                );
                 console.log(res);
             }).catch(er=>{
                 console.log(er)

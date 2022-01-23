@@ -19194,6 +19194,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     submitAssessment: function submitAssessment() {
+      var _this = this;
+
       var answerLen = Object.values(this.answers).filter(function (answer) {
         return answer.length > 0;
       });
@@ -19207,6 +19209,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: this.assessment.id,
         answers: _objectSpread({}, this.answers)
       }).then(function (res) {
+        if (res.data.success) {
+          _this.$Swal.fire("Success", "Successfully submitted", "success").then(function () {
+            location.href = "/subject/".concat(_this.assessment.subject_id);
+          });
+
+          return;
+        }
+
+        return _this.$Swal.fire("Warning", res.data.message, "warning");
         console.log(res);
       })["catch"](function (er) {
         console.log(er);
@@ -19832,15 +19843,60 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['response', 'assessment'],
   data: function data() {
-    return {};
+    return {
+      scoreArray: []
+    };
+  },
+  mounted: function mounted() {
+    console.log("adwawd", this.response);
+  },
+  watch: {
+    response: function response() {
+      console.log("response updated");
+      this.scoreArray = JSON.parse(_objectSpread({}, this.response).score);
+      console.log();
+    }
   },
   computed: {
     getDate: function getDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('MMMM Do YYYY, h:mm a');
+    },
+    totalScore: function totalScore() {
+      return Object.values(this.scoreArray).reduce(function (cscore, score) {
+        return cscore + Number(score);
+      }, 0);
+    }
+  },
+  methods: {
+    recordScore: function recordScore() {
+      var _this = this;
+
+      console.log(_objectSpread({}, this.scoreArray));
+      axios.post("/api/assessment/save/record", {
+        submission_id: this.response.id,
+        assessment_id: this.assessment.id,
+        score: _objectSpread({}, this.scoreArray),
+        subject_id: this.assessment.subject_id
+      }).then(function (res) {
+        if (res.data.success) {
+          return _this.$Swal.fire("Success", "Recorded successfully.", "success");
+        }
+
+        return _this.$Swal.fire("Warning", "Try again, Please try again.", "warning");
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+      console.log(this.totalScore);
     }
   }
 });
@@ -22245,23 +22301,37 @@ var _hoisted_13 = {
     "width": "600px"
   }
 };
-var _hoisted_14 = ["value"];
+var _hoisted_14 = ["name", "onUpdate:modelValue"];
 
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  style: {
-    "float": "right"
-  },
-  "class": "btn btn-primary"
-}, "Record", -1
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+  colspan: "3"
+}, null, -1
 /* HOISTED */
 );
 
 var _hoisted_16 = {
+  colspan: "2",
+  style: {
+    "text-align": "right"
+  }
+};
+
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  style: {
+    "margin-right": "10px"
+  }
+}, "TOTAL:", -1
+/* HOISTED */
+);
+
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)();
+
+var _hoisted_19 = {
   key: 1,
   "class": "messages_chat mb_30"
 };
 
-var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "white_box QA_section mb_30"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": ""
@@ -22274,7 +22344,7 @@ var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   style: {
     "float": "right"
   },
@@ -22283,7 +22353,7 @@ var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_19 = [_hoisted_17, _hoisted_18];
+var _hoisted_22 = [_hoisted_20, _hoisted_21];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return $props.response ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.response.student.fullname), 1
   /* TEXT */
@@ -22300,8 +22370,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(JSON.parse($props.response.answers)[question.id]), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-      value: $props.response.score,
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      name: question.id,
+      "onUpdate:modelValue": function onUpdateModelValue($event) {
+        return _ctx.scoreArray[question.id] = $event;
+      },
       type: "text",
       style: {
         "background": "transparent",
@@ -22315,10 +22388,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }
     }, null, 8
     /* PROPS */
-    , _hoisted_14)])]);
+    , _hoisted_14), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.scoreArray[question.id]]])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])])])]), _hoisted_15])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, _hoisted_19));
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tfoot", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_16, [_hoisted_17, _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.totalScore), 1
+  /* TEXT */
+  )])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    style: {
+      "float": "right"
+    },
+    "class": "btn btn-primary",
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.recordScore && $options.recordScore.apply($options, arguments);
+    })
+  }, "Record")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, _hoisted_22));
 }
 
 /***/ }),

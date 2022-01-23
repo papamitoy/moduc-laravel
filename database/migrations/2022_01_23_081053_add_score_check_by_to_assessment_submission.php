@@ -15,7 +15,7 @@ class AddScoreCheckByToAssessmentSubmission extends Migration
     {
         Schema::table('assessment_submissions', function (Blueprint $table) {
 
-            $table->integer("score")->nullable();
+            $table->text("score")->nullable();
             $table->boolean("status")->default(0);
             $table->bigInteger("checked_by")->nullable();
         });

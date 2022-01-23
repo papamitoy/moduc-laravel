@@ -72,13 +72,21 @@ class HomeController extends Controller
 
         $subject =  Subject::where("id", $subject)->first();
         $subject->load(["enroll","assessments"]);
+
+
+
+
         if(empty($subject->enroll->where("student_id",Auth::user()->id)->first())){
             return abort(404);
         }
 
         $assessment = $subject->assessments->where("id",$request->query("assessment_id"))->first();
 
-        return view("pages.assessmentresponse",compact('assessment'));
+        $checkResponse = $assessment->response->where("status" , "0")->where("user_id",Auth::user()->id)->first();
+        $checkResponse1 = $assessment->response->where("status" , "1")->where("user_id",Auth::user()->id)->first();
+
+        $responseSubmission = !empty($checkResponse) || !empty($checkResponse1);
+        return view("pages.assessmentresponse",compact('assessment','responseSubmission'));
     }
     public function subjectCheckResponse(Request $request,$subject){
         $subject =  Subject::where("id", $subject)->where("user_id",Auth::user()->id)->first();

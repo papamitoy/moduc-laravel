@@ -24,6 +24,8 @@ Route::get("/subject/{id}/assessment/check-response", [HomeController::class, "s
 Route::get("/subject/{id}", [HomeController::class, "subjectView"]);
 Route::get("/subject/{id}/response", [HomeController::class, "subjectViewResponse"]);
 
+
+
 Route::get('/login', [LoginController::class, "authView"])->name("login");
 Route::post("/login", [LoginController::class, "loginAttempt"]);
 Route::post("/register", [LoginController::class, "register"]);
@@ -36,5 +38,7 @@ Route::post("/api/class/create/assessment", [ClassController::class, "createAsse
 Route::post("/api/class/post/assessment", [ClassController::class, "postAssessment"]);
 Route::post("/api/get/assessment", [ClassController::class, "getAssessment"]);
 Route::post("/api/assessment/response",[ClassController::class,"submitResponse"]);
+
+Route::post("/api/assessment/save/record",[ClassController::class,"saveRecord"]);
 
 Route::post("/api/update-section", [ClassController::class, "updateSection"]);

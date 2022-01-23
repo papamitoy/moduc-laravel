@@ -38,7 +38,7 @@
                                                     <strong>{{JSON.parse(response.answers)[question.id]}}</strong>
                                                 </td>
                                                 <td>
-                                                    <input :value="response.score" type="text" style="background: transparent;                                                   border: none;
+                                                    <input  :name="question.id" v-model="scoreArray[question.id]" type="text" style="background: transparent;                                                   border: none;
                                                     border-bottom: 1px solid #949494;
                                                     outline:none; font-size: 20px; -moz-appearance: textfield;
                                                     box-shadow:none; width: 50px;">
@@ -47,12 +47,19 @@
 
 
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3"></td>
+
+                                                <td colspan="2" style="text-align:right"> <span style="margin-right:10px">TOTAL:</span> <b>{{ totalScore  }}</b></td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
 
                                 </div>
 
                             </div>
-                            <button style="float: right;" class="btn btn-primary">Record</button>
+                            <button style="float: right;" class="btn btn-primary" @click="recordScore">Record</button>
                         </div>
                         <div class="messages_chat mb_30" v-else>
                             <div class="white_box QA_section mb_30">
@@ -70,11 +77,51 @@ import moment from 'moment';
 export default {
   props:['response','assessment'],
   data:()=>({
-
+      scoreArray: []
   }),
+  mounted(){
+   console.log("adwawd",this.response)
+  },
+  watch:{
+      response(){
+          console.log("response updated")
+          this.scoreArray = JSON.parse({...this.response}.score)
+          console.log()
+      }
+  },
   computed:{
       getDate(date){
           return moment(date).format('MMMM Do YYYY, h:mm a');
+      },
+
+      totalScore(){
+          return Object.values(this.scoreArray).reduce((cscore,score)=>{return cscore+Number(score)},0)
+      }
+  },
+  methods:{
+      recordScore(){
+          console.log({...this.scoreArray})
+          axios.post("/api/assessment/save/record",{
+              submission_id: this.response.id,
+              assessment_id: this.assessment.id,
+              score: {...this.scoreArray},
+              subject_id: this.assessment.subject_id
+          })
+          .then(res=>{
+              if(res.data.success){
+                  return this.$Swal.fire(
+                        "Success",
+                        "Recorded successfully.",
+                        "success"
+                        );
+              }
+              return this.$Swal.fire(
+                        "Warning",
+                        "Try again, Please try again.",
+                        "warning"
+                        );
+          }).catch(err=>console.log(err))
+          console.log(this.totalScore)
       }
   }
 }

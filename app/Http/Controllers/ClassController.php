@@ -194,11 +194,33 @@ class ClassController extends Controller
       if(empty($enroll) && $subject->user->id != Auth::user()->id){
           return abort(404);
       }
+      $checkResponse = $assessment->response->where("status" , "0")->where("user_id",Auth::user()->id)->first();
+      $checkResponse1 = $assessment->response->where("status" , "1")->where("user_id",Auth::user()->id)->first();
+
+      if(!empty($checkResponse) || !empty($checkResponse1)){
+        return response()->json(['success'=>false,"message"=>"You can only response once."]);
+      }
+
 
       $create = $assessment->response()->create([
           "answers"=> $request->answers ? json_encode($request->answers) : "{}",
           "user_id" => Auth::user()->id,
         ]);
-        return  $create;
+        return  response()->json(['success'=>true]);
+    }
+
+    public function saveRecord(Request $request){
+        $subject = Subject::where("user_id",Auth::user()->id)->where("id",$request->subject_id)->first();
+        $subject->load("assessments");
+        $subject->assessments->load("response");
+        $res = $subject->assessments->where("id",$request->assessment_id)->first();
+        $answer = $res->response->where("id",$request->submission_id)->first();
+
+
+        $answer->score =  json_encode( $request->score);
+        $answer->status = 1;
+        $answer->checked_by = Auth::user()->id ;
+        $answer->save();
+        return response()->json(["success"=>true,"data"=> $answer]);
     }
 }
