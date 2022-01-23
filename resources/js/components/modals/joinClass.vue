@@ -51,7 +51,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="submitForm">Join Class</button>
+          <button type="button" class="btn btn-primary" @click="submitForm" v-if="!isBusy">Join Class</button>
         </div>
       </div>
     </div>
@@ -64,6 +64,9 @@
 //{{Auth::user()->email}}
 export default {
   props: ["user", "img"],
+  data:()=>({
+      isBusy: false
+  }),
   computed: {
     userInfo() {
       return typeof this.user == "string" ? JSON.parse(this.user) : this.user;
@@ -71,6 +74,7 @@ export default {
   },
   methods: {
     submitForm() {
+        this.isBusy = true
       var formData = new FormData(this.$refs.joinsubject);
       axios
         .post("/api/class/join", formData)
@@ -83,8 +87,10 @@ export default {
           } else {
             this.$Swal.fire("Warning", res.data.message, "warning");
           }
+          this.isBusy = false
         })
         .catch((err) => {
+            this.isBusy = false
           console.log("err", err);
         });
     },

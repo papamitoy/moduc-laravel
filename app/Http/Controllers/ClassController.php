@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessment;
+use App\Models\AssessmentResponse;
 use App\Models\ModuleSection;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -183,5 +184,21 @@ class ClassController extends Controller
                 "file" =>  $path
             ]);
         }
+    }
+
+    function submitResponse(Request $request){
+      $assessment = Assessment::where("id",$request->id)->first();
+      $assessment->load(["subject","response"]);
+      $subject =  $assessment->subject->load(["enroll","user"]);
+      $enroll =  $subject->enroll->where("student_id",Auth::user()->id)->first();
+      if(empty($enroll) && $subject->user->id != Auth::user()->id){
+          return abort(404);
+      }
+
+      $create = $assessment->response()->create([
+          "answers"=> $request->answers ? json_encode($request->answers) : "{}",
+          "user_id" => Auth::user()->id,
+        ]);
+        return  $create;
     }
 }

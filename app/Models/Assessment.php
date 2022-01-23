@@ -26,4 +26,7 @@ class Assessment extends Model
     {
         return $this->hasMany(AssessmentFiles::class, "assessment_id", "id");
     }
+    public function response(){
+        return $this->hasMany(AssessmentResponse::class,"assessment_id","id");
+    }
 }

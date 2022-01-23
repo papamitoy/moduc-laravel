@@ -20,7 +20,7 @@
           <div v-if="is_adviser" class="position-absolute" style="right:0;">
             <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn btn-primary">Add Assessment</a>
           </div>
-<div class="dropdown">
+<!-- <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </button>
@@ -28,7 +28,7 @@
     <a class="dropdown-item" href="#">Disable Section</a>
     <a class="dropdown-item" href="#">Delete</a>
   </div>
-</div>
+</div> -->
 
           <h4 class="mb-2 nowrap">{{ section.title }}</h4>
           <p>Preliminary stage</p>
@@ -41,16 +41,22 @@
         </div>
       </div>
       <div class="box_body">
-        <div class="default-according" id="accordion">
+        <div class="default-according" id="accordion"  >
 
-          <div class="card " v-for="(assessment,i) in assessments" :key="i">
-            <div class="card-header parpel_bg" id="headingOne">
+          <div class="card " v-for="(assessment,i) in assessments" :key="i" >
+              <div v-if="isShow(assessment.published)">
+
+
+            <div class="card-header parpel_bg" id="headingOne" style="overflow: auto;">
               <h5 class="mb-0">
 
                 <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
                 <span  style="font-size: 12px; font-weight: normal; ">Due January 14, 2019</span>
-                <a style="padding-left: 10px; margin-top: 10px;" class="float-right">...</a>
-                <p style="margin-top: 12px;" class="badge badge-warning float-right">Published</p>
+                 <button style="padding-left: 10px; margin-top: 10px; font-size:12px" class="float-right btn btn-primary" @click="gotoEdit(assessment.id)">Update</button>
+
+
+                <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="!assessment.published">Pending</p>
+                <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else>Published</p>
 
 
               </h5>
@@ -74,11 +80,12 @@
                 </div>
 
                 <div class="border_bottom_1px"></div><br>
-                <a href="#">Check Respond</a>
+                <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`" v-if="is_adviser">Check Respond</a>
+                <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
               </div>
             </div>
           </div>
-
+ </div>
         </div>
       </div>
     </div>
@@ -102,6 +109,12 @@ export default {
     console.log(this.assessments);
   },
   methods: {
+      gotoEdit(id){
+            location.href = `/subject/${this.subject.id}/section/${this.section.id}/assessment/create?u=${id}`
+      },
+      isShow(published){
+         return   this.is_adviser ? true : published
+     },
     getDate(date, format) {
       return moment(date).format(format);
     },

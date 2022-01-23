@@ -24,8 +24,13 @@ class HomeController extends Controller
     {
         $subject =  Subject::where("id", $subject)->first();
         $subject->load(["user", "enroll", "assessments"]);
+
+
         $adviser = $subject->user;
 
+        if(empty($subject->enroll->where("student_id",Auth::user()->id)->first()) && $adviser->id != Auth::user()->id){
+            return abort(404);
+        }
 
         $students = $subject->enroll->load("student");
 
@@ -61,5 +66,32 @@ class HomeController extends Controller
     public function viewAssessment(Request $request, Subject $subject)
     {
         $subject->load(["assessments"]);
+    }
+    public function subjectViewResponse(Request $request, $subject){
+
+
+        $subject =  Subject::where("id", $subject)->first();
+        $subject->load(["enroll","assessments"]);
+        if(empty($subject->enroll->where("student_id",Auth::user()->id)->first())){
+            return abort(404);
+        }
+
+        $assessment = $subject->assessments->where("id",$request->query("assessment_id"))->first();
+
+        return view("pages.assessmentresponse",compact('assessment'));
+    }
+    public function subjectCheckResponse(Request $request,$subject){
+        $subject =  Subject::where("id", $subject)->where("user_id",Auth::user()->id)->first();
+        if(empty($subject))return abort(404);
+        $subject->load(["assessments"]);
+        $assessment = $subject->assessments->where("id",$request->assessment_id)->first();
+        $assessment->load(["response"]);
+        $responses = $assessment->response->load(["student"]);
+        $students = [];
+        foreach ($responses as  $key => $value) {
+            $students[$key] = $value->student;
+        }
+
+        return view("pages.checkresponse",compact('responses','students','assessment'));
     }
 }

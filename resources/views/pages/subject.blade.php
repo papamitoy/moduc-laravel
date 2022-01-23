@@ -37,6 +37,9 @@
                                                 <div class="header">
                                                     <h1 style="color: white;">{{ $subject->subject_name }}</h1>
                                                     <p style="color: white;">{{ $subject->section_name }}</p>
+                                                     @if(Auth::user()->isAdviser())
+                                                    <p style="color: white;">SUBJECT CODE: {{ $subject->subject_code }}</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -158,7 +161,7 @@
                         <div class="row justify-content-center">
                             @foreach ($moduleSection as $section)
                                 <module-section :assessments="{{ $section->assessments }}" :subject="{{ $subject }}"
-                                    :is_adviser="{{ $adviser }}" :section="{{ $section }}">
+                                    :is_adviser="{{ $adviser->id == Auth::user()->id }}" :section="{{ $section }}">
                                 </module-section>
                             @endforeach
                             <!--
