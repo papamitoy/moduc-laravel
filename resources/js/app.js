@@ -7,9 +7,9 @@ import joinClass from "./components/modals/joinClass.vue";
 import AuthForm from "./components/AuthForm.vue";
 import ModuleSection from "./components/ModuleSection.vue";
 import CreateAssessment from "./components/CreateAssessment.vue";
-import AssessmentView from './components/AssessmentView.vue';
-import CheckResponse from './components/CheckResponse.vue';
-
+import AssessmentView from "./components/AssessmentView.vue";
+import CheckResponse from "./components/CheckResponse.vue";
+import ExcelGrades from "./components/ExcelGrades.vue";
 import { createApp } from "vue";
 
 const app = createApp({});
@@ -18,7 +18,8 @@ app.component("join-class", joinClass);
 app.component("auth-form", AuthForm);
 app.component("module-section", ModuleSection);
 app.component("create-assessment", CreateAssessment);
-app.component("assessment-response",AssessmentView)
-app.component("check-response",CheckResponse)
+app.component("assessment-response", AssessmentView);
+app.component("check-response", CheckResponse);
+app.component("excel-grades", ExcelGrades);
 app.use(DropZone);
 app.mount("#app");

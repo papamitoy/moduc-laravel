@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessment;
+use App\Models\AssessmentFiles;
 use App\Models\AssessmentResponse;
+use App\Models\Grade;
+use App\Models\Module;
 use App\Models\ModuleSection;
 use App\Models\Subject;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -111,7 +116,8 @@ class ClassController extends Controller
                     'deadline' => $request->deadline,
                     'type' => $request->assessmentType,
                     "published" =>  $selectedSubject->published,
-                    "shuffle" => $request->shuffle
+                    "shuffle" => $request->shuffle,
+                    "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
                 ]);
 
                 if (collect(json_decode($selectedSubject->questions))->count() == 0) {
@@ -131,7 +137,8 @@ class ClassController extends Controller
                 'deadline' => isset($request->deadline) ? $request->deadline : null,
                 'type' => $request->assessmentType,
                 "published" => 0,
-                "shuffle" => $request->shuffle
+                "shuffle" => $request->shuffle,
+                "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
             return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire", "data" => $newAssessment, "request" => $request->all()]);
         }
@@ -154,9 +161,9 @@ class ClassController extends Controller
                 'questions' => json_encode($request->questions),
                 'deadline' => $request->deadline,
                 'type' => $request->assessmentType,
-                "published" => 0,
+                "published" => $request->published,
                 "shuffle" => $request->shuffle,
-                "published" => true
+             
             ]);
             return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
         }
@@ -222,5 +229,55 @@ class ClassController extends Controller
         $answer->checked_by = Auth::user()->id ;
         $answer->save();
         return response()->json(["success"=>true,"data"=> $answer]);
+    }
+    public function uploadModule(Request $request,$subjectid,$sectionid){
+        $subject = Subject::where("id",$subjectid)->first();
+        if(!empty($subject) && !!$sectionid && $sectionid != 'undefined'){
+            $name =  $request->file('fileZone')->getClientOriginalName();
+            $files =  $request->file("fileZone")->store("/public/assets/uploads");
+            $created = Module::create([
+                'subject_id'=> $subject->id,
+                'module_section_id'=> $sectionid,
+                'title'=>'',
+                'description'=>'',
+                'file_name'=>$name,
+                'module_file'=>$files,
+                'deadline'=> Carbon::now()->addMonth(1),
+
+            ]);
+            return response()->json(['success'=>!!$created,'data'=>$created]);
+        }
+        return response()->json(['success'=>false]);
+    }
+    public function subjectFiles(Request $request){
+        $subject =  Subject::where("id", $request->id)->first();
+        $subject->load(["user", "enroll", "assessments",'moduleFiles']);
+        return response()->json(['success'=>true,'data'=>$subject]);
+    }
+    public function saveGrades(Request $request){
+        $subject =  Subject::where("id", $request->subject_id)->first();
+        $user = User::where("id", $request->user_id)->first();
+        if(!empty($subject) && !empty($user)){
+          $grades =   Grade::where([
+                'subject_id'=>$subject->id,
+                'user_id'=>$user->id
+            ])->first();
+           if(!empty($grades)){
+            $dataGrades = json_decode($grades->grades);
+            array_push($dataGrades,[$request->position=>$request->grade]);
+            $grades->grades = json_encode($dataGrades);
+            $grades->save();
+            return [$grades,"success"];
+           }
+           $dataGrades = array();
+           array_push($dataGrades,[$request->position=>$request->grade]);
+           $grades = new Grade();
+           $grades->subject_id = $subject->id;
+           $grades->user_id = $user->id;
+           $grades->grades= json_encode($dataGrades);
+           $grades->save();
+           return [$grades,"success1"];
+        }
+       
     }
 }

@@ -25,4 +25,10 @@ class Subject extends Model
     {
         return $this->hasMany(ModuleSection::class, "subject_id", "id");
     }
+    public function moduleFiles(){
+        return $this->hasMany(Module::class,"subject_id","id");
+    }
+    public function grades(){
+        return $this->hasMany(Grade::class,"subject_id","id");
+    }
 }

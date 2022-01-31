@@ -23,7 +23,7 @@ Route::get("/subject/{subject}/section/{section}/assessment/view", [HomeControll
 Route::get("/subject/{id}/assessment/check-response", [HomeController::class, "subjectCheckResponse"]);
 Route::get("/subject/{id}", [HomeController::class, "subjectView"]);
 Route::get("/subject/{id}/response", [HomeController::class, "subjectViewResponse"]);
-
+Route::get("/subject/{id}/grades",[HomeController::class,"studentGrades"]);
 
 
 Route::get('/login', [LoginController::class, "authView"])->name("login");
@@ -42,3 +42,8 @@ Route::post("/api/assessment/response",[ClassController::class,"submitResponse"]
 Route::post("/api/assessment/save/record",[ClassController::class,"saveRecord"]);
 
 Route::post("/api/update-section", [ClassController::class, "updateSection"]);
+
+Route::post("/upload/module-section/{id}/{secid}",[ClassController::class,"uploadModule"]);
+
+Route::post("/subject/{id}/files",[ClassController::class,"subjectFiles"]);
+Route::post("/subject/{id}/save-grades",[ClassController::class,"saveGrades"]);

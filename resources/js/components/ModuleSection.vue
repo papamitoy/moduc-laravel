@@ -1,8 +1,9 @@
 <template>
   <div class="col-lg-5">
 
-    <div class="disabled card_box box_shadow position-relative mb_30">
-      <div @mouseenter="showBtn =true" v-if="active == 0" class="overlay-section disabled">
+    <div @mouseenter="showUpload" @mouseleave="hideUpload" class="disabled card_box box_shadow position-relative mb_30">
+
+      <div @mouseenter="showBtn = true" v-if="active == 0" class="overlay-section disabled">
       </div>
 
       <div @mouseleave="showBtn = false" v-show="showBtn" v-if="active == 0" class="overlay-section1">
@@ -20,7 +21,7 @@
           <div v-if="is_adviser" class="position-absolute" style="right:0;">
             <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn btn-primary">Add Assessment</a>
           </div>
-<!-- <div class="dropdown">
+          <!-- <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </button>
@@ -34,58 +35,63 @@
           <p>Preliminary stage</p>
           <p><span style="color: red">*NOTE:</span> you need to upload Module soft-copy for students</p><br>
 
-                <div class="form-group mb-0 typography form-inline">
-                    <p><mark>Upload your module here...</mark></p><br><br>
-                    <input style="font-size: 10px;" type="file" class="form-control-file" id="exampleFormControlFile1">
-                </div>
+          <div class="form-group mb-0 typography form-inline" v-if="is_adviser">
+            <p><mark>Upload your module here...</mark></p><br /><br />
+            <div class="form-row" style="width:100%">
+              <DropZone :clickable="uploadClickable" v-if="uploadClickable" @uploaded="uploadedModule" :headers="headers" style="width:100%" :acceptedFiles="['pdf','docx','pptx','ppt','xlsx','png','jpg']" paramName="fileZone" :maxFiles="Number(10000000000)" :url="`/upload/module-section/${subject.id}/${section.id}`" :uploadOnDrop="true" :multipleUpload="true" :parallelUpload="1" />
+            </div>
+          </div>
+          <div class="mt-4">
+            <h4>Modules:</h4>
+            <div v-for="file in subject.module_files" :key="file.id">
+              <a :href="'../storage/'+file.module_file.split('/').slice(1).join('/')" v-if="file.module_section_id == section.id"> {{ file.file_name }}</a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="box_body">
-        <div class="default-according" id="accordion"  >
+        <div class="default-according" id="accordion">
 
-          <div class="card " v-for="(assessment,i) in assessments" :key="i" >
-              <div v-if="isShow(assessment.published)">
+          <div class="card " v-for="(assessment,i) in assessments" :key="i">
+            <div v-if="isShow(assessment.published)">
 
+              <div class="card-header parpel_bg" id="headingOne" style="overflow: auto;">
+                <h5 class="mb-0">
 
-            <div class="card-header parpel_bg" id="headingOne" style="overflow: auto;">
-              <h5 class="mb-0">
+                  <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
+                  <span style="font-size: 12px; font-weight: normal; ">{{ assessment.deadline ? "Due "+getDate(assessment.deadline,"LL") : "" }}</span>
+                  <button v-if="is_adviser" style="padding-left: 10px; margin-top: 10px; font-size:12px" class="float-right btn btn-primary" @click="gotoEdit(assessment.id)">Update</button>
 
-                <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
-                <span  style="font-size: 12px; font-weight: normal; ">Due January 14, 2019</span>
-                 <button style="padding-left: 10px; margin-top: 10px; font-size:12px" class="float-right btn btn-primary" @click="gotoEdit(assessment.id)">Update</button>
+                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="!assessment.published">Unpublished</p>
+                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else>Published</p>
 
-
-                <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="!assessment.published">Pending</p>
-                <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else>Published</p>
-
-
-              </h5>
-            </div>
-            <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
-              <div class="card-body">
-                <div style="margin-left: 40%; position:absolute; margin-top: -7%; padding: 10px;">
-                  <div style="padding: 10px;">
-                    <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
-                      <h3>021</h3><small style="position: absolute; margin-top:-10px;">Turn In</small>
-                    </div>
-                    <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
-                      <h3>021</h3><small style="position: absolute; margin-top:-10px;">Assigned</small>
+                </h5>
+              </div>
+              <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <div style="margin-left: 40%; position:absolute; margin-top: -7%; padding: 10px;">
+                    <div style="padding: 10px;">
+                      <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
+                        <h3>021</h3><small style="position: absolute; margin-top:-10px;">Turn In</small>
+                      </div>
+                      <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
+                        <h3>021</h3><small style="position: absolute; margin-top:-10px;">Assigned</small>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
-                <p>{{ assessment.description }}</p><br><br>
-                <div v-for="file in assessment.files" :key="file.id">
-                  <a :href="file.file"><i class="fa fa-file" aria-hidden="true"> &nbsp; &nbsp;</i>{{ file.name }}</a><br><br>
-                </div>
+                  <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
+                  <p>{{ assessment.description }}</p><br><br>
+                  <div v-for="file in assessment.files" :key="file.id">
+                    <a :href="file.file"><i class="fa fa-file" aria-hidden="true"> &nbsp; &nbsp;</i>{{ file.name }}</a><br><br>
+                  </div>
 
-                <div class="border_bottom_1px"></div><br>
-                <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`" v-if="is_adviser">Check Respond</a>
-                <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
+                  <div class="border_bottom_1px"></div><br>
+                  <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`" v-if="is_adviser">Check Respond</a>
+                  <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
+                </div>
               </div>
             </div>
           </div>
- </div>
         </div>
       </div>
     </div>
@@ -96,25 +102,47 @@
 <script>
 import moment from "moment";
 export default {
-  props: ["section", "is_adviser", "subject", "assessments"],
+  props: ["section1", "is_adviser", "subject1", "assessments"],
   data() {
     return {
+      section: {},
       showBtn: false,
       active: false,
+      uploadClickable: false,
+      subject: {},
+      headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
     };
   },
 
   mounted() {
-    this.active = this.section.status;
-    console.log(this.assessments);
+    this.active = this.section1.status;
+    this.section = this.section1;
+    this.subject = this.subject1;
+    console.log(this.section.status);
   },
   methods: {
-      gotoEdit(id){
-            location.href = `/subject/${this.subject.id}/section/${this.section.id}/assessment/create?u=${id}`
-      },
-      isShow(published){
-         return   this.is_adviser ? true : published
-     },
+    showUpload() {
+      this.uploadClickable = true;
+    },
+    hideUpload() {
+      console.log("HOVER out");
+      this.uploadClickable = false;
+    },
+    uploadedModule(res) {
+      if (!!res[0]) {
+        axios.post(`/subject/${this.subject.id}/files`).then((res) => {
+          if (res.data.success) this.subject = res.data.data;
+        });
+      }
+
+      console.log("modu", res[0], res);
+    },
+    gotoEdit(id) {
+      location.href = `/subject/${this.subject.id}/section/${this.section.id}/assessment/create?u=${id}`;
+    },
+    isShow(published) {
+      return this.is_adviser ? true : published;
+    },
     getDate(date, format) {
       return moment(date).format(format);
     },
@@ -140,7 +168,7 @@ export default {
 .overlay-section1 {
   height: 100%;
   width: 100%;
-  z-index: 3001;
+  z-index: 3101;
   position: absolute;
   top: 0;
   left: 0;

@@ -23,7 +23,7 @@ class HomeController extends Controller
     public function subjectView(Request $request, $subject)
     {
         $subject =  Subject::where("id", $subject)->first();
-        $subject->load(["user", "enroll", "assessments"]);
+        $subject->load(["user", "enroll", "assessments",'moduleFiles']);
 
 
         $adviser = $subject->user;
@@ -101,5 +101,23 @@ class HomeController extends Controller
         }
 
         return view("pages.checkresponse",compact('responses','students','assessment'));
+    }
+    public function studentGrades(Request $request ,$id){
+        $subject = Subject::where("id",$id)->first();
+        if(!empty($subject)){
+            $subject->load(["grades","user", "enroll", "assessments",'moduleFiles']);
+            $subject->assessments->load(["response"]);
+            $subject->enroll->load("student");
+
+            $moduleSection = ModuleSection::where("subject_id",$subject->id)->get();
+            foreach($subject->enroll as $enrolled){
+                $enrolled->student->load(["assessmentSubmissions","grades"]);
+            }
+
+            $enrolled = $subject->enroll;
+         
+            return view("pages.showgrades",compact('subject','moduleSection','enrolled'));
+        }
+        return abort(404);
     }
 }

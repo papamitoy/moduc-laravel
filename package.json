@@ -19,9 +19,11 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
+        "@revolist/vue3-datagrid": "^3.0.97",
         "dropzone": "^6.0.0-beta.1",
         "dropzone-vue": "^0.1.10",
         "moment": "^2.29.1",
-        "sweetalert2": "^11.1.9"
+        "sweetalert2": "^11.1.9",
+        "vue-class-component": "^7.2.6"
     }
 }

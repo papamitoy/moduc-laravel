@@ -11,10 +11,19 @@
               <input v-model="deadline" type="date" class="form-control" name="inputDate" id="inputDate">
             </div>
             <div class="form-group mb-0">
-              <select v-model="assessmentType" id="inputState" class="form-control">
-                <option value="major-exam">Major Exam</option>
+              <select v-model="assessmentType" id="inputState" class="form-control mt-2">
+                <option value="exam">Major Exam</option>
                 <option value="assessment">Assessment</option>
                 <option value="activity">Activity</option>
+              </select>
+
+              <select v-model="examType" v-if="assessmentType == 'exam'" id="inputState" class="form-control mt-2">
+                <option value="prelim">Prelim</option>
+                <option value="midterm">Midterm</option>
+                <option value="semifi">Semi-Final</option>
+                <option value="final">Final</option>
+                <option value="summer">Summer</option>
+
               </select>
             </div>
             <!-- to be design end-->
@@ -47,7 +56,8 @@
 
           </div>
           <!-- lol  -->
-          <button class="btn btn-primary" @click="postAssessment">Publish</button>
+          <button class="btn btn-primary" @click="postAssessment(true)" v-if="!published">Publish</button>
+          <button class="btn btn-primary" @click="postAssessment(false)" v-else>Unpublish</button>
         </div>
       </div>
     </div>
@@ -204,7 +214,7 @@
           </div>
 
         </div>
-          <button type="submit" class="btn btn-primary" @click="save()">Save</button>
+        <button type="submit" class="btn btn-primary" @click="save()">Save</button>
       </div>
     </div>
 
@@ -231,11 +241,12 @@ export default {
     },
   },
   mounted() {
+    console.log(this.subject);
     var url = new URL(location.href);
     var id = url.searchParams.get("u");
     let that = this;
     if (id) {
-    console.log("has ID")
+      console.log("has ID");
       axios
         .post("/api/get/assessment", {
           id,
@@ -248,6 +259,8 @@ export default {
             that.deadline = res.data.data.deadline;
             that.shuffle = res.data.data.shuffle == 1;
             that.title = res.data.data.title;
+            that.published = res.data.data.published;
+            that.assessmentType = res.data.data.type;
           }
         });
     }
@@ -265,8 +278,10 @@ export default {
       setChoice: {},
       choices: [],
       deadline: null,
-      assessmentType: "assessment",
+      assessmentType: "exam",
       shuffle: false,
+      published: false,
+      examType: "prelim",
     };
   },
   methods: {
@@ -332,7 +347,7 @@ export default {
       this.choices = this.choices.filter((choice) => choice.choice != selected);
       this.questionMC.choices = this.choices;
     },
-    postAssessment() {
+    postAssessment(published) {
       if (this.questions.length == 0) return alert("Please add a questions");
       axios
         .post("/api/class/post/assessment", {
@@ -345,6 +360,7 @@ export default {
           assessmentType: this.assessmentType,
           shuffle: this.shuffle,
           selectedId: this.selectedId,
+          published: published,
         })
         .then((res) => {
           if (res.data.success) {
@@ -365,11 +381,9 @@ export default {
             });
         });
     },
-    save(){
-    this.saveAssessment();
-     this.$Swal
-            .fire("Success", "Saved successfully", "success")
-
+    save() {
+      this.saveAssessment();
+      this.$Swal.fire("Success", "Saved successfully", "success");
     },
     saveAssessment() {
       let that = this;
@@ -385,6 +399,7 @@ export default {
           assessmentType: this.assessmentType,
           shuffle: this.shuffle,
           selectedId: this.selectedId,
+          examType: this.examType,
         })
         .then((res) => {
           console.log(res);

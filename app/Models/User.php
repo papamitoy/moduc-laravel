@@ -55,4 +55,12 @@ class User extends Authenticatable
     public function enroll(){
         return $this->hasMany(Enroll::class,"student_id","id");
     }
+
+    public function assessmentSubmissions(){
+        return $this->hasMany(AssessmentResponse::class,"user_id","id");
+    }
+
+    public function grades(){
+        return $this->hasMany(Grade::class,"user_id");
+    }
 }
