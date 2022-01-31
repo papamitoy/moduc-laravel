@@ -29,4 +29,8 @@ class Assessment extends Model
     public function response(){
         return $this->hasMany(AssessmentResponse::class,"assessment_id","id");
     }
+
+    public function moduleSection(){
+        return $this->belongsTo(ModuleSection::class,"module_section_id","id");
+    }
 }

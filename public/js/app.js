@@ -19964,7 +19964,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return this.subject.assessments.filter(function (assessment) {
-        var checkFilter = _this.title == "Midterm" ? assessment.module_section_id == 1 || assessment.module_section_id == 2 : assessment.module_section_id == 3 || assessment.module_section_id == 4;
+        var checkFilter = _this.title == "Midterm" ? assessment.module_section.title == "Prelim" || assessment.module_section.title == "Midterm" : assessment.module_section.title == "Semi-final" || assessment.module_section.title == "Final";
         return assessment.published && assessment.type != "exam" && checkFilter;
       });
     },
@@ -19972,7 +19972,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       return this.subject.assessments.filter(function (assessment) {
-        var checkFilter = _this2.title == "Midterm" ? assessment.module_section_id == 1 || assessment.module_section_id == 2 : assessment.module_section_id == 3 || assessment.module_section_id == 4;
+        var checkFilter = _this2.title == "Midterm" ? assessment.module_section.title == "Prelim" || assessment.module_section.title == "Midterm" : assessment.module_section.title == "Semi-final" || assessment.module_section.title == "Final";
         return assessment.published && assessment.type == "exam" && checkFilter;
       });
     }

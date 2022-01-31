@@ -105,7 +105,7 @@ class HomeController extends Controller
     public function studentGrades(Request $request ,$id){
         $subject = Subject::where("id",$id)->first();
         if(!empty($subject)){
-            $subject->load(["grades","user", "enroll", "assessments",'moduleFiles']);
+            $subject->load(["grades","user", "enroll", "assessments",'moduleFiles','moduleSection']);
             $subject->assessments->load(["response"]);
             $subject->enroll->load("student");
 
@@ -113,9 +113,12 @@ class HomeController extends Controller
             foreach($subject->enroll as $enrolled){
                 $enrolled->student->load(["assessmentSubmissions","grades"]);
             }
+            foreach($subject->assessments as $assessment){
+                $assessment->load(["moduleSection"]);
+            }
 
             $enrolled = $subject->enroll;
-         
+          
             return view("pages.showgrades",compact('subject','moduleSection','enrolled'));
         }
         return abort(404);

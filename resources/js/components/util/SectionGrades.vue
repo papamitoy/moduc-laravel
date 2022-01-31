@@ -101,13 +101,13 @@
             </td>
             <td style="text-align: center;">
               <p v-if="title == 'Midterm'">
-
                 <a v-if="getAssessmentFromExam('midterm',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('midterm',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("midterm",enroll.student.id) }}</a>
               </p>
               <p v-else>
                 <a v-if="getAssessmentFromExam('final',enroll.student.id)" style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('final',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("final",enroll.student.id) }}</a>
 
               </p>
+
             </td>
             <td style="text-align: center;">
               <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("midterm",enroll.student.id)) }}</p>
@@ -155,10 +155,10 @@ export default {
       return this.subject.assessments.filter((assessment) => {
         let checkFilter =
           this.title == "Midterm"
-            ? assessment.module_section_id == 1 ||
-              assessment.module_section_id == 2
-            : assessment.module_section_id == 3 ||
-              assessment.module_section_id == 4;
+            ? assessment.module_section.title == "Prelim" ||
+              assessment.module_section.title == "Midterm"
+            : assessment.module_section.title == "Semi-final" ||
+              assessment.module_section.title == "Final";
         return assessment.published && assessment.type != "exam" && checkFilter;
       });
     },
@@ -166,10 +166,10 @@ export default {
       return this.subject.assessments.filter((assessment) => {
         let checkFilter =
           this.title == "Midterm"
-            ? assessment.module_section_id == 1 ||
-              assessment.module_section_id == 2
-            : assessment.module_section_id == 3 ||
-              assessment.module_section_id == 4;
+            ? assessment.module_section.title == "Prelim" ||
+              assessment.module_section.title == "Midterm"
+            : assessment.module_section.title == "Semi-final" ||
+              assessment.module_section.title == "Final";
         return assessment.published && assessment.type == "exam" && checkFilter;
       });
     },
