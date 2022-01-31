@@ -19942,6 +19942,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers/index.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["title", "subject", "module_section"],
   data: function data() {
@@ -19976,6 +19978,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getFinalGrades: function getFinalGrades(grade1, grade2) {
+      return grade1 * 0.6 + grade2 * 0.4;
+    },
+    getTransExam: function getTransExam(total) {
+      return total / 50 * 100;
+    },
+    getEqui: function getEqui(ave) {
+      return _helpers__WEBPACK_IMPORTED_MODULE_0__["default"][ave];
+    },
     getAssessmentFromExam: function getAssessmentFromExam(type, id) {
       var filterExam = this.exams.filter(function (exam) {
         return exam.exam_type == type;
@@ -19990,6 +20001,7 @@ __webpack_require__.r(__webpack_exports__);
       response = response != 0 ? response.find(function (i) {
         return i.user_id == id;
       }) : 0;
+      console.log("exam filter ", type, response);
       return response.assessment_id;
     },
     getTotalExams: function getTotalExams(type, id) {
@@ -20026,7 +20038,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     getAverage: function getAverage(id) {
       var total = this.getTotal(id);
-      var ave = Math.ceil(total / this.assessments.length);
+      var ave = Math.ceil(total / this.assessments.reduce(function (total, item) {
+        return total + Number(item.max_score);
+      }, 0) * 100);
       return ave ? ave : 0;
     },
     saveScore: function saveScore(subject_id, user_id, position) {
@@ -22953,40 +22967,25 @@ var _hoisted_39 = /*#__PURE__*/_withScopeId(function () {
 });
 
 var _hoisted_40 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "10", -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_41 = [_hoisted_40];
-
-var _hoisted_42 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "100")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_43 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "60%")], -1
   /* HOISTED */
   );
 });
 
-var _hoisted_44 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_41 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
       "width": "100px",
       "text-align": "center"
     }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "100%")], -1
+  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "50")], -1
   /* HOISTED */
   );
 });
 
-var _hoisted_45 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_42 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
-      "color": "red",
       "width": "100px",
       "text-align": "center"
     }
@@ -22995,119 +22994,117 @@ var _hoisted_45 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_46 = {
+var _hoisted_43 = {
   scope: "row"
 };
-var _hoisted_47 = ["href"];
+var _hoisted_44 = ["href"];
+var _hoisted_45 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_46 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_47 = {
+  style: {
+    "text-align": "center"
+  }
+};
 var _hoisted_48 = {
   style: {
     "text-align": "center"
   }
 };
 var _hoisted_49 = {
-  style: {
-    "text-align": "center"
-  }
-};
-
-var _hoisted_50 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_51 = {
-  style: {
-    "text-align": "center"
-  }
-};
-var _hoisted_52 = {
   key: 0
 };
-var _hoisted_53 = ["href"];
-var _hoisted_54 = {
+var _hoisted_50 = ["href"];
+var _hoisted_51 = {
   key: 1
 };
-var _hoisted_55 = ["href"];
-
-var _hoisted_56 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "0")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_57 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "0")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_58 = {
+var _hoisted_52 = ["href"];
+var _hoisted_53 = {
   style: {
     "text-align": "center"
   }
+};
+var _hoisted_54 = {
+  key: 0
+};
+var _hoisted_55 = {
+  key: 1
+};
+var _hoisted_56 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_57 = {
+  key: 0
+};
+var _hoisted_58 = {
+  key: 1
 };
 var _hoisted_59 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_60 = {
   key: 0
 };
-var _hoisted_60 = ["href"];
-var _hoisted_61 = {
+var _hoisted_61 = ["href"];
+var _hoisted_62 = {
   key: 1
 };
-var _hoisted_62 = ["href"];
-
-var _hoisted_63 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "0")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_64 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "0")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_65 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p")], -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_66 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    style: {
-      "text-align": "center"
-    }
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p")], -1
-  /* HOISTED */
-  );
-});
-
+var _hoisted_63 = ["href"];
+var _hoisted_64 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_65 = {
+  key: 0
+};
+var _hoisted_66 = {
+  key: 1
+};
+var _hoisted_67 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_68 = {
+  key: 0
+};
+var _hoisted_69 = {
+  key: 1
+};
+var _hoisted_70 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_71 = {
+  key: 0
+};
+var _hoisted_72 = {
+  key: 1
+};
+var _hoisted_73 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_74 = {
+  key: 0
+};
+var _hoisted_75 = {
+  key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.subject.subject_name) + " | Class Record", 1
   /* TEXT */
@@ -23135,13 +23132,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   )), _hoisted_29, _hoisted_30, _hoisted_31, _hoisted_32, _hoisted_33, _hoisted_34, _hoisted_35, _hoisted_36, _hoisted_37]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_38, [_hoisted_39, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (count) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
       key: count
-    }, _hoisted_41);
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(count.max_score), 1
+    /* TEXT */
+    )]);
   }), 128
   /* KEYED_FRAGMENT */
-  )), _hoisted_42, _hoisted_43, _hoisted_44, _hoisted_45])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.subject.enroll, function (enroll) {
+  )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.assessments.length * 10), 1
+  /* TEXT */
+  )]), _hoisted_40, _hoisted_41, _hoisted_42])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.subject.enroll, function (enroll) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: enroll.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(enroll.student.fullname), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(enroll.student.fullname), 1
     /* TEXT */
     ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (assessment) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", {
@@ -23168,50 +23169,76 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return total + Number(item);
       }, 0)), 9
       /* TEXT, PROPS */
-      , _hoisted_47)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+      , _hoisted_44)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
     }), 128
     /* KEYED_FRAGMENT */
-    )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotal(enroll.student.id)), 1
+    )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotal(enroll.student.id)), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getAverage(enroll.student.id)), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getAverage(enroll.student.id)), 1
     /* TEXT */
-    )]), _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_51, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_52, [$options.getAssessmentFromExam('prelim', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getAverage(enroll.student.id))), 1
+    /* TEXT */
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_48, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_49, [$options.getAssessmentFromExam('prelim', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
       },
-      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam(enroll.student.id), "&user_id=").concat(enroll.student.id),
+      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam('prelim', enroll.student.id), "&user_id=").concat(enroll.student.id),
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("prelim", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_53)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_54, [$options.getAssessmentFromExam('semifi', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    , _hoisted_50)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_51, [$options.getAssessmentFromExam('semifi', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
       },
-      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam(enroll.student.id), "&user_id=").concat(enroll.student.id),
+      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam('semifi', enroll.student.id), "&user_id=").concat(enroll.student.id),
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("semifi", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_55)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), _hoisted_56, _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_58, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_59, [$options.getAssessmentFromExam('midterm', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    , _hoisted_52)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_53, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_54, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))), 1
+    /* TEXT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_56, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id)))), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id)))), 1
+    /* TEXT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_59, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_60, [$options.getAssessmentFromExam('midterm', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
       },
-      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam(enroll.student.id), "&user_id=").concat(enroll.student.id),
+      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam('midterm', enroll.student.id), "&user_id=").concat(enroll.student.id),
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("midterm", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_60)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_61, [$options.getAssessmentFromExam('final', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    , _hoisted_61)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_62, [$options.getAssessmentFromExam('final', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
       },
-      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam(enroll.student.id), "&user_id=").concat(enroll.student.id),
+      href: "/subject/".concat($props.subject.id, "/assessment/check-response?assessment_id=").concat($options.getAssessmentFromExam('final', enroll.student.id), "&user_id=").concat(enroll.student.id),
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("final", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_62)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), _hoisted_63, _hoisted_64, _hoisted_65, _hoisted_66]);
+    , _hoisted_63)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_64, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_65, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("midterm", enroll.student.id))), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_66, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("final", enroll.student.id))), 1
+    /* TEXT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_67, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_68, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_69, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))), 1
+    /* TEXT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_70, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_71, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_72, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2), 1
+    /* TEXT */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_73, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_74, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades($options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2)), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_75, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades($options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2)), 1
+    /* TEXT */
+    ))])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])])])], 64
@@ -23696,6 +23723,123 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/helpers/index.js":
+/*!***************************************!*\
+  !*** ./resources/js/helpers/index.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  0: 4.0,
+  1: 3.9,
+  2: 3.9,
+  3: 3.9,
+  4: 3.9,
+  5: 3.9,
+  6: 3.9,
+  7: 3.9,
+  8: 3.9,
+  9: 3.9,
+  10: 3.9,
+  11: 3.8,
+  12: 3.8,
+  13: 3.8,
+  14: 3.8,
+  15: 3.8,
+  16: 3.8,
+  17: 3.8,
+  18: 3.8,
+  19: 3.8,
+  20: 3.7,
+  21: 3.7,
+  22: 3.7,
+  23: 3.7,
+  24: 3.7,
+  25: 3.6,
+  26: 3.6,
+  27: 3.6,
+  28: 3.6,
+  29: 3.6,
+  30: 3.5,
+  31: 3.5,
+  32: 3.5,
+  33: 3.5,
+  34: 3.5,
+  35: 3.4,
+  36: 3.4,
+  37: 3.4,
+  38: 3.4,
+  39: 3.4,
+  40: 3.3,
+  41: 3.3,
+  42: 3.3,
+  43: 3.3,
+  44: 3.3,
+  45: 3.2,
+  46: 3.2,
+  47: 3.2,
+  48: 3.2,
+  49: 3.2,
+  50: 3.1,
+  51: 3.1,
+  52: 3.1,
+  53: 3.1,
+  54: 3.1,
+  55: 3.1,
+  56: 3.1,
+  57: 3.1,
+  58: 3.1,
+  59: 3.1,
+  60: 3.0,
+  61: 2.9,
+  62: 2.9,
+  63: 2.9,
+  64: 2.8,
+  65: 2.8,
+  66: 2.7,
+  67: 2.7,
+  68: 2.6,
+  69: 2.6,
+  70: 2.5,
+  71: 2.5,
+  72: 2.4,
+  73: 2.4,
+  74: 2.3,
+  75: 2.3,
+  76: 2.2,
+  77: 2.2,
+  78: 2.1,
+  79: 2.1,
+  80: 2.0,
+  81: 2.0,
+  82: 1.9,
+  83: 1.9,
+  84: 1.8,
+  85: 1.8,
+  86: 1.7,
+  87: 1.7,
+  88: 1.6,
+  89: 1.6,
+  90: 1.5,
+  91: 1.5,
+  92: 1.4,
+  93: 1.4,
+  94: 1.3,
+  95: 1.3,
+  96: 1.2,
+  97: 1.2,
+  98: 1.1,
+  99: 1.1,
+  100: 1.0
+});
 
 /***/ }),
 

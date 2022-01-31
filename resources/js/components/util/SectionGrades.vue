@@ -56,11 +56,11 @@
           </tr>
           <tr class="text-center">
             <th></th>
-            <th v-for="count in assessments" :key="count"><strong>10</strong></th>
-            <th><strong>100</strong></th>
+            <th v-for="count in assessments" :key="count"><strong>{{ count.max_score }}</strong></th>
+            <th><strong>{{ (this.assessments.length * 10) }}</strong></th>
             <th><strong>60%</strong></th>
-            <th style="width: 100px; text-align: center;"><strong>100%</strong></th>
-            <th style="color: red; width: 100px; text-align: center;"><strong>100</strong></th>
+            <th style="width: 100px; text-align: center;"><strong>50</strong></th>
+            <th style="width: 100px; text-align: center;"><strong>100</strong></th>
 
           </tr>
         </thead>
@@ -79,45 +79,51 @@
               <p>{{ getAverage(enroll.student.id) }}</p>
             </td>
             <td style="text-align: center;">
-              <p></p>
+              <p>{{ getEqui(getAverage(enroll.student.id)) }} </p>
             </td>
             <td style="text-align: center;">
               <p v-if="title == 'Midterm'">
-                <a v-if="getAssessmentFromExam('prelim',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam(enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("prelim",enroll.student.id) }}</a>
+                <a v-if="getAssessmentFromExam('prelim',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('prelim',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("prelim",enroll.student.id) }}</a>
               </p>
               <p v-else>
 
-                <a v-if="getAssessmentFromExam('semifi',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam(enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("semifi",enroll.student.id) }}</a>
+                <a v-if="getAssessmentFromExam('semifi',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('semifi',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("semifi",enroll.student.id) }}</a>
               </p>
 
             </td>
             <td style="text-align: center;">
-              <p>0</p>
+              <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("prelim",enroll.student.id)) }}</p>
+              <p v-else>{{ getTransExam(getTotalExams("semifi",enroll.student.id)) }}</p>
             </td>
             <td style="text-align: center;">
-              <p>0</p>
+              <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) }}</p>
+              <p v-else>{{ getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) }}</p>
             </td>
             <td style="text-align: center;">
               <p v-if="title == 'Midterm'">
 
-                <a v-if="getAssessmentFromExam('midterm',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam(enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("midterm",enroll.student.id) }}</a>
+                <a v-if="getAssessmentFromExam('midterm',enroll.student.id) " style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('midterm',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("midterm",enroll.student.id) }}</a>
               </p>
               <p v-else>
-                <a v-if="getAssessmentFromExam('final',enroll.student.id)" style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam(enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("final",enroll.student.id) }}</a>
+                <a v-if="getAssessmentFromExam('final',enroll.student.id)" style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${getAssessmentFromExam('final',enroll.student.id)}&user_id=${enroll.student.id}`" target="_blank">{{ getTotalExams("final",enroll.student.id) }}</a>
 
               </p>
             </td>
             <td style="text-align: center;">
-              <p>0</p>
+              <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("midterm",enroll.student.id)) }}</p>
+              <p v-else>{{ getTransExam(getTotalExams("final",enroll.student.id)) }}</p>
             </td>
             <td style="text-align: center;">
-              <p>0</p>
+              <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))) }}</p>
+              <p v-else>{{ getEqui(getTransExam(getTotalExams("final",enroll.student.id))) }}</p>
             </td>
             <td style="text-align: center;">
-              <p></p>
+              <p v-if="title == 'Midterm'">{{ (getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2 }}</p>
+              <p v-else>{{ (getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2 }}</p>
             </td>
             <td style="text-align: center;">
-              <p></p>
+              <p v-if="title == 'Midterm'">{{getFinalGrades(getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2)}}</p>
+              <p v-else>{{getFinalGrades(getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2)}}</p>
             </td>
           </tr>
 
@@ -128,6 +134,7 @@
 </template>
 
 <script>
+import equivalence from "../../helpers";
 export default {
   props: ["title", "subject", "module_section"],
   data() {
@@ -168,14 +175,25 @@ export default {
     },
   },
   methods: {
+    getFinalGrades(grade1, grade2) {
+      return grade1 * 0.6 + grade2 * 0.4;
+    },
+    getTransExam(total) {
+      return (total / 50) * 100;
+    },
+    getEqui(ave) {
+      return equivalence[ave];
+    },
     getAssessmentFromExam(type, id) {
       const filterExam = this.exams.filter((exam) => exam.exam_type == type);
       if (!filterExam) return false;
       const exam = filterExam.find((exam) => {
         return exam.response.find((i) => i.user_id == id);
       });
+
       let response = exam ? exam.response : 0;
       response = response != 0 ? response.find((i) => i.user_id == id) : 0;
+      console.log("exam filter ", type, response);
       return response.assessment_id;
     },
     getTotalExams(type, id) {
@@ -212,7 +230,14 @@ export default {
     },
     getAverage(id) {
       const total = this.getTotal(id);
-      const ave = Math.ceil(total / this.assessments.length);
+      const ave = Math.ceil(
+        (total /
+          this.assessments.reduce(
+            (total, item) => total + Number(item.max_score),
+            0
+          )) *
+          100
+      );
       return ave ? ave : 0;
     },
 
