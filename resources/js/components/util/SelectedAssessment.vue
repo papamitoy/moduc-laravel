@@ -79,13 +79,11 @@ export default {
   data: () => ({
     scoreArray: [],
   }),
-  mounted() {
-    console.log("adwawd", this.response);
-  },
+  mounted() {},
   watch: {
     response() {
       if (!this.response.score) {
-        return (this.scoreArray = []);
+        return this.autoChecker();
       }
       console.log("response updated", this.response.score);
       this.scoreArray = JSON.parse({ ...this.response }.score);
@@ -104,6 +102,20 @@ export default {
     },
   },
   methods: {
+    autoChecker() {
+      JSON.parse(this.assessment.questions).map((question) => {
+        if (question.type == "multiple-choice" && question.choices[0].correct) {
+          this.scoreArray[question.id] =
+            JSON.parse(this.response.answers)[question.id] ==
+            question.choices[0].choice
+              ? 1
+              : 0;
+        } else {
+          this.scoreArray[question.id] = "";
+        }
+      });
+      return this.scoreArray;
+    },
     recordScore() {
       console.log({ ...this.scoreArray });
       axios

@@ -1,12 +1,12 @@
 <template>
-  <div class="col-lg-5">
+  <div class="col-lg-5" v-if="studentEnable || is_adviser">
 
-    <div @mouseenter="showUpload" @mouseleave="hideUpload" class="disabled card_box box_shadow position-relative mb_30">
+    <div @mouseenter="showUpload" @dragover="showUpload" @dragend="hideUpload" @mouseleave="hideUpload" class="disabled card_box box_shadow position-relative mb_30">
 
       <div @mouseenter="showBtn = true" v-if="active == 0" class="overlay-section disabled">
       </div>
 
-      <div @mouseleave="showBtn = false" v-show="showBtn" v-if="active == 0" class="overlay-section1">
+      <div @mouseleave="showBtn = false" v-show="showBtn" v-if="active == 0 && is_adviser" class="overlay-section1">
         <div class="section-hover">
           <div class="box-container">
             <button class="btn btn-primary" @click="enableSection">Enable</button>
@@ -32,8 +32,8 @@
 </div> -->
 
           <h4 class="mb-2 nowrap">{{ section.title }}</h4>
-          <p>Preliminary stage</p>
-          <p><span style="color: red">*NOTE:</span> you need to upload Module soft-copy for students</p><br>
+          <!-- <p>Preliminary stage</p> -->
+          <p v-if="is_adviser"><span style="color: red">*NOTE:</span> you need to upload Module soft-copy for students</p><br>
 
           <div class="form-group mb-0 typography form-inline" v-if="is_adviser">
             <p><mark>Upload your module here...</mark></p><br /><br />
@@ -102,7 +102,14 @@
 <script>
 import moment from "moment";
 export default {
-  props: ["section1", "is_adviser", "subject1", "assessments"],
+  props: [
+    "section1",
+    "is_adviser",
+    "subject1",
+    "assessments",
+    "grades",
+    "user_id",
+  ],
   data() {
     return {
       section: {},
@@ -118,7 +125,20 @@ export default {
     this.active = this.section1.status;
     this.section = this.section1;
     this.subject = this.subject1;
-    console.log(this.section.status);
+    console.log(this.studentEnable);
+  },
+  computed: {
+    studentEnable() {
+      if (this.section.title == "Prelim") return true;
+      if (this.section.title == "Midterm") return true;
+      return this.grades.find(
+        (grade) =>
+          grade.remarks == "pass" &&
+          grade.user_id == this.user_id &&
+          grade.module_section == "Midterm" &&
+          (this.section.title == "Semi-final" || this.section.title == "Final")
+      );
+    },
   },
   methods: {
     showUpload() {

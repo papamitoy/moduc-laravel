@@ -122,8 +122,8 @@
               <p v-else>{{ (getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2 }}</p>
             </td>
             <td style="text-align: center;">
-              <p v-if="title == 'Midterm'">{{getFinalGrades(getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2)}}</p>
-              <p v-else>{{getFinalGrades(getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2)}}</p>
+              <p ref="gradeRemarks" v-if="title == 'Midterm'">{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2)}}</p>
+              <p ref="gradeRemarks" v-else>{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2)}}</p>
             </td>
           </tr>
 
@@ -143,8 +143,9 @@ export default {
     };
   },
   mounted() {
-    console.log("data", this.assessments);
+    console.log(this.$refs.gradeRemarks);
   },
+
   computed: {
     assessmentCount() {
       return this.subject.assessments.filter(
@@ -175,8 +176,22 @@ export default {
     },
   },
   methods: {
-    getFinalGrades(grade1, grade2) {
-      return grade1 * 0.6 + grade2 * 0.4;
+    getFinalGrades(user_id, grade1, grade2) {
+      const grade = grade1 * 0.6 + grade2 * 0.4;
+
+      axios
+        .post(`/subject/${this.subject.id}/save-grades`, {
+          subject_id: this.subject.id,
+          user_id,
+          grade,
+          remarks: grade <= 3 ? "pass" : "fail",
+          module_section: this.title,
+        })
+        .then(() => {})
+        .catch(() => {});
+
+      console.log("SAVE", grade);
+      return grade;
     },
     getTransExam(total) {
       return (total / 50) * 100;

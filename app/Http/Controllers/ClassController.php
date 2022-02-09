@@ -258,26 +258,27 @@ class ClassController extends Controller
         $subject =  Subject::where("id", $request->subject_id)->first();
         $user = User::where("id", $request->user_id)->first();
         if(!empty($subject) && !empty($user)){
-          $grades =   Grade::where([
-                'subject_id'=>$subject->id,
-                'user_id'=>$user->id
+         $grade=   Grade::where([
+                'subject_id' => $subject->id,
+                'user_id' => $user->id,
+                'module_section' => $request->module_section
             ])->first();
-           if(!empty($grades)){
-            $dataGrades = json_decode($grades->grades);
-            array_push($dataGrades,[$request->position=>$request->grade]);
-            $grades->grades = json_encode($dataGrades);
-            $grades->save();
-            return [$grades,"success"];
-           }
-           $dataGrades = array();
-           array_push($dataGrades,[$request->position=>$request->grade]);
-           $grades = new Grade();
-           $grades->subject_id = $subject->id;
-           $grades->user_id = $user->id;
-           $grades->grades= json_encode($dataGrades);
-           $grades->save();
-           return [$grades,"success1"];
+         if($grade){
+             $grade->grades = $request->grade;
+             $grade->remarks = $request->remarks;
+             $grade->save();
+         }else{
+            $grade=   Grade::create([
+                'subject_id' => $subject->id,
+                'user_id' => $user->id,
+                'module_section' => $request->module_section,
+                'grades'=>$request->grade,
+                'remarks'=>$request->remarks,
+            ]);
+         }
+         return response()->json(['success'=>true]);
         }
+        return response()->json(['success'=>false]);
        
     }
 }

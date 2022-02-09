@@ -161,7 +161,7 @@
                     <div class="tab-pane fade" id="page" role="tabpanel" aria-labelledby="page-tab">
                         <div class="row justify-content-center">
                             @foreach ($moduleSection as $section)
-                                <module-section :assessments="{{ $section->assessments }}" :subject1="{{ $subject }}"
+                                <module-section :user_id="{{ Auth::user()->id }}" :grades="{{  $grades }}" :assessments="{{ $section->assessments }}" :subject1="{{ $subject }}"
                                     :is_adviser="{{ $adviser->id == Auth::user()->id }}" :section1="{{ $section }}">
                                 </module-section>
                             @endforeach
