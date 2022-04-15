@@ -21,7 +21,7 @@ Route::get("/", [HomeController::class, "homeView"]);
 Route::get("/subject/{subject}/section/{section}/assessment/create", [HomeController::class, "createAssessment"])->name("subject.create.assessment");
 Route::get("/subject/{subject}/section/{section}/assessment/view", [HomeController::class, "viewAssessment"]);
 Route::get("/subject/{id}/assessment/check-response", [HomeController::class, "subjectCheckResponse"]);
-Route::get("/subject/{id}", [HomeController::class, "subjectView"]);
+Route::get("/subject/{id}", [HomeController::class, "subjectView"])->name("subject.view");
 Route::get("/subject/{id}/response", [HomeController::class, "subjectViewResponse"]);
 Route::get("/subject/{id}/grades",[HomeController::class,"studentGrades"]);
 

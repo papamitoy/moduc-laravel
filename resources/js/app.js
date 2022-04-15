@@ -11,7 +11,7 @@ import AssessmentView from "./components/AssessmentView.vue";
 import CheckResponse from "./components/CheckResponse.vue";
 import ExcelGrades from "./components/ExcelGrades.vue";
 import { createApp } from "vue";
-
+import print from "vue3-print-nb";
 const app = createApp({});
 app.config.globalProperties.$Swal = Swal;
 app.component("join-class", joinClass);
@@ -22,4 +22,5 @@ app.component("assessment-response", AssessmentView);
 app.component("check-response", CheckResponse);
 app.component("excel-grades", ExcelGrades);
 app.use(DropZone);
+app.use(print);
 app.mount("#app");

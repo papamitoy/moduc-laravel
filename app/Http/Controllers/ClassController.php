@@ -32,12 +32,12 @@ class ClassController extends Controller
 
 
         $created = Auth::user()->subjects()->create([
-            "class_name" => $request->className,
-            "section_name" => $request->sectionName,
-            "subject_name" => $request->subjectName,
-            "room" => $request->room,
+            "class_name" => $request->className ? $request->className : "",
+            "section_name" => $request->sectionName ? $request->sectionName : "",
+            "subject_name" => $request->subjectName ? $request->subjectName : "No Subject Title",
+            "room" => $request->room ? $request->room : "",
             "subject_code" => $subjectCode,
-            "description" => $request->description,
+            "description" => $request->description ? $request->description : "",
         ]);
 
         if (!empty($created)) {
@@ -163,7 +163,7 @@ class ClassController extends Controller
                 'type' => $request->assessmentType,
                 "published" => $request->published,
                 "shuffle" => $request->shuffle,
-             
+
             ]);
             return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
         }
@@ -279,6 +279,6 @@ class ClassController extends Controller
          return response()->json(['success'=>true]);
         }
         return response()->json(['success'=>false]);
-       
+
     }
 }

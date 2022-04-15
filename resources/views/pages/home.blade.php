@@ -1,4 +1,7 @@
 @extends("layouts.home")
+@section("pageTitle")
+    My Classes
+@endsection
 @section("content")
       @if(Auth::user()->isAdviser())
       @foreach (Auth::user()->subjects as $subject)
@@ -66,5 +69,5 @@
            @endforeach
       @endif
 
-           
+
 @endsection

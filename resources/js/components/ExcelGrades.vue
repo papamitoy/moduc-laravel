@@ -20,7 +20,6 @@
 
               </div>
             </div>
-
             <div class="white_card_body">
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show" id="midterm" role="tabpanel" aria-labelledby="Themes-tab">
@@ -51,6 +50,7 @@ export default {
   components: {
     SectionGrades,
   },
+  methods: {},
 };
 </script>
 

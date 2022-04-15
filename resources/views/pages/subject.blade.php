@@ -1,4 +1,7 @@
 @extends("layouts.home")
+@section("pageTitle")
+    Moduc | {{ $subject->subject_name  }}
+@endsection
 @section('content')
 
     <div class="col-12">

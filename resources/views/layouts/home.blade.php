@@ -9,7 +9,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Analytic</title>
+    <title>
+        @yield("pageTitle")
+    </title>
     <link rel="icon" href="{{ asset('pages/img/mini_logo.png') }}" type="image/png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('pages/css/bootstrap.min.css') }}" />
@@ -73,14 +75,20 @@
                                 <div class="page_title_left">
                                     <h3 class="f_s_25 f_w_700 dark_text">Dashboard</h3>
                                     <ol class="breadcrumb page_bradcam mb-0">
-                                        <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
-                                        <li class="breadcrumb-item active">Subjects</li>
+                                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="/">Subjects</a></li>
+                                        @if (Request::route()->getName())
+                                        <li class="breadcrumb-item active"> {{ $subject->subject_name }}</li>
+                                        @endif
+
+
+
                                     </ol>
                                 </div>
                                 <div class="page_title_right">
 
                                     <div class="page_date_button">
-                                        August 1, 2020 | 01:30 PM
+                                        {{ date("F ,d | h:i:s a") }}
                                     </div>
                                     <div class="dropdown common_bootstrap_button ">
                                         <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
