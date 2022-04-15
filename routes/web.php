@@ -22,7 +22,7 @@ Route::get("/subject/{subject}/section/{section}/assessment/create", [HomeContro
 Route::get("/subject/{subject}/section/{section}/assessment/view", [HomeController::class, "viewAssessment"]);
 Route::get("/subject/{id}/assessment/check-response", [HomeController::class, "subjectCheckResponse"]);
 Route::get("/subject/{id}", [HomeController::class, "subjectView"])->name("subject.view");
-Route::get("/subject/{id}/response", [HomeController::class, "subjectViewResponse"]);
+Route::get("/subject/{id}/response", [HomeController::class, "subjectViewResponse"])->name("student.response");
 Route::get("/subject/{id}/grades",[HomeController::class,"studentGrades"]);
 
 
@@ -48,3 +48,5 @@ Route::post("/upload/module-section/{id}/{secid}",[ClassController::class,"uploa
 
 Route::post("/subject/{id}/files",[ClassController::class,"subjectFiles"]);
 Route::post("/subject/{id}/save-grades",[ClassController::class,"saveGrades"]);
+
+Route::get("/notify-redirect",[HomeController::class,"notifyClick"]);

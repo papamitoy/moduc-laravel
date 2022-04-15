@@ -8,9 +8,11 @@ use App\Models\AssessmentResponse;
 use App\Models\Grade;
 use App\Models\Module;
 use App\Models\ModuleSection;
+use App\Models\Notification;
 use App\Models\Subject;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -117,7 +119,7 @@ class ClassController extends Controller
         $subject =   Subject::where("id", $request->id)->first();
         if (empty($subject)) return response()->json(['success' => false, "message" => "No Subject found"]);
 
-        $subject->load("assessments");
+        $subject->load("assessments","enroll");
         if ($request->selectedId != null) {
             $selectedSubject =  $subject->assessments()->where("id", $request->selectedId)->first();
             if (!empty($selectedSubject)) {
@@ -137,6 +139,7 @@ class ClassController extends Controller
                     $selectedSubject->published = false;
                     $selectedSubject->save();
                 }
+
                 return response()->json(['success' => true, 'message' => "You've successfully created a questionaire", "data" => $selectedSubject, "request" => $request->all()]);
             } else {
                 return response()->json(['success' => false, 'message' => "No assessment found"]);
@@ -153,6 +156,7 @@ class ClassController extends Controller
                 "shuffle" => $request->shuffle,
                 "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
+
             return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire", "data" => $newAssessment, "request" => $request->all()]);
         }
     }
@@ -167,7 +171,9 @@ class ClassController extends Controller
     public function postAssessment(Request $request)
     {
         $assessment = Assessment::where("id", $request->selectedId)->first();
+
         if (!empty($assessment)) {
+            $assessment->load("subject");
             $assessment->update([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -178,6 +184,21 @@ class ClassController extends Controller
                 "shuffle" => $request->shuffle,
 
             ]);
+            try{
+                if($request->published){
+                    foreach($assessment->subject->enroll as $enroll){
+                        Notification::create([
+                        "from" => $assessment->subject-> user_id,
+                        "to" =>$enroll-> student_id,
+                        "title" => "New Assessment is now available",
+                        "body" => $assessment->subject->subject_name ." has new assessment available",
+                        "link" => "/subject/".$assessment->subject->id."/response?assessment_id=".$assessment->id
+                        ]);
+                    }
+                }
+            }catch(Exception $er){
+
+            }
             return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
         }
         return response()->json(['success' => false]);

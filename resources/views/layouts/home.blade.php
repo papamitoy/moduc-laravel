@@ -64,7 +64,7 @@
         <!-- main content part here -->
         <section class="main_content dashboard_part large_header_bg">
             <!-- menu  -->
-            <x-search-menu></x-search-menu>
+            <x-search-menu ></x-search-menu>
             <!--/ menu  -->
             <div class="main_content_iner overly_inner ">
                 <div class="container-fluid p-0 ">
@@ -73,7 +73,11 @@
                         <div class="col-12">
                             <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
                                 <div class="page_title_left">
-                                    <h3 class="f_s_25 f_w_700 dark_text">Dashboard</h3>
+                                    @if (Request::route()->getName() == "student.response" || Request::route()->getName() == "subject.view")
+                                    <h3 class="f_s_25 f_w_700 dark_text">{{ $subject->subject_name }}</h3>
+                                    @else
+                                    <h3 class="f_s_25 f_w_700 dark_text">Subjects</h3>
+                                    @endif
                                     <ol class="breadcrumb page_bradcam mb-0">
                                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                                         <li class="breadcrumb-item"><a href="/">Subjects</a></li>

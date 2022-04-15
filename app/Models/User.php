@@ -63,4 +63,11 @@ class User extends Authenticatable
     public function grades(){
         return $this->hasMany(Grade::class,"user_id");
     }
+
+    public function notifications(){
+        return $this->hasMany(Notification::class,"to");
+    }
+    public function notificationCount(){
+        return count($this->notifications->where("seen",false));
+    }
 }

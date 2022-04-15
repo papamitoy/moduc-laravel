@@ -15,86 +15,40 @@
                     <div class="header_notification_warp d-flex align-items-center">
                         <li>
                             <a class="bell_notification_clicker" href="#"> <img src="{{ asset("pages/img/icon/bell.svg")}}" alt="">
-                                <span>2</span>
+                                @if (Auth::user()->notificationCount() > 0)
+                                <span>{{Auth::user()->notificationCount()}} </span>
+                                @endif
                             </a>
+
                             <!-- Menu_NOtification_Wrap  -->
                         <div class="Menu_NOtification_Wrap">
                             <div class="notification_Header">
                                 <h4>Notifications</h4>
                             </div>
-                            <div class="Notification_body">
+                            <div class="">
                                 <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/2.png")}}" alt=""></a>
-                                    </div>
+                                @forelse  (Auth::user()->notifications as $notification)
+                                <a href="/notify-redirect?url={{$notification->link}}&id={{$notification->id}}" class="p-3 single_notify d-flex align-items-center" @if (!$notification->seen)style="background: rgba(0,0,0,.1)"@endif >
                                     <div class="notify_content">
-                                        <a href="#"><h5>Cool Marketing </h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
+                                       <span style="color:#222">{{$notification->title}} </span>
+                                        <p>{{ $notification->body }}</p>
+                                    </div>
+                                </a>
+
+                                @empty
+                                <div class="p-3 single_notify d-flex align-items-center"  >
+                                    <div class="text-center pt_20 ">
+                                       No notifications
                                     </div>
                                 </div>
-                                <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/4.png")}}" alt=""></a>
-                                    </div>
-                                    <div class="notify_content">
-                                        <a href="#"><h5>Awesome packages</h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
-                                    </div>
-                                </div>
-                                <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/3.png")}}" alt=""></a>
-                                    </div>
-                                    <div class="notify_content">
-                                        <a href="#"><h5>what a packages</h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
-                                    </div>
-                                </div>
-                                <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/2.png")}}" alt=""></a>
-                                    </div>
-                                    <div class="notify_content">
-                                        <a href="#"><h5>Cool Marketing </h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
-                                    </div>
-                                </div>
-                                <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/4.png")}}" alt=""></a>
-                                    </div>
-                                    <div class="notify_content">
-                                        <a href="#"><h5>Awesome packages</h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
-                                    </div>
-                                </div>
-                                <!-- single_notify  -->
-                                <div class="single_notify d-flex align-items-center">
-                                    <div class="notify_thumb">
-                                        <a href="#"><img src="{{ asset("pages/img/staf/3.png")}}" alt=""></a>
-                                    </div>
-                                    <div class="notify_content">
-                                        <a href="#"><h5>what a packages</h5></a>
-                                        <p>Lorem ipsum dolor sit amet</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nofity_footer">
-                                <div class="submit_button text-center pt_20">
-                                    <a href="#" class="btn_1">See More</a>
-                                </div>
+                                @endforelse
                             </div>
                         </div>
                         <!--/ Menu_NOtification_Wrap  -->
                         </li>
-                        <li>
+                        {{-- <li>
                             <a class="CHATBOX_open" href="#"> <img src="{{ asset("pages/img/icon/msg.svg")}}" alt=""> <span>2</span>  </a>
-                        </li>
+                        </li> --}}
                     </div>
 
                     <div class="profile_info">

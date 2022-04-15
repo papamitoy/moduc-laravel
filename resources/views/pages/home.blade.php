@@ -40,10 +40,9 @@
            <div class="col-md-6 col-lg-6 col-xl-4 box-col-6">
             <div class="card custom-card">
                 <div class="card-header"><img class="img-fluid" src="{{ asset("pages/img/profilebox/3.jpg")}}" alt="" data-original-title="" title="">
-                    <h1 style="position: absolute; top: 0;  left: 0; color: white; "><strong>{{ $subject->subject_name }}</strong><br>
-                    <small style="position: absolute; font-size: 20px;">{{ $subject->class_name }}</small></h1>
 
-
+                    <h1 style="position: absolute; top: 0;  left: 0; color: white; "><strong>{{ $subject->subject->subject_name }}</strong><br>
+                    <small style="position: absolute; font-size: 20px;">{{ $subject->subject->class_name }}</small></h1>
 
 
                 </div>

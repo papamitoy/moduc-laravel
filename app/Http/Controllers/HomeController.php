@@ -22,8 +22,8 @@ class HomeController extends Controller
             foreach($enrolled as $value){
                 $value->subject->load('user');
             }
-     
-        
+
+
         return view("pages.home", compact('enrolled'));
     }
     public function subjectView(Request $request, $subject)
@@ -96,7 +96,7 @@ class HomeController extends Controller
         $checkResponse1 = $assessment->response->where("status" , "1")->where("user_id",Auth::user()->id)->first();
 
         $responseSubmission = !empty($checkResponse) || !empty($checkResponse1);
-        return view("pages.assessmentresponse",compact('assessment','responseSubmission'));
+        return view("pages.assessmentresponse",compact('assessment','responseSubmission','subject'));
     }
     public function subjectCheckResponse(Request $request,$subject){
         $subject =  Subject::where("id", $subject)->where("user_id",Auth::user()->id)->first();
@@ -128,10 +128,17 @@ class HomeController extends Controller
             }
 
             $enrolled = $subject->enroll;
-     
+
             return view("pages.showgrades",compact('subject','moduleSection','enrolled'));
         }
         return abort(404);
+    }
+
+    function notifyClick(){
+        Auth::user()->notifications->where("id",request()->query("id"))->first()->update([
+            'seen' => true,
+        ]);
+        return redirect(request()->query("url"));
     }
 
     function getEquiv(){
@@ -237,7 +244,7 @@ class HomeController extends Controller
             1.1,
             1.1,
             1.0,
-            
+
             ];
     }
 }
