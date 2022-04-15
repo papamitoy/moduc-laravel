@@ -51,7 +51,7 @@
     <link rel="stylesheet" href="{{ asset('pages/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('pages/css/colors/default.css') }}" id="colorSkinCSS">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @yield("pagesStyles")
 </head>
 
 <body class="crm_body_bg">
@@ -77,7 +77,7 @@
                                     <ol class="breadcrumb page_bradcam mb-0">
                                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                                         <li class="breadcrumb-item"><a href="/">Subjects</a></li>
-                                        @if (Request::route()->getName())
+                                        @if (Request::route()->getName() == "subject.view")
                                         <li class="breadcrumb-item active"> {{ $subject->subject_name }}</li>
                                         @endif
 
@@ -120,6 +120,9 @@
 
             <join-class user="{{ Auth::user() }}" img="{{ asset('pages/img/messages/1.png') }}"></join-class>
             <x-create-class></x-create-class>
+            @if (Request::route()->getName() == "subject.view")
+            <x-update-class :subject="$subject"></x-update-class>
+            @endif
     </div>
     <!-- footer part -->
     <div class="footer_part">
@@ -287,7 +290,7 @@
     <script src="{{ asset('pages/vendors/niceselect/js/jquery.nice-select.min.js') }}"></script>
     <!-- owl carousel -->
     <script src="{{ asset('pages/vendors/owl_carousel/js/owl.carousel.min.js') }}"></script>
-
+    <script src="{{ asset('js/app.js') }}"></script>
     <!-- responsive table -->
     <script src="{{ asset('pages/vendors/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('pages/vendors/datatable/js/dataTables.responsive.min.js') }}"></script>
@@ -338,7 +341,7 @@
     <!-- custom js -->
     <script src="{{ asset('pages/js/dashboard_init.js') }}"></script>
     <script src="{{ asset('pages/js/custom.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 
 <!-- Mirrored from demo.dashboardpack.com/analytic-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Aug 2021 13:40:30 GMT -->

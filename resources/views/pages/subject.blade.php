@@ -2,6 +2,22 @@
 @section("pageTitle")
     Moduc | {{ $subject->subject_name  }}
 @endsection
+@section("pagesStyles")
+    <style>
+        .subject-title{
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .edit-subject{
+            display: none;
+        }
+        .subject-title:hover ~ .edit-subject,
+        .subject-title:hover{
+           display: inline  !important;
+           cursor: pointer;
+        }
+    </style>
+@endsection
 @section('content')
 
     <div class="col-12">
@@ -38,7 +54,10 @@
                                         <div class="row justify-content-center">
                                             <div class="col-lg-12">
                                                 <div class="header">
-                                                    <h1 style="color: white;">{{ $subject->subject_name }}</h1>
+                                                    <div style="color: white;" data-toggle="modal" data-target="#updateClass">
+                                                       <span class="subject-title"> {{ $subject->subject_name }} </span>
+                                                       <div class="fas fa-pen edit-subject" ></div>
+                                                    </div>
                                                     <p style="color: white;">{{ $subject->section_name }}</p>
                                                      @if(Auth::user()->isAdviser())
                                                     <p style="color: white;">SUBJECT CODE: {{ $subject->subject_code }}</p>

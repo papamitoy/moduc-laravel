@@ -84,6 +84,19 @@ class ClassController extends Controller
 
         return redirect("/");
     }
+    public function updateClass(Request $request)
+    {
+         Auth::user()->subjects()->where("id",$request->id)->update(
+            [
+                "class_name" => $request->className ? $request->className : "",
+                "section_name" => $request->sectionName ? $request->sectionName : "",
+                "subject_name" => $request->subjectName ? $request->subjectName : "No Subject Title",
+                "room" => $request->room ? $request->room : "",
+                "description" => $request->description ? $request->description : "",
+            ]
+        );
+        return redirect()->route("subject.view",$request->id);
+    }
     public function joinClass(Request $request)
     {
         $this->validate($request, [

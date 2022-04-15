@@ -13,16 +13,16 @@
         <div class="modal-body">
 
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Class name <span class="small">(required)</span></label>
-                    <input type="text" name="className" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <label for="exampleInputEmail1" >Class name </label>
+                    <input required type="text" name="className" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Section name </label>
-                    <input type="text" name="sectionName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input required type="text" name="sectionName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Subject name </label>
-                    <input type="text" name="subjectName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input required type="text" name="subjectName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Room </label>
@@ -32,8 +32,6 @@
                     <label for="exampleInputEmail1">Description </label>
                     <textarea type="email" name="description" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></textarea>
                 </div>
-
-
 
         </div>
         <div class="modal-footer">
