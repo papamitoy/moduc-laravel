@@ -1,5 +1,6 @@
 @extends("layouts.home")
 @section('content')
+<div class="col-12">
 @if($responseSubmission)
 <div class="container-fluid p-0">
 <div class="row justify-content-center">
@@ -35,4 +36,5 @@
 @else
 <assessment-response :assessment="{{ $assessment }}" :user="{{ Auth::user() }}" ></assessment-response>
 @endif
+</div>
 @endsection

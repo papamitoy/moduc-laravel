@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row ">
+                    <div class="row "style="width:100%">
 
                         @yield("content")
 

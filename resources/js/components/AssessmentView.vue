@@ -31,24 +31,23 @@
                   <p class="f-w-400 ">{{ question.optional }}</p>
                   <div v-if="question.type != 'multiple-choice'">
 
-                  <input v-model="answers[question.id]" type="text" style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
+                    <input v-model="answers[question.id]" type="text" style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
                   </div>
                   <div v-else>
-                <div v-for="(choice,index) in question.choices" :key="choice.choice"  class="form-check">
+                    <div v-for="(choice,index) in question.choices" :key="choice.choice" class="form-check">
 
-                    <input v-model="answers[question.id]" class="form-check-input" type="radio" :name="question.id" :id="question.id +'_'+ index" :value="choice.choice">
-                    <label class="form-check-label" :for="question.id +'_'+ index">
-                      {{choice.choice}}
-                    </label>
+                      <input v-model="answers[question.id]" class="form-check-input" type="radio" :name="question.id" :id="question.id +'_'+ index" :value="choice.choice">
+                      <label class="form-check-label" :for="question.id +'_'+ index">
+                        {{choice.choice}}
+                      </label>
 
-                </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
 
         <div class="col-lg-8">
           <nav aria-label="Page navigation example">
@@ -71,59 +70,54 @@
 
 <script>
 export default {
-    props:['assessment','user'],
-    data:()=>({
-        answers:[]
-    }),
-    mounted(){
-        console.log(this.assessment)
+  props: ["assessment", "user"],
+  data: () => ({
+    answers: [],
+  }),
+  mounted() {
+    console.log(this.assessment);
+  },
+  computed: {
+    questions() {
+      return JSON.parse(this.assessment.questions);
     },
-    computed:{
-        questions(){
-            return JSON.parse(this.assessment.questions)
-        }
+  },
+  methods: {
+    submitAssessment() {
+      let answerLen = Object.values(this.answers).filter(
+        (answer) => answer.length > 0
+      );
+      if (answerLen.length < this.questions.length) {
+        return this.$Swal.fire(
+          "Warning",
+          "Please answer all the questions.",
+          "warning"
+        );
+      }
+      console.log({ ...this.answers });
+
+      axios
+        .post("/api/assessment/response", {
+          id: this.assessment.id,
+          answers: { ...this.answers },
+        })
+        .then((res) => {
+          if (res.data.success) {
+            this.$Swal
+              .fire("Success", "Successfully submitted", "success")
+              .then(() => {
+                location.href = `/subject/${this.assessment.subject_id}`;
+              });
+            return;
+          }
+          return this.$Swal.fire("Warning", res.data.message, "warning");
+          console.log(res);
+        })
+        .catch((er) => {
+          console.log(er);
+        });
     },
-    methods:{
-        submitAssessment(){
-            let answerLen = Object.values(this.answers).filter(answer => answer.length > 0)
-            if(answerLen.length < this.questions.length){
-               return this.$Swal.fire(
-                "Warning",
-                "Please answer all the questions.",
-                "warning"
-                );
-            }
-            console.log({...this.answers})
-
-
-
-            axios.post("/api/assessment/response",{
-                id:this.assessment.id,
-                answers:{...this.answers}
-            }
-            ).then(res=>{
-                if(res.data.success){
-                    this.$Swal.fire(
-                    "Success",
-                    "Successfully submitted",
-                    "success"
-                    ).then(()=>{
-                        location.href = `/subject/${this.assessment.subject_id}`
-                    });
-                    return;
-                }
-                return this.$Swal.fire(
-                "Warning",
-                res.data.message,
-                "warning"
-                );
-                console.log(res);
-            }).catch(er=>{
-                console.log(er)
-            })
-
-        }
-    }
+  },
 };
 </script>
 

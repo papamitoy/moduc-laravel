@@ -190,8 +190,8 @@ class ClassController extends Controller
                         Notification::create([
                         "from" => $assessment->subject-> user_id,
                         "to" =>$enroll-> student_id,
-                        "title" => "New Assessment is now available",
-                        "body" => $assessment->subject->subject_name ." has new assessment available",
+                        "title" => $assessment->subject->subject_name .": ".(strlen($assessment->title) > 20 ? substr($assessment->title,0,20)."..." :$assessment->title),
+                        "body" => strlen($assessment->description) > 20 ? substr($assessment->description,0,20)."..." : (!empty($assessment->description) ? $assessment->description :  $assessment->subject->subject_name ." new assessment"),
                         "link" => "/subject/".$assessment->subject->id."/response?assessment_id=".$assessment->id
                         ]);
                     }

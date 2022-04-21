@@ -19178,7 +19178,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['assessment', 'user'],
+  props: ["assessment", "user"],
   data: function data() {
     return {
       answers: []
@@ -21842,26 +21842,24 @@ var _hoisted_32 = ["id"];
 var _hoisted_33 = {
   "class": "card-body"
 };
+var _hoisted_34 = {
+  key: 0,
+  style: {
+    "margin-left": "40%",
+    "position": "absolute",
+    "margin-top": "-7%",
+    "padding": "10px"
+  }
+};
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div style=\"margin-left:40%;position:absolute;margin-top:-7%;padding:10px;\" data-v-cd4cb404><div style=\"padding:10px;\" data-v-cd4cb404><div class=\"border-left\" style=\"padding:6px;display:inline-block;padding-right:30px;\" data-v-cd4cb404><h3 data-v-cd4cb404>021</h3><small style=\"position:absolute;margin-top:-10px;\" data-v-cd4cb404>Turn In</small></div><div class=\"border-left\" style=\"padding:6px;display:inline-block;padding-right:30px;\" data-v-cd4cb404><h3 data-v-cd4cb404>021</h3><small style=\"position:absolute;margin-top:-10px;\" data-v-cd4cb404>Assigned</small></div></div></div>", 1);
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div style=\"padding:10px;\" data-v-cd4cb404><div class=\"border-left\" style=\"padding:6px;display:inline-block;padding-right:30px;\" data-v-cd4cb404><h3 data-v-cd4cb404>021</h3><small style=\"position:absolute;margin-top:-10px;\" data-v-cd4cb404>Turn In</small></div><div class=\"border-left\" style=\"padding:6px;display:inline-block;padding-right:30px;\" data-v-cd4cb404><h3 data-v-cd4cb404>021</h3><small style=\"position:absolute;margin-top:-10px;\" data-v-cd4cb404>Assigned</small></div></div>", 1);
 
-var _hoisted_35 = {
+var _hoisted_36 = [_hoisted_35];
+var _hoisted_37 = {
   style: {
     "font-size": "10px"
   }
 };
-
-var _hoisted_36 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_37 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
-  /* HOISTED */
-  );
-});
 
 var _hoisted_38 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
@@ -21869,9 +21867,21 @@ var _hoisted_38 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_39 = ["href"];
+var _hoisted_39 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+  /* HOISTED */
+  );
+});
 
 var _hoisted_40 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_41 = ["href"];
+
+var _hoisted_42 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa fa-file",
     "aria-hidden": "true"
@@ -21880,22 +21890,8 @@ var _hoisted_40 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_41 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_42 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
-  /* HOISTED */
-  );
-});
-
 var _hoisted_43 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "border_bottom_1px"
-  }, null, -1
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
   /* HOISTED */
   );
 });
@@ -21906,8 +21902,22 @@ var _hoisted_44 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_45 = ["href"];
-var _hoisted_46 = ["href"];
+var _hoisted_45 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "border_bottom_1px"
+  }, null, -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_46 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_47 = ["href"];
+var _hoisted_48 = ["href"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_DropZone = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DropZone");
 
@@ -21951,7 +21961,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn btn-primary"
   }, "Add Assessment", 8
   /* PROPS */
-  , _hoisted_7)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"dropdown\">\r\n  <button class=\"btn btn-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n      <i class=\"fa fa-ellipsis-v\" aria-hidden=\"true\"></i>\r\n  </button>\r\n  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\r\n    <a class=\"dropdown-item\" href=\"#\">Disable Section</a>\r\n    <a class=\"dropdown-item\" href=\"#\">Delete</a>\r\n  </div>\r\n</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.section.title), 1
+  , _hoisted_7)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"dropdown\">\n  <button class=\"btn btn-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <i class=\"fa fa-ellipsis-v\" aria-hidden=\"true\"></i>\n  </button>\n  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n    <a class=\"dropdown-item\" href=\"#\">Disable Section</a>\n    <a class=\"dropdown-item\" href=\"#\">Delete</a>\n  </div>\n</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.section.title), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p>Preliminary stage</p> "), $props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_9, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_13, $props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [_hoisted_15, _hoisted_16, _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [$data.uploadClickable ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_DropZone, {
     key: 0,
@@ -22013,34 +22023,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       id: "collapseOne".concat($data.section.id + '' + assessment.id),
       "aria-labelledby": "headingOne",
       "data-parent": "#accordion"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [_hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_35, "Posted " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getDate(assessment.created_at, "ll")), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [$props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_34, _hoisted_36)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_37, "Posted " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getDate(assessment.created_at, "ll")), 1
     /* TEXT */
-    ), _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(assessment.description), 1
+    ), _hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(assessment.description), 1
     /* TEXT */
-    ), _hoisted_37, _hoisted_38, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(assessment.files, function (file) {
+    ), _hoisted_39, _hoisted_40, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(assessment.files, function (file) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
         key: file.id
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
         href: file.file
-      }, [_hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(file.name), 1
+      }, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(file.name), 1
       /* TEXT */
       )], 8
       /* PROPS */
-      , _hoisted_39), _hoisted_41, _hoisted_42]);
+      , _hoisted_41), _hoisted_43, _hoisted_44]);
     }), 128
     /* KEYED_FRAGMENT */
-    )), _hoisted_43, _hoisted_44, $props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
-      key: 0,
+    )), _hoisted_45, _hoisted_46, $props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 1,
       href: "/subject/".concat($data.subject.id, "/assessment/check-response?assessment_id=").concat(assessment.id)
     }, "Check Respond", 8
     /* PROPS */
-    , _hoisted_45)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
-      key: 1,
+    , _hoisted_47)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+      key: 2,
       href: "/subject/".concat($data.subject.id, "/response?assessment_id=").concat(assessment.id),
       target: "_BLANK"
     }, "Respond", 8
     /* PROPS */
-    , _hoisted_46))])], 8
+    , _hoisted_48))])], 8
     /* PROPS */
     , _hoisted_32)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
   }), 128
@@ -23987,7 +23997,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.overlay-section1[data-v-cd4cb404] {\r\n  height: 100%;\r\n  width: 100%;\r\n  z-index: 3101;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\r\n  background: rgba(0, 0, 0, 0.8);\n}\n.section-hover[data-v-cd4cb404] {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  height: 100%;\r\n  width: 100%;\n}\n.box-container[data-v-cd4cb404] {\r\n  background: white;\r\n  padding: 10px 20px;\r\n  border-radius: 10px;\n}\n.overlay-section[data-v-cd4cb404] {\r\n  height: 100%;\r\n  width: 100%;\r\n  z-index: 2000;\r\n  position: absolute;\r\n  top: 0;\r\n  left: 0;\n}\n.overlay-section.disabled[data-v-cd4cb404] {\r\n  opacity: 0.5;\r\n  background: #ccc;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.overlay-section1[data-v-cd4cb404] {\n  height: 100%;\n  width: 100%;\n  z-index: 3101;\n  position: absolute;\n  top: 0;\n  left: 0;\n  background: rgba(0, 0, 0, 0.8);\n}\n.section-hover[data-v-cd4cb404] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100%;\n  width: 100%;\n}\n.box-container[data-v-cd4cb404] {\n  background: white;\n  padding: 10px 20px;\n  border-radius: 10px;\n}\n.overlay-section[data-v-cd4cb404] {\n  height: 100%;\n  width: 100%;\n  z-index: 2000;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.overlay-section.disabled[data-v-cd4cb404] {\n  opacity: 0.5;\n  background: #ccc;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

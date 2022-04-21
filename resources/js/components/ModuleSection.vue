@@ -69,7 +69,7 @@
               </div>
               <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                  <div style="margin-left: 40%; position:absolute; margin-top: -7%; padding: 10px;">
+                  <div style="margin-left: 40%; position:absolute; margin-top: -7%; padding: 10px;" v-if="is_adviser">
                     <div style="padding: 10px;">
                       <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
                         <h3>021</h3><small style="position: absolute; margin-top:-10px;">Turn In</small>

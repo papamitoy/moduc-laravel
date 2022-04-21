@@ -74,24 +74,29 @@
                                         <div class="white_card_header border_bottom_1px">
                                             <h4 class="card-title mb-0">Upcomming</h4>
                                         </div>
+
                                         <!--end white_card_header border_bottom_1px-->
                                         <div class="card-body">
-                                            <div class="form-group row">
-                                                <label class="col-xl-10 col-lg-10 col-form-label">Wohooo No work due
-                                                    soon..</label>
+                                            @forelse ($assessments as $assessment)
+                                            <div class="" style="display:flex; justify-content:space-between;width:100%;">
+                                                <a target="_blank" href="/subject/{{$subject->id}}/response?assessment_id={{$assessment->id}}">{{ $assessment->title }}</a>
+                                                <small>{{ date('F d ', strtotime( $assessment->deadline)); }}</small>
                                             </div>
+                                            @empty
                                             <div class="form-group row">
-                                                <a class="col-xl-10" href="#">Multimedia Project</a>
+                                              No assessment
                                             </div>
+                                            @endforelse
 
 
-                                            <div class="form-group row">
+
+                                            {{-- <div class="form-group row">
                                                 <div class="col-lg-9 col-xl-8 offset-lg-3 offset-xl-3">
                                                     <div class="custom-control custom-checkbox">
                                                         <a href="#"><strong>View All</strong></a>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!--end card-body-->
                                     </div>

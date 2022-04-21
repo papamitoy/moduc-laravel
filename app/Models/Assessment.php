@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,5 +33,9 @@ class Assessment extends Model
 
     public function moduleSection(){
         return $this->belongsTo(ModuleSection::class,"module_section_id","id");
+    }
+
+    public function scopeUpcomming($query){
+        return $query->whereDate("deadline",">",Carbon::now())->where("published",true);
     }
 }

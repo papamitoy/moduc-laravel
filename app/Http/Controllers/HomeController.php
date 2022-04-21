@@ -31,7 +31,7 @@ class HomeController extends Controller
         $subject =  Subject::where("id", $subject)->first();
         if(empty($subject)) return abort(404);
         $subject->load(["user", "enroll", "assessments",'moduleFiles']);
-
+        $assessments = $subject->assessments()->upcomming()->get();
 
         $adviser = $subject->user;
 
@@ -49,7 +49,7 @@ class HomeController extends Controller
         $grades = Grade::where("subject_id",$subject->id)->get();
         $grades->load(["subject","student"]);
 
-        return view("pages.subject", compact('subject', 'adviser', 'students', "moduleSection","grades"));
+        return view("pages.subject", compact('assessments','subject', 'adviser', 'students', "moduleSection","grades"));
     }
     public function createAssessment(Request $request, Subject $subject, ModuleSection $section)
     {
