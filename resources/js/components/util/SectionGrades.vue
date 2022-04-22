@@ -249,13 +249,18 @@ export default {
         this.assessments
           .filter((item) => !!item.response.find((i) => i.user_id == id))
           .map((item) => {
-            return item.response.find((i) => i.user_id == id).score
-              ? JSON.parse(item.response.find((i) => i.user_id == id).score)
-              : 0;
+            let titem = item.response.find((i) => i.user_id == id).score;
+            return titem ? JSON.parse(titem) : { re: 0 };
           })
-      ).reduce((total, item) => total + Number(Object.values(item)), 0);
+      );
+      let score1 = score.reduce((total, item) => {
+        return (
+          total + Object.values(item).reduce((d, i) => Number(d) + Number(i), 0)
+        );
+      }, 0);
 
-      return score;
+      console.log("ASSESS", score1);
+      return score1;
     },
     getAverage(id) {
       const total = this.getTotal(id);

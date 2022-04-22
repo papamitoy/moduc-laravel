@@ -20088,15 +20088,20 @@ __webpack_require__.r(__webpack_exports__);
           return i.user_id == id;
         });
       }).map(function (item) {
-        return item.response.find(function (i) {
+        var titem = item.response.find(function (i) {
           return i.user_id == id;
-        }).score ? JSON.parse(item.response.find(function (i) {
-          return i.user_id == id;
-        }).score) : 0;
-      })).reduce(function (total, item) {
-        return total + Number(Object.values(item));
+        }).score;
+        return titem ? JSON.parse(titem) : {
+          re: 0
+        };
+      }));
+      var score1 = score.reduce(function (total, item) {
+        return total + Object.values(item).reduce(function (d, i) {
+          return Number(d) + Number(i);
+        }, 0);
       }, 0);
-      return score;
+      console.log("ASSESS", score1);
+      return score1;
     },
     getAverage: function getAverage(id) {
       var total = this.getTotal(id);
