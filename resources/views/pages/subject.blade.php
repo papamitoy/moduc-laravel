@@ -1,6 +1,6 @@
 @extends("layouts.home")
 @section("pageTitle")
-    Moduc | {{ $subject->subject_name  }}
+    Mudoc | {{ $subject->subject_name  }}
 @endsection
 @section("pagesStyles")
     <style>

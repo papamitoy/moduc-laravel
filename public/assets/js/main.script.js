@@ -1,7 +1,7 @@
 function loginAuth(){
- 
+
         var formData = new FormData(document.getElementById('loginForm'));
-        axios.post("/moduc/requests/POST/login.request.php",formData).then(res=>{
+        axios.post("/mudoc/requests/POST/login.request.php",formData).then(res=>{
             console.log(res.data)
             if(res.data.success){
                 Swal.fire(
@@ -16,7 +16,7 @@ function loginAuth(){
                     'Warning',
                     res.data.message,
                     'warning'
-                ) 
+                )
             }
         }).catch(err=>{
             console.log("err",err)
@@ -24,9 +24,9 @@ function loginAuth(){
 }
 
 function registerForm(){
-  
+
     var formData = new FormData(document.getElementById('registerForm'));
-    axios.post("/moduc/requests/POST/register.request.php",formData).then(res=>{
+    axios.post("/mudoc/requests/POST/register.request.php",formData).then(res=>{
         console.log(res.data)
         if(res.data.success){
             Swal.fire(
@@ -41,7 +41,7 @@ function registerForm(){
                 'Warning',
                 res.data.message,
                 'warning'
-            ) 
+            )
         }
     }).catch(err=>{
         console.log("err",err)
@@ -50,7 +50,7 @@ function registerForm(){
 
 function addSubject(){
     var formData = new FormData(document.getElementById('addSubject'));
-    axios.post("/moduc/requests/POST/addsubject.request.php",formData).then(res=>{
+    axios.post("/mudoc/requests/POST/addsubject.request.php",formData).then(res=>{
         console.log(res);
         if(res.data.success){
             Swal.fire(
@@ -65,7 +65,7 @@ function addSubject(){
                 'Warning',
                 res.data.message,
                 'warning'
-            ) 
+            )
         }
     }).catch(err=>{
         console.log("err",err)
@@ -73,7 +73,7 @@ function addSubject(){
 }
 function joinSubject(){
     var formData = new FormData(document.getElementById('joinsubject'));
-    axios.post("/moduc/requests/POST/joinsubject.request.php",formData).then(res=>{
+    axios.post("/mudoc/requests/POST/joinsubject.request.php",formData).then(res=>{
         console.log(res);
         if(res.data.success){
             Swal.fire(
@@ -88,7 +88,7 @@ function joinSubject(){
                 'Warning',
                 res.data.message,
                 'warning'
-            ) 
+            )
         }
     }).catch(err=>{
         console.log("err",err)
@@ -96,7 +96,7 @@ function joinSubject(){
 }
 
 function logout(){
-    axios.post("/moduc/requests/POST/logout.request.php").then(res=>{
+    axios.post("/mudoc/requests/POST/logout.request.php").then(res=>{
         location.reload();
     });
 }

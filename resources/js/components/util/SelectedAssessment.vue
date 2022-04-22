@@ -58,7 +58,9 @@
       </div>
 
     </div>
+
     <button style="float: right;" class="btn btn-primary" @click="recordScore">Record</button>
+    <a :href="`/subject/${assessment.subject_id}/grades`" style="float: right;" class="btn btn-primary mr-2">Class Record</a>
   </div>
   <div class="messages_chat mb_30" v-else>
     <div class="white_box QA_section mb_30">
@@ -67,7 +69,7 @@
 
       </div>
     </div>
-    <button style="float: right;" class="btn btn-primary">Record</button>
+    <a :href="`/subject/${assessment.subject_id}/grades`" style="float: right;" class="btn btn-primary">Class Record</a>
   </div>
 </template>
 
@@ -127,6 +129,7 @@ export default {
         })
         .then((res) => {
           if (res.data.success) {
+            this.$emit("recorded", this.response);
             return this.$Swal.fire(
               "Success",
               "Recorded successfully.",

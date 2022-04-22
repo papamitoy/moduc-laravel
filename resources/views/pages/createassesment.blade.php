@@ -1,6 +1,6 @@
 @extends("layouts.home")
 @section("pageTitle")
-Moduc |  {{ $subject->subject_name }} : Create assessment
+Mudoc |  {{ $subject->subject_name }} : Create assessment
 @endsection
 
 @section('content')

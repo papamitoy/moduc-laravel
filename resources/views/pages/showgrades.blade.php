@@ -1,7 +1,7 @@
 @extends("layouts.home")
 
 @section("pageTitle")
-    Moduc | {{$subject->subject_name}} : Grade sheet
+    Mudoc | {{$subject->subject_name}} : Grade sheet
 @endsection
 
 @section('content')

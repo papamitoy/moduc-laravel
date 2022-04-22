@@ -44,7 +44,7 @@ class HomeController extends Controller
         $moduleSection =  ModuleSection::where("subject_id", $subject->id)->get();
         $moduleSection->load(['assessments']);
         foreach ($moduleSection as $section) {
-            $section->assessments->load(['files']);
+            $section->assessments->load(['files','response']);
         }
         $grades = Grade::where("subject_id",$subject->id)->get();
         $grades->load(["subject","student"]);
@@ -110,7 +110,7 @@ class HomeController extends Controller
             $students[$key] = $value->student;
         }
 
-        return view("pages.checkresponse",compact('responses','students','assessment'));
+        return view("pages.checkresponse",compact('responses','students','assessment','subject'));
     }
     public function studentGrades(Request $request ,$id){
         $subject = Subject::where("id",$id)->first();

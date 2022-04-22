@@ -1,5 +1,8 @@
 <template>
   <div class="col-lg-12">
+
+    <h3 class="f_s_25 f_w_700 dark_text mb-2">{{ subject.subject_name }} : {{ assessment.title }}</h3>
+
     <div class="messages_box_area">
       <div class="messages_list">
         <div class="white_box ">
@@ -7,7 +10,7 @@
             <h4>Student Response List</h4>
           </div>
           <ul>
-            <li v-for="response in responses" :key="response.id" @click="selectStudent(response)">
+            <li v-for="response in studentList" :key="response.id" @click="selectStudent(response)">
               <a href="#">
                 <div class="message_pre_left">
                   <div class="message_preview_thumb">
@@ -19,8 +22,8 @@
                   </div>
                 </div>
                 <div class="messge_time">
-                  <span style="background-color: green; padding: 2px; color: white; border-radius: 2px;" class="text-succes" v-if="response.status"> Recorded </span>
-                  <span style="background-color: green; padding: 2px; color: white; border-radius: 2px;" class="text-succes" v-else> Pending </span>
+                  <span class="text-white badge bg-success" v-if="response.status"> Recorded </span>
+                  <span class="text-white badge bg-warning" v-else> Pending </span>
                 </div>
               </a>
             </li>
@@ -28,7 +31,7 @@
         </div>
 
       </div>
-      <SelectedAssessment :response="selectedStudent" :assessment="assessment" />
+      <SelectedAssessment @recorded="setRecorded" :response="selectedStudent" :assessment="assessment" />
     </div>
   </div>
 </template>
@@ -36,31 +39,44 @@
 <script>
 import SelectedAssessment from "./util/SelectedAssessment.vue";
 export default {
-  props: ["students", "responses", "assessment"],
+  props: ["students", "responses", "assessment", "subject"],
   data: () => ({
     selectedStudent: null,
     hasUserId: false,
+    studentList: [],
   }),
   components: {
     SelectedAssessment,
   },
   watch: {
     hasUserId() {
-      const student = this.responses.find(
+      const student = this.studentList.find(
         (student) => student.user_id == this.hasUserId
       );
       this.selectStudent(student ? student : null);
     },
+    responses() {
+      this.studentList = this.responses;
+    },
   },
   async mounted() {
+    this.studentList = this.responses;
     let uri = window.location.search;
     let params = new URLSearchParams(uri);
-    console.log(this.responses);
     if (params.get("user_id")) {
       this.hasUserId = params.get("user_id");
     }
   },
   methods: {
+    setRecorded(val) {
+      this.studentList = this.studentList.map((student) => {
+        console.log(student.id, val.id);
+        if (student.id == val.id) {
+          student.status = 1;
+        }
+        return student;
+      });
+    },
     selectStudent(student) {
       console.log("STUDENT", student);
       this.selectedStudent = student;

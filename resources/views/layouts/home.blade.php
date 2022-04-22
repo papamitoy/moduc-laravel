@@ -74,15 +74,17 @@
                             <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
                                 <div class="page_title_left">
                                     @if (Request::route()->getName() == "student.response" || Request::route()->getName() == "subject.view")
-                                    <h3 class="f_s_25 f_w_700 dark_text">{{ $subject->subject_name }}</h3>
+                                       <h3 class="f_s_25 f_w_700 dark_text"><a href="/subject/{{$subject->id}}" style="color:#444">{{ $subject->subject_name }}</a> </h3>
                                     @else
-                                    <h3 class="f_s_25 f_w_700 dark_text">Subjects</h3>
+                                        @if(Request::route()->getName() != "check.responses")
+                                        <h3 class="f_s_25 f_w_700 dark_text"><a href="/" style="color:#444">Subjects</a></h3>
+                                        @endif
                                     @endif
                                     <ol class="breadcrumb page_bradcam mb-0">
                                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                                         <li class="breadcrumb-item"><a href="/">Subjects</a></li>
                                         @if (Request::route()->getName() == "subject.view")
-                                        <li class="breadcrumb-item active"> {{ $subject->subject_name }}</li>
+                                        <li class="breadcrumb-item active"><a href="/subject/{{$subject->id}}" style="color:#444">  {{ $subject->subject_name }} </a></li>
                                         @endif
 
 

@@ -12,7 +12,6 @@
           </div>
           <div style="padding: 20px; border-top: 1px solid #f2f4ff;">
             <button @click="removeQuestion" style="background-color: #df0000e6;" class="btn btn-primary2"><i style="font-size: 15px; opacity: 1;" class="far fa-trash-alt"></i></button> |
-            <a href="" class="btn btn-primary2 mr-1"><i style="font-size: 15px; opacity: 1;" class="far fa-clone"></i></a>
             <button :data-target="`#saModal${question.id}`" data-toggle="modal" class="btn btn-primary2"><i style="font-size: 15px; opacity: 1;" class="far fa-edit"></i></button>
           </div>
         </div>

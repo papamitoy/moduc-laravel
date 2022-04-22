@@ -19,7 +19,7 @@
         <div class="main-title2 position-relative" style="width:100%">
 
           <div v-if="is_adviser" class="position-absolute" style="right:0;">
-            <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn btn-primary">Add Assessment</a>
+            <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn-sm btn-primary rounded-pill px-3 py-1 text-sm">Add Assessment</a>
           </div>
           <!-- <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +60,7 @@
 
                   <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
                   <span style="font-size: 12px; font-weight: normal; ">{{ assessment.deadline ? "Due "+getDate(assessment.deadline,"LL") : "" }}</span>
-                  <button v-if="is_adviser" style="padding-left: 10px; margin-top: 10px; font-size:12px" class="float-right btn btn-primary" @click="gotoEdit(assessment.id)">Update</button>
+                  <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="float-right btn btn-sm  btn-primary rounded-pill" @click="gotoEdit(assessment.id)">Update</button>
 
                   <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="!assessment.published">Unpublished</p>
                   <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else>Published</p>
@@ -69,17 +69,17 @@
               </div>
               <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                  <div style="margin-left: 40%; position:absolute; margin-top: -7%; padding: 10px;" v-if="is_adviser">
-                    <div style="padding: 10px;">
-                      <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
-                        <h3>021</h3><small style="position: absolute; margin-top:-10px;">Turn In</small>
+                  <div v-if="is_adviser" style="display:flex; justify-content:space-between;">
+                    <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
+                    <div style="padding: 10px; display:flex;">
+                      <div class="border-left">
+                        <h3>{{ getResponseCount(assessment.response,"pending") }}</h3><small>Pending Responses</small>
                       </div>
-                      <div class="border-left" style="padding: 6px; display: inline-block; padding-right: 30px;">
-                        <h3>021</h3><small style="position: absolute; margin-top:-10px;">Assigned</small>
+                      <div class="border-left">
+                        <h3>{{ getResponseCount(assessment.response) }}</h3><small>Responded</small>
                       </div>
                     </div>
                   </div>
-                  <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
                   <p>{{ assessment.description }}</p><br><br>
                   <div v-for="file in assessment.files" :key="file.id">
                     <a :href="file.file"><i class="fa fa-file" aria-hidden="true"> &nbsp; &nbsp;</i>{{ file.name }}</a><br><br>
@@ -141,6 +141,18 @@ export default {
     },
   },
   methods: {
+    getResponseCount(responses, status = "responded") {
+      if (!responses && responses.length == 0) return [];
+      if (status == "pending") {
+        return responses.filter(
+          (response) => response.checked_by == null && response.status == 0
+        ).length;
+      } else {
+        console.log("response", responses);
+        return responses.filter((response) => response.checked_by != null)
+          .length;
+      }
+    },
     showUpload() {
       this.uploadClickable = true;
     },
