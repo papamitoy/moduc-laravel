@@ -69,9 +69,9 @@
               </div>
               <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                  <div v-if="is_adviser" style="display:flex; justify-content:space-between;">
+                  <div style="display:flex; justify-content:space-between;">
                     <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
-                    <div style="padding: 10px; display:flex;">
+                    <div style="padding: 10px; display:flex;" v-if="is_adviser">
                       <div class="border-left">
                         <h3>{{ getResponseCount(assessment.response,"pending") }}</h3><small>Pending Responses</small>
                       </div>
