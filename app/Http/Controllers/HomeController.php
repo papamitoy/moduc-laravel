@@ -96,6 +96,11 @@ class HomeController extends Controller
         $checkResponse1 = $assessment->response->where("status" , "1")->where("user_id",Auth::user()->id)->first();
 
         $responseSubmission = !empty($checkResponse) || !empty($checkResponse1);
+
+        if($assessment->shuffle){
+            $assessment->questions = json_encode(collect(json_decode($assessment->questions))->shuffle());
+        }
+
         return view("pages.assessmentresponse",compact('assessment','responseSubmission','subject'));
     }
     public function subjectCheckResponse(Request $request,$subject){

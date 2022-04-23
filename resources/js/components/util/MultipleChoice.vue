@@ -36,51 +36,41 @@
             <div class="form-row align-items-center">
               <div style="width: 100%;" class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Question</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea v-model="equestion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
               </div>
               <div class="col-auto">
                 <label class="sr-only" for="inlineFormInputGroup"></label>
                 <div class="input-group mb-2">
-                  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="answer here..">
+                  <input v-model="choiceToAdd.choice" type="text" class="form-control" id="inlineFormInputGroup" placeholder="choices here..">
                 </div>
               </div>
               <div class="col-auto">
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+                  <input v-model="choiceToAdd.correct" class="form-check-input" type="checkbox" id="autoSizingCheck">
                   <label class="form-check-label" for="autoSizingCheck">
                     Correct Answer
                   </label>
                 </div>
               </div>
               <div class="col-auto">
-                <button type="submit" class="btn btn-primary2 mb-2">Add</button>
+                <button type="submit" class="btn btn-primary2 mb-2" @click="addChoice">Add</button>
               </div>
             </div>
             <div>
               <form style="font-size: 17px;" class="form-check">
-                <div style="padding-bottom: 5px; color: #00C3FF;" class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="d">
-                  <a style="padding: 2px 5px; font-size: 10px; background-color: red; border-color: red;" class="btn btn-primary" href=""><i class="far fa-trash-alt"></i></a>
+                <div style="padding-bottom: 5px; color: #00C3FF;" class="form-check" v-for="(choice,i) in question.choices" :key="i">
+                  <input class="form-check-input" type="radio" name="exampleRadios" :checked="choice.correct" @click="changeCorrectAnswer(choice.choice)" :id="`choice${i}`" value="d">
+                  <label class="form-check-label" style="color:#444" :for="`choice${i}`">
+                    {{ choice.choice }} &nbsp;&nbsp;&nbsp;
+                  </label>
+                  <a style="padding: 2px 5px; font-size: 10px; background-color: red; border-color: red;" class="btn btn-primary" @click="removeChoice(choice.choice)"> <i class="far fa-trash-alt"></i></a>
                 </div>
-                <div style="padding-bottom: 5px; color: #00C3FF;" class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="d">
-                  <a style="padding: 2px 5px; font-size: 10px; background-color: red; border-color: red;" class="btn btn-primary" href=""><i class="far fa-trash-alt"></i></a>
-                </div>
-                <div style="padding-bottom: 5px; color: #00C3FF;" class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="d">
-                  <a style="padding: 2px 5px; font-size: 10px; background-color: red; border-color: red;" class="btn btn-primary" href=""><i class="far fa-trash-alt"></i></a>
-                </div>
-                <div style="padding-bottom: 5px; color: #00C3FF;" class="form-check">
-                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="d">
-                  <a style="padding: 2px 5px; font-size: 10px; background-color: red; border-color: red;" class="btn btn-primary" href=""><i class="far fa-trash-alt"></i></a>
-                </div>
-
               </form>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button @click="saveChanges" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
           </div>
         </div>
       </div>
@@ -92,9 +82,60 @@
 <script>
 export default {
   props: ["question", "number"],
+  data: () => ({
+    ecorrectAnswer: "",
+    equestion: "",
+    choiceToAdd: {},
+  }),
+  mounted() {
+    this.ecorrectAnswer = this.question.correctAnswer;
+    this.equestion = this.question.question;
+  },
   methods: {
+    addChoice() {
+      if (this.choiceToAdd && !this.choiceToAdd.choice) return;
+      if (
+        this.question.choices.find(
+          (choice) => choice.choice == this.choiceToAdd.choice
+        )
+      )
+        return;
+      const choice = this.choiceToAdd;
+      if (choice.correct) {
+        this.question.choices = this.question.choices.map((choice) => {
+          delete choice.correct;
+          return choice;
+        });
+      }
+      this.choiceToAdd = {};
+      this.question.choices.push(choice);
+    },
+    changeCorrectAnswer(name) {
+      this.question.choices = this.question.choices.map((choice) => {
+        delete choice.correct;
+        if (choice.choice == name) {
+          choice.correct = true;
+        }
+        return choice;
+      });
+    },
+    removeChoice(choice) {
+      this.question.choices = this.question.choices.filter(
+        (choice1) => choice1.choice != choice
+      );
+    },
     removeQuestion() {
       this.$emit("removeQuestion", this.question);
+    },
+    saveChanges() {
+      this.$emit("updateQuestion", {
+        oldQuestion: this.question,
+        newQuestion: {
+          ...this.question,
+          question: this.equestion,
+          correctAnswer: this.ecorrectAnswer,
+        },
+      });
     },
   },
 };

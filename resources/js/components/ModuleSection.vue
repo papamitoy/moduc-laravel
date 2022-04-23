@@ -62,8 +62,8 @@
                   <span style="font-size: 12px; font-weight: normal; ">{{ assessment.deadline ? "Due "+getDate(assessment.deadline,"LL") : "" }}</span>
                   <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="float-right btn btn-sm  btn-primary rounded-pill" @click="gotoEdit(assessment.id)">Update</button>
 
-                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="!assessment.published">Unpublished</p>
-                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else>Published</p>
+                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="is_adviser && !assessment.published">Unpublished</p>
+                  <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else-if="is_adviser && assessment.published">Published</p>
 
                 </h5>
               </div>
