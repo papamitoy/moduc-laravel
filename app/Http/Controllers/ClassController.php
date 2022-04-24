@@ -194,7 +194,7 @@ class ClassController extends Controller
                     "title" => $assessment->title,
                     "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
                     "student_link"=> "/subject/".$assessment->subject->id."/response?assessment_id=$assessment->id",
-                    "adviser_link"=> "/subject/".$assessment->subject->id."/section/20/assessment/create?u=$assessment->id",
+                    "adviser_link"=> "/subject/".$assessment->subject->id."/section/$assessment->module_section_id/assessment/create?u=$assessment->id",
                     "owner" => $assessment->subject-> user_id,
                     ]);
 
