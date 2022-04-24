@@ -30,6 +30,7 @@ Route::middleware(['adviser'])->group(function(){
     Route::post("/api/assessment/save/record",[ClassController::class,"saveRecord"]);
     Route::post("/api/update-section", [ClassController::class, "updateSection"]);
     Route::post("/subject/{id}/save-grades",[ClassController::class,"saveGrades"]);
+    Route::post("/api/assessment/remove",[ClassController::class,"removeAssessment"]);
 });
 
 Route::get("/subject/{subject}/section/{section}/assessment/view", [HomeController::class, "viewAssessment"]);
@@ -46,7 +47,6 @@ Route::post("/api/class/join", [ClassController::class, "joinClass"]);
 Route::post("/api/get/assessment", [ClassController::class, "getAssessment"]);
 Route::post("/api/assessment/response",[ClassController::class,"submitResponse"]);
 Route::post("/upload/module-section/{id}/{secid}",[ClassController::class,"uploadModule"]);
-
 Route::post("/subject/{id}/files",[ClassController::class,"subjectFiles"]);
 
 Route::get("/notify-redirect",[HomeController::class,"notifyClick"]);

@@ -122,7 +122,11 @@
                                                 <!--end white_card_header border_bottom_1px-->
                                                 <div class="card-body">
                                                     <div class="mx-4 mb-4">
-                                                        <h4 class="mb-0"><a style="color:#444;" href="/subject/{{$subject->id}}/response?assessment_id={{$feed->assessment->id}}">{{ $feed->title }}</a></h4>
+                                                        @if(!Auth::user()->isAdviser())
+                                                        <h4 class="mb-0"><a style="color:#444;" href="{!!$feed->student_link!!}">{{ $feed->title }}</a></h4>
+                                                        @else
+                                                        <h4 class="mb-0"><a style="color:#444;" href="{!!$feed->adviser_link!!}">{{ $feed->title }}</a></h4>
+                                                        @endif
                                                        <div> <label class="col-xl-10 col-lg-10 col-form-label">{{ $feed->body }}</label></div>
                                                     </div>
 
@@ -153,7 +157,7 @@
                     <div class="tab-pane fade" id="page" role="tabpanel" aria-labelledby="page-tab">
                         <div class="row justify-content-center">
                             @foreach ($moduleSection as $section)
-                                <module-section :user_id="{{ Auth::user()->id }}" :grades="{{  $grades }}" :assessments="{{ $section->assessments }}" :subject1="{{ $subject }}"
+                                <module-section :user_id="{{ Auth::user()->id }}" :grades="{{  $grades }}" :assessments="{{ $section->assessments }}" :subject1="{{ json_encode($subject) }}"
                                     :is_adviser="{{ $adviser->id == Auth::user()->id }}" :section1="{{ $section }}">
                                 </module-section>
                             @endforeach

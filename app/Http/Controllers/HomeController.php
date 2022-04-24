@@ -40,8 +40,7 @@ class HomeController extends Controller
         }
 
         $students = $subject->enroll->load("student");
-
-        $moduleSection =  ModuleSection::where("subject_id", $subject->id)->get();
+        $moduleSection =  ModuleSection::where("subject_id", $subject->id)->orderBy("order","asc")->get();
         $moduleSection->load(['assessments']);
         foreach ($moduleSection as $section) {
             $section->assessments->load(['files','response']);

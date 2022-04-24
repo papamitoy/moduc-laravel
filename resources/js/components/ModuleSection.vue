@@ -52,7 +52,7 @@
       <div class="box_body">
         <div class="default-according" id="accordion">
 
-          <div class="card " v-for="(assessment,i) in assessments" :key="i">
+          <div class="card " v-for="(assessment,i) in assessmentList" :key="i">
             <div v-if="isShow(assessment.published)">
 
               <div class="card-header parpel_bg" id="headingOne" style="overflow: auto;">
@@ -86,7 +86,11 @@
                   </div>
 
                   <div class="border_bottom_1px"></div><br>
-                  <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`" v-if="is_adviser">Check Respond</a>
+                  <div v-if="is_adviser" style="display:flex; justify-content:space-between;">
+                    <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`">Check Respond</a>
+                    <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="btn btn-sm  btn-danger rounded-pill" @click="removeAssessment(assessment.id)">Remove</button>
+
+                  </div>
                   <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
                 </div>
               </div>
@@ -117,6 +121,7 @@ export default {
       active: false,
       uploadClickable: false,
       subject: {},
+      assessmentList: [],
       headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
     };
   },
@@ -125,6 +130,7 @@ export default {
     this.active = this.section1.status;
     this.section = this.section1;
     this.subject = this.subject1;
+    this.assessmentList = this.assessments;
     console.log(this.studentEnable);
   },
   computed: {
@@ -141,6 +147,36 @@ export default {
     },
   },
   methods: {
+    removeAssessment(id) {
+      this.$Swal
+        .fire({
+          title: "Do you want to remove this assessment?",
+          showDenyButton: true,
+          confirmButtonText: "Yes",
+          denyButtonText: `No`,
+          confirmButtonColor: "#00D5DB",
+        })
+        .then(async (result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            try {
+              const data = await axios.post("/api/assessment/remove", {
+                id: id,
+              });
+              if (data.data.success) {
+                this.assessmentList = this.assessmentList.filter(
+                  (assessment) => assessment.id != id
+                );
+                this.$Swal.fire("Removed successfully", "", "success");
+                return;
+              }
+            } catch (e) {
+              console.log(e);
+            }
+            this.$Swal.fire("Please try again later", "", "info");
+          }
+        });
+    },
     getResponseCount(responses, status = "responded") {
       if (!responses && responses.length == 0) return [];
       if (status == "pending") {

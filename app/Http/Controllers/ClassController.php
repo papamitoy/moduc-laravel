@@ -50,6 +50,7 @@ class ClassController extends Controller
                     "subject_id" => $created->id,
                     "title" => "Prelim",
                     "description" => "",
+                    "order"=> 1,
                     "status" => false
 
                 ],
@@ -57,6 +58,7 @@ class ClassController extends Controller
                     "subject_id" => $created->id,
                     "title" => "Midterm",
                     "description" => "",
+                    "order"=> 2,
                     "status" => false
 
                 ],
@@ -64,6 +66,7 @@ class ClassController extends Controller
                     "subject_id" => $created->id,
                     "title" => "Semi-final",
                     "description" => "",
+                    "order"=> 3,
                     "status" => false
 
                 ],
@@ -71,6 +74,7 @@ class ClassController extends Controller
                     "subject_id" => $created->id,
                     "title" => "Final",
                     "description" => "",
+                    "order"=> 4,
                     "status" => false
 
                 ]
@@ -183,6 +187,17 @@ class ClassController extends Controller
                 if($request->published && !$assessment->broadcasted){
                     $assessment->broadcasted = true;
                     $assessment->save();
+
+                    SubjectFeed::create([
+                    "assessment_id" => $assessment->id,
+                    "subject_id" => $assessment->subject->id,
+                    "title" => $assessment->title,
+                    "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
+                    "student_link"=> "/subject/".$assessment->subject->id."/response?assessment_id=$assessment->id",
+                    "adviser_link"=> "/subject/".$assessment->subject->id."/section/20/assessment/create?u=$assessment->id",
+                    "owner" => $assessment->subject-> user_id,
+                    ]);
+
                     foreach($assessment->subject->enroll as $enroll){
                         Notification::create([
                         "from" => $assessment->subject-> user_id,
@@ -190,19 +205,13 @@ class ClassController extends Controller
                         "title" => $assessment->subject->subject_name .": ".(strlen($assessment->title) > 20 ? substr($assessment->title,0,20)."..." :$assessment->title),
                         "body" => strlen($assessment->description) > 20 ? substr($assessment->description,0,20)."..." : (!empty($assessment->description) ? $assessment->description :  $assessment->subject->subject_name ." new assessment"),
                         "link" => "/subject/".$assessment->subject->id."/response?assessment_id=".$assessment->id
-                        ]);
+                    ]);
 
-                        SubjectFeed::create([
-                        "assessment_id" => $assessment->id,
-                        "subject_id" => $assessment->subject->id,
-                        "title" => $assessment->title,
-                        "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
-                        "owner" => $assessment->subject-> user_id,
-                        ]);
+
                     }
                 }
             }catch(Exception $er){
-
+                dd($er);
             }
             return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
         }
@@ -292,6 +301,14 @@ class ClassController extends Controller
         $subject =  Subject::where("id", $request->id)->first();
         $subject->load(["user", "enroll", "assessments",'moduleFiles']);
         return response()->json(['success'=>true,'data'=>$subject]);
+    }
+    public function removeAssessment(Request $request){
+        $assessment = Assessment::where("id",$request->id)->first();
+        if(!empty($assessment)){
+            $assessment->delete();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
     }
     public function saveGrades(Request $request){
         $subject =  Subject::where("id", $request->subject_id)->first();
