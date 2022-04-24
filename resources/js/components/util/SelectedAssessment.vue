@@ -32,7 +32,7 @@
               </td>
               <td style="color: green;">
                 <strong v-if="question.type == 'multiple-choice' && question.choices[0].correct">{{ question.choices[0].choice }}</strong>
-
+                <strong v-if="question.type == 'short-answer'">{{question.correctAnswer}}</strong>
               </td>
               <td style="width: 600px;">
                 <strong>{{JSON.parse(response.answers)[question.id]}}</strong>

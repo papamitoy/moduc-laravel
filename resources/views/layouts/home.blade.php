@@ -20,7 +20,7 @@
     <!-- select2 CSS -->
     <link rel="stylesheet" href="{{ asset('pages/vendors/niceselect/css/nice-select.css') }}" />
     <!-- owl carousel CSS -->
-    <link rel="stylesheet" href="{{ asset('pages/vendors/owl_carousel/css/owl.carousel.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('pages/vendors/owl_carousel/css/owl.carousel.css') }}" /> --}}
     <!-- gijgo css -->
     <link rel="stylesheet" href="{{ asset('pages/vendors/gijgo/gijgo.min.css') }}" />
     <!-- font awesome CSS -->

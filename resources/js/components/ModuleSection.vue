@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="white_box_tittle ">
+      <div class="white_box_tittle mb-4">
 
         <div class="main-title2 position-relative" style="width:100%">
 
@@ -39,6 +39,9 @@
             <p><mark>Upload your module here...</mark></p><br /><br />
             <div class="form-row" style="width:100%">
               <DropZone :clickable="uploadClickable" v-if="uploadClickable" @uploaded="uploadedModule" :headers="headers" style="width:100%" :acceptedFiles="['pdf','docx','pptx','ppt','xlsx','png','jpg']" paramName="fileZone" :maxFiles="Number(10000000000)" :url="`/upload/module-section/${subject.id}/${section.id}`" :uploadOnDrop="true" :multipleUpload="true" :parallelUpload="1" />
+              <div v-else style="height:64px">
+
+              </div>
             </div>
           </div>
           <div class="mt-4">
@@ -78,6 +81,9 @@
                       <div class="border-left">
                         <h3>{{ getResponseCount(assessment.response) }}</h3><small>Responded</small>
                       </div>
+                    </div>
+                    <div v-else>
+                      <div v-if="getScore(assessment.response)"><span>SCORE: </span> <span style="font-size:20px"> {{ getScore(assessment.response) }}</span></div>
                     </div>
                   </div>
                   <p>{{ assessment.description }}</p><br><br>
@@ -147,6 +153,22 @@ export default {
     },
   },
   methods: {
+    getScore(response) {
+      const hasResponse =
+        response &&
+        response.find((resp) => {
+          return resp.user_id == this.user_id;
+        });
+      if (!hasResponse) return null;
+      return (
+        hasResponse &&
+        hasResponse.score &&
+        Object.values(JSON.parse(hasResponse.score)).reduce(
+          (total, num) => total + Number(num),
+          0
+        )
+      );
+    },
     removeAssessment(id) {
       this.$Swal
         .fire({

@@ -13,11 +13,12 @@
         </div>
       </div>
       <div class="add_button ml-10">
-        <a href="#" class="btn_1" v-print="printObj">Print</a>
+        <a href="#" class="btn_1" v-if="title == 'Midterm'" v-print="printObj1">Print</a>
+        <a href="#" class="btn_1" v-else v-print="printObj2">Print</a>
       </div>
     </div>
   </div>
-  <div id="grades_table">
+  <div :id="`grades_table${title == 'Midterm' ? '1':'2'}`">
     <div class="">
       <div class="box_header m-0 mb-4">
         <div class="main-title">
@@ -146,8 +147,21 @@ export default {
   data() {
     return {
       dataInput: [],
-      printObj: {
-        id: "grades_table",
+      printObj1: {
+        id: "grades_table1",
+
+        beforeOpenCallback(vue) {
+          const ele = document.getElementById("print_hidden");
+          if (ele) ele.style.opacity = "0";
+        },
+        closeCallback(vue) {
+          const ele = document.getElementById("print_hidden");
+          if (ele) ele.style.opacity = "1";
+        },
+      },
+
+      printObj2: {
+        id: "grades_table2",
 
         beforeOpenCallback(vue) {
           const ele = document.getElementById("print_hidden");

@@ -7,7 +7,7 @@
           <div class="box_body ">
             <h5 class="">{{ number }}. {{ question.question }}</h5>
             <p class="f-w-400 ">{{ question.optional }}</p>
-            <input type="text" style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
+            <input type="text" :value="question.correctAnswer" readonly style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
 
           </div>
           <div style="padding: 20px; border-top: 1px solid #f2f4ff;">
@@ -41,7 +41,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button @click="saveChanges" type="button" class="btn btn-primary">Save changes</button>
+            <button @click="saveChanges" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
           </div>
         </div>
       </div>

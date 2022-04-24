@@ -8,10 +8,12 @@
           <div class="main-title2 ">
             <!-- to be design start -->
             <div class="form-group mb-0">
+              <label for="date">Due Date</label>
               <input v-model="deadline" type="date" class="form-control" name="inputDate" id="inputDate">
             </div>
-            <div class="form-group mb-0">
-              <select v-model="assessmentType" id="inputState" class="form-control mt-2">
+            <div class="form-group mb-0 mt-2">
+              <label for="inputState">Questionnaire Type</label>
+              <select v-model="assessmentType" id="inputState" class="form-control ">
                 <option value="exam">Major Exam</option>
                 <option value="assessment">Assessment</option>
                 <option value="activity">Activity</option>
@@ -22,13 +24,12 @@
                 <option value="midterm">Midterm</option>
                 <option value="semifi">Semi-Final</option>
                 <option value="final">Final</option>
-                <option value="summer">Summer</option>
 
               </select>
             </div>
             <!-- to be design end-->
 
-            <h2 class="mb-2 nowrap">{{ title }}</h2>
+            <h2 class="mb-2 nowrap mt-4">{{ title }}</h2>
             <p>{{ description }}</p>
           </div>
         </div>
@@ -41,7 +42,7 @@
               <ShortAnswer @removeQuestion="removeQuestion" :number="index+1" @updateQuestion="updateQuestion" v-else-if="question.type=='short-answer'" :question="question" />
             </div>
             <nav aria-label=" Page navigation example">
-              <ul class="pagination justify-content-end">
+              <!-- <ul class="pagination justify-content-end">
                 <li class="page-item disabled">
                   <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
                 </li>
@@ -51,7 +52,7 @@
                 <li class="page-item">
                   <a class="page-link" href="#">Next</a>
                 </li>
-              </ul>
+              </ul> -->
             </nav>
 
           </div>

@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="add_button ml-10">
-        <a href="#" class="btn_1">Print</a>
+        <a href="#" class="btn_1" v-print="printObj"> Print</a>
       </div>
     </div>
   </div>
@@ -59,6 +59,20 @@
 import equivalence from "../../helpers";
 export default {
   props: ["title", "subject", "module_section"],
+  data: () => ({
+    printObj: {
+      id: "grades_table",
+
+      beforeOpenCallback(vue) {
+        const ele = document.getElementById("print_hidden");
+        if (ele) ele.style.opacity = "0";
+      },
+      closeCallback(vue) {
+        const ele = document.getElementById("print_hidden");
+        if (ele) ele.style.opacity = "1";
+      },
+    },
+  }),
   computed: {},
   methods: {
     getGrade(enroll, type) {
