@@ -39,10 +39,13 @@
               <th v-if="title == 'Midterm'" colspan="3" style=" text-align: center; width: 150px;"><strong>MIDTERM EXAM</strong></th>
               <th v-else colspan="3" style=" text-align: center; width: 150px;"><strong>FINAL EXAM</strong></th>
               <th rowspan="3" style=" text-align: center; width: 150px;">Average Exam</th>
-              <th rowspan="3" style=" text-align: center;">Remarks</th>
+              <th rowspan="3" style=" text-align: center;" v-if="title == 'Midterm'">Midterm Grade</th>
+              <th rowspan="3" style=" text-align: center;" v-if="title == 'Final'">Final Grade</th>
             </tr>
             <tr style=" text-align: center;">
-              <th style="text-align: center;" scope="col" v-for="(count,i) in assessments" :key="count">A{{ i+1 }}</th>
+              <th style="text-align: center;" scope="col" v-for="(count,i) in assessments" :key="count">
+                <a style="text-decoration:none; color:#444" :href="`/subject/${subject.id}/section/11/assessment/create?u=${count.id}`">A{{ i+1 }}</a>
+              </th>
 
               <th style="text-align: center;" scope="col">TOTAL</th>
               <th style="text-align: center;" scope="col" rowspan="2">AVE</th>
@@ -68,7 +71,7 @@
 
           <tbody>
 
-            <tr v-for="enroll in subject.enroll" :key="enroll.id">
+            <tr v-for="enroll in subject.enroll" :key="enroll.id" class="rows">
               <th scope="row">{{ enroll.student.fullname }}</th>
               <td style="text-align: center;" v-for="(assessment) in assessments" :key="assessment.id">
                 <a style="color:black" :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}&user_id=${enroll.student.id}`" target="_blank" v-if="assessment.response.find(res=>res.user_id == enroll.student.id) ">{{ Object.values(assessment.response.find(res=>res.user_id == enroll.student.id).score ? JSON.parse((assessment.response.find(res=>res.user_id == enroll.student.id).score)): {score:0}).reduce((total,item)=>total+Number(item),0) }}</a>
@@ -77,10 +80,10 @@
                 <p>{{ getTotal(enroll.student.id) }}</p>
               </td>
               <td style="text-align: center;">
-                <p>{{ getAverage(enroll.student.id) }}</p>
+                <p>{{ getAverage(enroll.student.id).toFixed(2) }}</p>
               </td>
               <td style="text-align: center;">
-                <p>{{ getEqui(getAverage(enroll.student.id)) }} </p>
+                <p>{{ getEqui(getAverage(enroll.student.id)).toFixed(1) }} </p>
               </td>
               <td style="text-align: center;">
                 <p v-if="title == 'Midterm'">
@@ -93,12 +96,12 @@
 
               </td>
               <td style="text-align: center;">
-                <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("prelim",enroll.student.id)) }}</p>
-                <p v-else>{{ getTransExam(getTotalExams("semifi",enroll.student.id)) }}</p>
+                <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("prelim",enroll.student.id)).toFixed(2) }}</p>
+                <p v-else>{{ getTransExam(getTotalExams("semifi",enroll.student.id)).toFixed(2) }}</p>
               </td>
               <td style="text-align: center;">
-                <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) }}</p>
-                <p v-else>{{ getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) }}</p>
+                <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))).toFixed(1) }}</p>
+                <p v-else>{{ getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))).toFixed(1) }}</p>
               </td>
               <td style="text-align: center;">
                 <p v-if="title == 'Midterm'">
@@ -111,21 +114,22 @@
 
               </td>
               <td style="text-align: center;">
-                <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("midterm",enroll.student.id)) }}</p>
-                <p v-else>{{ getTransExam(getTotalExams("final",enroll.student.id)) }}</p>
+                <p v-if="title == 'Midterm'">{{ getTransExam(getTotalExams("midterm",enroll.student.id)).toFixed(2) }}</p>
+                <p v-else>{{ getTransExam(getTotalExams("final",enroll.student.id)).toFixed(2) }}</p>
               </td>
               <td style="text-align: center;">
-                <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))) }}</p>
-                <p v-else>{{ getEqui(getTransExam(getTotalExams("final",enroll.student.id))) }}</p>
+                <p v-if="title == 'Midterm'">{{ getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))).toFixed(1) }}</p>
+                <p v-else>{{ getEqui(getTransExam(getTotalExams("final",enroll.student.id))).toFixed(1) }}</p>
               </td>
               <td style="text-align: center;">
-                <p v-if="title == 'Midterm'">{{ (getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2 }}</p>
-                <p v-else>{{ (getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2 }}</p>
+                <p v-if="title == 'Midterm'">{{ ((getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2).toFixed(1) }}</p>
+                <p v-else>{{ ((getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2).toFixed(1) }}</p>
               </td>
               <td style="text-align: center;">
-                <p ref="gradeRemarks" v-if="title == 'Midterm'">{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2)}}</p>
-                <p ref="gradeRemarks" v-else>{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2)}}</p>
+                <p v-if="title == 'Midterm'">{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("prelim",enroll.student.id))) + getEqui(getTransExam(getTotalExams("midterm",enroll.student.id))))/2).toFixed(1)}}</p>
+                <p v-else>{{getFinalGrades(enroll.student.id,getEqui(getAverage(enroll.student.id)),(getEqui(getTransExam(getTotalExams("semifi",enroll.student.id))) + getEqui(getTransExam(getTotalExams("final",enroll.student.id)))) /2).toFixed(1)}}</p>
               </td>
+
             </tr>
 
           </tbody>
@@ -156,10 +160,6 @@ export default {
       },
     };
   },
-  mounted() {
-    console.log(this.$refs.gradeRemarks);
-  },
-
   computed: {
     assessmentCount() {
       return this.subject.assessments.filter(
@@ -308,5 +308,8 @@ export default {
 .QA_section .QA_table th,
 .QA_section .QA_table td {
   padding: 5px;
+}
+.rows * {
+  text-decoration: none;
 }
 </style>

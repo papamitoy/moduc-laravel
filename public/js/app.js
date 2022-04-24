@@ -19703,13 +19703,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_SectionGrades_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/SectionGrades.vue */ "./resources/js/components/util/SectionGrades.vue");
+/* harmony import */ var _util_SummaryOfGrades_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/SummaryOfGrades.vue */ "./resources/js/components/util/SummaryOfGrades.vue");
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["subject", "module_section"],
   components: {
-    SectionGrades: _util_SectionGrades_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    SectionGrades: _util_SectionGrades_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SummaryOfGrades: _util_SummaryOfGrades_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  methods: {}
+  data: function data() {
+    return {
+      gettingGrades: false
+    };
+  },
+  methods: {
+    getGrades: function getGrades() {
+      this.gettingGrades = true;
+    }
+  }
 });
 
 /***/ }),
@@ -20065,9 +20077,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  mounted: function mounted() {
-    console.log(this.$refs.gradeRemarks);
-  },
   computed: {
     assessmentCount: function assessmentCount() {
       return this.subject.assessments.filter(function (assessment) {
@@ -20334,6 +20343,97 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           correctAnswer: this.ecorrectAnswer
         })
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers/index.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ["title", "subject", "module_section"],
+  computed: {},
+  methods: {
+    getGrade: function getGrade(enroll, type) {
+      return this.getFinalGrades(this.getEqui(this.getAverage(type, enroll.student.id)), (this.getEqui(this.getTransExam(this.getTotalExams(type == "Midterm" ? "prelim" : "semifi", enroll.student.id))) + this.getEqui(this.getTransExam(this.getTotalExams(type == "Midterm" ? "midterm" : "final", enroll.student.id)))) / 2);
+    },
+    getTransExam: function getTransExam(total) {
+      return total / 50 * 100;
+    },
+    getTotalExams: function getTotalExams(type, exam_type, id) {
+      var filterExam = this.exams(type).filter(function (exam) {
+        return exam.exam_type == exam_type;
+      });
+      return filterExam ? filterExam.map(function (response) {
+        return response.response.find(function (i) {
+          return i.user_id == id;
+        });
+      }).reduce(function (total, item) {
+        return item ? total + Object.values(!!item.score ? JSON.parse(item.score) : {
+          score: 0
+        }).reduce(function (t, i) {
+          return t + Number(i);
+        }, 0) : total;
+      }, 0) : 0;
+    },
+    exams: function exams(type) {
+      return this.subject.assessments.filter(function (assessment) {
+        var checkFilter = type == "Midterm" ? assessment.module_section.title == "Prelim" || assessment.module_section.title == "Midterm" : assessment.module_section.title == "Semi-final" || assessment.module_section.title == "Final";
+        return assessment.published && assessment.type == "exam" && checkFilter;
+      });
+    },
+    assessments: function assessments(type) {
+      return this.subject.assessments.filter(function (assessment) {
+        var checkFilter = type == "Midterm" ? assessment.module_section.title == "Prelim" || assessment.module_section.title == "Midterm" : assessment.module_section.title == "Semi-final" || assessment.module_section.title == "Final";
+        return assessment.published && assessment.type != "exam" && checkFilter;
+      });
+    },
+    getFinalGrades: function getFinalGrades(grade1, grade2) {
+      var grade = grade1 * 0.6 + grade2 * 0.4;
+      return grade;
+    },
+    getEqui: function getEqui(ave) {
+      return _helpers__WEBPACK_IMPORTED_MODULE_0__["default"][ave];
+    },
+    getAverage: function getAverage(type, id) {
+      var total = this.getTotal(type, id);
+      var ave = Math.ceil(total / this.assessments(type).reduce(function (total, item) {
+        return total + Number(item.max_score);
+      }, 0) * 100);
+      return ave ? ave : 0;
+    },
+    getTotal: function getTotal(type, id) {
+      var score = Object.values(this.assessments(type).filter(function (item) {
+        return !!item.response.find(function (i) {
+          return i.user_id == id;
+        });
+      }).map(function (item) {
+        var titem = item.response.find(function (i) {
+          return i.user_id == id;
+        }).score;
+        return titem ? JSON.parse(titem) : {
+          re: 0
+        };
+      }));
+      var score1 = score.reduce(function (total, item) {
+        return total + Object.values(item).reduce(function (d, i) {
+          return Number(d) + Number(i);
+        }, 0);
+      }, 0);
+      console.log("ASSESS", score1);
+      return score1;
     }
   }
 });
@@ -21683,7 +21783,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "main_content_iner"
+  "class": "main_content_iner",
+  style: {
+    "width": "100%"
+  }
 };
 var _hoisted_2 = {
   "class": "container-fluid p-0"
@@ -21726,7 +21829,17 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   role: "tab",
   "aria-controls": "Themes",
   "aria-selected": "true"
-}, "Finals")])])])], -1
+}, "Finals")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
+  "class": "nav-item"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  "class": /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("nav-link"),
+  id: "Themes-tab",
+  "data-toggle": "tab",
+  href: "#summary",
+  role: "tab",
+  "aria-controls": "Themes",
+  "aria-selected": "true"
+}, "Summary of Grades")])])])], -1
 /* HOISTED */
 );
 
@@ -21749,8 +21862,14 @@ var _hoisted_10 = {
   role: "tabpanel",
   "aria-labelledby": "Themes-tab"
 };
+var _hoisted_11 = {
+  "class": /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)("tab-pane fade"),
+  id: "summary",
+  role: "tabpanel",
+  "aria-labelledby": "Themes-tab"
+};
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "col-12"
 }, null, -1
 /* HOISTED */
@@ -21758,6 +21877,8 @@ var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_SectionGrades = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SectionGrades");
+
+  var _component_SummaryOfGrades = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SummaryOfGrades");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SectionGrades, {
     title: "Midterm",
@@ -21771,7 +21892,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     module_section: $props.module_section
   }, null, 8
   /* PROPS */
-  , ["subject", "module_section"])])])])])]), _hoisted_11])])]);
+  , ["subject", "module_section"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SummaryOfGrades, {
+    title: "Summary of Grades",
+    subject: $props.subject,
+    module_section: $props.module_section
+  }, null, 8
+  /* PROPS */
+  , ["subject", "module_section"])])])])])]), _hoisted_12])])]);
 }
 
 /***/ }),
@@ -22999,45 +23126,26 @@ var _hoisted_32 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_33 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
-    rowspan: "3",
-    style: {
-      "text-align": "center"
-    }
-  }, "Remarks", -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_34 = {
+var _hoisted_33 = {
+  key: 4,
+  rowspan: "3",
   style: {
     "text-align": "center"
   }
 };
-
-var _hoisted_35 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
-    style: {
-      "text-align": "center"
-    },
-    scope: "col"
-  }, "TOTAL", -1
-  /* HOISTED */
-  );
-});
-
-var _hoisted_36 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
-    style: {
-      "text-align": "center"
-    },
-    scope: "col",
-    rowspan: "2"
-  }, "AVE", -1
-  /* HOISTED */
-  );
-});
+var _hoisted_34 = {
+  key: 5,
+  rowspan: "3",
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_35 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_36 = ["href"];
 
 var _hoisted_37 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
@@ -23045,7 +23153,7 @@ var _hoisted_37 = /*#__PURE__*/_withScopeId(function () {
       "text-align": "center"
     },
     scope: "col"
-  }, "TRANS", -1
+  }, "TOTAL", -1
   /* HOISTED */
   );
 });
@@ -23057,7 +23165,7 @@ var _hoisted_38 = /*#__PURE__*/_withScopeId(function () {
     },
     scope: "col",
     rowspan: "2"
-  }, "RAW SCORE", -1
+  }, "AVE", -1
   /* HOISTED */
   );
 });
@@ -23080,7 +23188,7 @@ var _hoisted_40 = /*#__PURE__*/_withScopeId(function () {
     },
     scope: "col",
     rowspan: "2"
-  }, "RATING", -1
+  }, "RAW SCORE", -1
   /* HOISTED */
   );
 });
@@ -23090,9 +23198,8 @@ var _hoisted_41 = /*#__PURE__*/_withScopeId(function () {
     style: {
       "text-align": "center"
     },
-    scope: "col",
-    rowspan: "2"
-  }, "RAW SCORE", -1
+    scope: "col"
+  }, "TRANS", -1
   /* HOISTED */
   );
 });
@@ -23102,8 +23209,9 @@ var _hoisted_42 = /*#__PURE__*/_withScopeId(function () {
     style: {
       "text-align": "center"
     },
-    scope: "col"
-  }, "TRANS", -1
+    scope: "col",
+    rowspan: "2"
+  }, "RATING", -1
   /* HOISTED */
   );
 });
@@ -23115,28 +23223,51 @@ var _hoisted_43 = /*#__PURE__*/_withScopeId(function () {
     },
     scope: "col",
     rowspan: "2"
+  }, "RAW SCORE", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_44 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+    style: {
+      "text-align": "center"
+    },
+    scope: "col"
+  }, "TRANS", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_45 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+    style: {
+      "text-align": "center"
+    },
+    scope: "col",
+    rowspan: "2"
   }, "RATING", -1
   /* HOISTED */
   );
 });
 
-var _hoisted_44 = {
+var _hoisted_46 = {
   "class": "text-center"
 };
 
-var _hoisted_45 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_47 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, null, -1
   /* HOISTED */
   );
 });
 
-var _hoisted_46 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_48 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, "60%")], -1
   /* HOISTED */
   );
 });
 
-var _hoisted_47 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_49 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
       "width": "100px",
@@ -23147,7 +23278,7 @@ var _hoisted_47 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_48 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_50 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
       "width": "100px",
@@ -23158,20 +23289,10 @@ var _hoisted_48 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_49 = {
+var _hoisted_51 = {
   scope: "row"
 };
-var _hoisted_50 = ["href"];
-var _hoisted_51 = {
-  style: {
-    "text-align": "center"
-  }
-};
-var _hoisted_52 = {
-  style: {
-    "text-align": "center"
-  }
-};
+var _hoisted_52 = ["href"];
 var _hoisted_53 = {
   style: {
     "text-align": "center"
@@ -23183,85 +23304,101 @@ var _hoisted_54 = {
   }
 };
 var _hoisted_55 = {
-  key: 0
+  style: {
+    "text-align": "center"
+  }
 };
-var _hoisted_56 = ["href"];
+var _hoisted_56 = {
+  style: {
+    "text-align": "center"
+  }
+};
 var _hoisted_57 = {
-  key: 1
+  key: 0
 };
 var _hoisted_58 = ["href"];
 var _hoisted_59 = {
+  key: 1
+};
+var _hoisted_60 = ["href"];
+var _hoisted_61 = {
   style: {
     "text-align": "center"
   }
-};
-var _hoisted_60 = {
-  key: 0
-};
-var _hoisted_61 = {
-  key: 1
 };
 var _hoisted_62 = {
-  style: {
-    "text-align": "center"
-  }
+  key: 0
 };
 var _hoisted_63 = {
-  key: 0
-};
-var _hoisted_64 = {
   key: 1
 };
-var _hoisted_65 = {
+var _hoisted_64 = {
   style: {
     "text-align": "center"
   }
 };
-var _hoisted_66 = {
+var _hoisted_65 = {
   key: 0
 };
-var _hoisted_67 = ["href"];
-var _hoisted_68 = {
+var _hoisted_66 = {
   key: 1
+};
+var _hoisted_67 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_68 = {
+  key: 0
 };
 var _hoisted_69 = ["href"];
 var _hoisted_70 = {
+  key: 1
+};
+var _hoisted_71 = ["href"];
+var _hoisted_72 = {
   style: {
     "text-align": "center"
   }
-};
-var _hoisted_71 = {
-  key: 0
-};
-var _hoisted_72 = {
-  key: 1
 };
 var _hoisted_73 = {
-  style: {
-    "text-align": "center"
-  }
+  key: 0
 };
 var _hoisted_74 = {
-  key: 0
+  key: 1
 };
 var _hoisted_75 = {
-  key: 1
+  style: {
+    "text-align": "center"
+  }
 };
 var _hoisted_76 = {
-  style: {
-    "text-align": "center"
-  }
-};
-var _hoisted_77 = {
   key: 0
 };
-var _hoisted_78 = {
+var _hoisted_77 = {
   key: 1
 };
-var _hoisted_79 = {
+var _hoisted_78 = {
   style: {
     "text-align": "center"
   }
+};
+var _hoisted_79 = {
+  key: 0
+};
+var _hoisted_80 = {
+  key: 1
+};
+var _hoisted_81 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_82 = {
+  key: 0
+};
+var _hoisted_83 = {
+  key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _directive_print = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("print");
@@ -23279,19 +23416,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }
   }, _hoisted_19, 8
   /* PROPS */
-  , _hoisted_17), $props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_20, _hoisted_22)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_23, _hoisted_25)), $props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_26, _hoisted_28)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_29, _hoisted_31)), _hoisted_32, _hoisted_33]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_34, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (count, i) {
+  , _hoisted_17), $props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_20, _hoisted_22)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_23, _hoisted_25)), $props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_26, _hoisted_28)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_29, _hoisted_31)), _hoisted_32, $props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_33, "Midterm Grade")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.title == 'Final' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_34, "Final Grade")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_35, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (count, i) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
       style: {
         "text-align": "center"
       },
       scope: "col",
       key: count
-    }, "A" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(i + 1), 1
-    /* TEXT */
-    );
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      style: {
+        "text-decoration": "none",
+        "color": "#444"
+      },
+      href: "/subject/".concat($props.subject.id, "/section/11/assessment/create?u=").concat(count.id)
+    }, "A" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(i + 1), 9
+    /* TEXT, PROPS */
+    , _hoisted_36)]);
   }), 128
   /* KEYED_FRAGMENT */
-  )), _hoisted_35, _hoisted_36, _hoisted_37, _hoisted_38, _hoisted_39, _hoisted_40, _hoisted_41, _hoisted_42, _hoisted_43]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_44, [_hoisted_45, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (count) {
+  )), _hoisted_37, _hoisted_38, _hoisted_39, _hoisted_40, _hoisted_41, _hoisted_42, _hoisted_43, _hoisted_44, _hoisted_45]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_46, [_hoisted_47, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (count) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", {
       key: count
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(count.max_score), 1
@@ -23301,10 +23444,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* KEYED_FRAGMENT */
   )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.assessments.length * 10), 1
   /* TEXT */
-  )]), _hoisted_46, _hoisted_47, _hoisted_48])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.subject.enroll, function (enroll) {
+  )]), _hoisted_48, _hoisted_49, _hoisted_50])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.subject.enroll, function (enroll) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
-      key: enroll.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(enroll.student.fullname), 1
+      key: enroll.id,
+      "class": "rows"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(enroll.student.fullname), 1
     /* TEXT */
     ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.assessments, function (assessment) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", {
@@ -23331,16 +23475,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return total + Number(item);
       }, 0)), 9
       /* TEXT, PROPS */
-      , _hoisted_50)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+      , _hoisted_52)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
     }), 128
     /* KEYED_FRAGMENT */
-    )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotal(enroll.student.id)), 1
+    )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_53, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotal(enroll.student.id)), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getAverage(enroll.student.id)), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getAverage(enroll.student.id).toFixed(2)), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_53, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getAverage(enroll.student.id))), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getAverage(enroll.student.id)).toFixed(1)), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_54, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_55, [$options.getAssessmentFromExam('prelim', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_56, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_57, [$options.getAssessmentFromExam('prelim', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
@@ -23349,7 +23493,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("prelim", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_56)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_57, [$options.getAssessmentFromExam('semifi', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    , _hoisted_58)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_59, [$options.getAssessmentFromExam('semifi', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
@@ -23358,15 +23502,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("semifi", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_58)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_59, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_60, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))), 1
+    , _hoisted_60)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_61, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_62, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("prelim", enroll.student.id)).toFixed(2)), 1
     /* TEXT */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))), 1
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_63, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("semifi", enroll.student.id)).toFixed(2)), 1
     /* TEXT */
-    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_62, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_63, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id)))), 1
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_64, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_65, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))).toFixed(1)), 1
     /* TEXT */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_64, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id)))), 1
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_66, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))).toFixed(1)), 1
     /* TEXT */
-    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_65, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_66, [$options.getAssessmentFromExam('midterm', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_67, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_68, [$options.getAssessmentFromExam('midterm', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
@@ -23375,7 +23519,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("midterm", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_67)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_68, [$options.getAssessmentFromExam('final', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
+    , _hoisted_69)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_70, [$options.getAssessmentFromExam('final', enroll.student.id) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("a", {
       key: 0,
       style: {
         "color": "black"
@@ -23384,28 +23528,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       target: "_blank"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTotalExams("final", enroll.student.id)), 9
     /* TEXT, PROPS */
-    , _hoisted_69)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_70, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_71, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("midterm", enroll.student.id))), 1
+    , _hoisted_71)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_72, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_73, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)).toFixed(2)), 1
     /* TEXT */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_72, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("final", enroll.student.id))), 1
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_74, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getTransExam($options.getTotalExams("final", enroll.student.id)).toFixed(2)), 1
     /* TEXT */
-    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_73, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_74, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))), 1
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_75, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_76, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id))).toFixed(1)), 1
     /* TEXT */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_75, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))), 1
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_77, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id))).toFixed(1)), 1
     /* TEXT */
-    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_76, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_77, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2), 1
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_78, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_79, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2).toFixed(1)), 1
     /* TEXT */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_78, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2), 1
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_80, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2).toFixed(1)), 1
     /* TEXT */
-    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_79, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-      key: 0,
-      ref: "gradeRemarks"
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades(enroll.student.id, $options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2)), 513
-    /* TEXT, NEED_PATCH */
-    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-      key: 1,
-      ref: "gradeRemarks"
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades(enroll.student.id, $options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2)), 513
-    /* TEXT, NEED_PATCH */
+    ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_81, [$props.title == 'Midterm' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_82, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades(enroll.student.id, $options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("prelim", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("midterm", enroll.student.id)))) / 2).toFixed(1)), 1
+    /* TEXT */
+    )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_83, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getFinalGrades(enroll.student.id, $options.getEqui($options.getAverage(enroll.student.id)), ($options.getEqui($options.getTransExam($options.getTotalExams("semifi", enroll.student.id))) + $options.getEqui($options.getTransExam($options.getTotalExams("final", enroll.student.id)))) / 2).toFixed(1)), 1
+    /* TEXT */
     ))])]);
   }), 128
   /* KEYED_FRAGMENT */
@@ -23810,6 +23948,130 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497 ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "white_box_tittle list_header mb-2"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"box_right d-flex lms_block\" id=\"print_hidden\"><div class=\"serach_field_2\"><div class=\"search_inner\"><!-- &lt;form Active=&quot;#&quot;&gt;\n                &lt;div class=&quot;search_field&quot;&gt;\n                  &lt;input type=&quot;text&quot; placeholder=&quot;Search content here...&quot;&gt;\n                &lt;/div&gt;\n                &lt;button type=&quot;submit&quot;&gt; &lt;i class=&quot;ti-search&quot;&gt;&lt;/i&gt; &lt;/button&gt;\n              &lt;/form&gt; --></div></div><div class=\"add_button ml-10\"><a href=\"#\" class=\"btn_1\">Print</a></div></div>", 1);
+
+var _hoisted_3 = {
+  id: "grades_table"
+};
+var _hoisted_4 = {
+  "class": ""
+};
+var _hoisted_5 = {
+  "class": "box_header m-0 mb-4"
+};
+var _hoisted_6 = {
+  "class": "main-title"
+};
+var _hoisted_7 = {
+  "class": "m-0"
+};
+var _hoisted_8 = {
+  "class": "QA_section"
+};
+var _hoisted_9 = {
+  "class": "QA_table mb_30"
+};
+var _hoisted_10 = {
+  "class": "table-bordered",
+  style: {
+    "width": "100%"
+  }
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", {
+  style: {
+    "width": "100%"
+  }
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  style: {
+    "width": "300px",
+    "text-align": "center"
+  }
+}, "Student Name"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  style: {
+    "text-align": "center"
+  }
+}, "Midterm Grade"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  style: {
+    "text-align": "center"
+  }
+}, "Final Grade"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  style: {
+    "text-align": "center"
+  }
+}, "Final Rating"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  style: {
+    "text-align": "center"
+  }
+}, "Remarks")])], -1
+/* HOISTED */
+);
+
+var _hoisted_12 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_13 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_14 = {
+  style: {
+    "text-align": "center"
+  }
+};
+var _hoisted_15 = {
+  style: {
+    "text-align": "center"
+  }
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.title), 1
+  /* TEXT */
+  ), _hoisted_2]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.subject.subject_name) + " | Grades", 1
+  /* TEXT */
+  )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" table-responsive "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_10, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.subject.enroll, function (enroll) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
+      key: enroll.id
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(enroll.student.fullname), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getGrade(enroll, "Midterm").toFixed(1)), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getGrade(enroll, "Final").toFixed(1)), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((($options.getGrade(enroll, "Midterm") + $options.getGrade(enroll, "Final")) / 2).toFixed(1)), 1
+    /* TEXT */
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(($options.getGrade(enroll, "Midterm") + $options.getGrade(enroll, "Final")) / 2 > 3.0 ? "Failed" : "Passed"), 1
+    /* TEXT */
+    )]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))])])])])])], 64
+  /* STABLE_FRAGMENT */
+  );
+}
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -24122,7 +24384,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.QA_section .QA_table th[data-v-4e3c92df],\n.QA_section .QA_table td[data-v-4e3c92df] {\n  padding: 5px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.QA_section .QA_table th[data-v-4e3c92df],\n.QA_section .QA_table td[data-v-4e3c92df] {\n  padding: 5px;\n}\n.rows *[data-v-4e3c92df] {\n  text-decoration: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -67830,6 +68092,34 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/components/util/SummaryOfGrades.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/util/SummaryOfGrades.vue ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SummaryOfGrades_vue_vue_type_template_id_4031e497__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SummaryOfGrades.vue?vue&type=template&id=4031e497 */ "./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497");
+/* harmony import */ var _SummaryOfGrades_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SummaryOfGrades.vue?vue&type=script&lang=js */ "./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js");
+/* harmony import */ var C_Users_reymond_Desktop_PERSONAL_PROJECTS_moduc_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,C_Users_reymond_Desktop_PERSONAL_PROJECTS_moduc_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_SummaryOfGrades_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SummaryOfGrades_vue_vue_type_template_id_4031e497__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/util/SummaryOfGrades.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/components/AssessmentView.vue?vue&type=script&lang=js":
 /*!****************************************************************************!*\
   !*** ./resources/js/components/AssessmentView.vue?vue&type=script&lang=js ***!
@@ -68022,6 +68312,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SummaryOfGrades_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SummaryOfGrades_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./SummaryOfGrades.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/components/AssessmentView.vue?vue&type=template&id=8f48f79c":
 /*!**********************************************************************************!*\
   !*** ./resources/js/components/AssessmentView.vue?vue&type=template&id=8f48f79c ***!
@@ -68210,6 +68516,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ShortAnswer_vue_vue_type_template_id_388da478__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_ShortAnswer_vue_vue_type_template_id_388da478__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./ShortAnswer.vue?vue&type=template&id=388da478 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/ShortAnswer.vue?vue&type=template&id=388da478");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497 ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SummaryOfGrades_vue_vue_type_template_id_4031e497__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SummaryOfGrades_vue_vue_type_template_id_4031e497__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./SummaryOfGrades.vue?vue&type=template&id=4031e497 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/util/SummaryOfGrades.vue?vue&type=template&id=4031e497");
 
 
 /***/ }),

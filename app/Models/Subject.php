@@ -31,4 +31,7 @@ class Subject extends Model
     public function grades(){
         return $this->hasMany(Grade::class,"subject_id","id");
     }
+    public function feeds(){
+        return $this->hasMany(SubjectFeed::class,"subject_id");
+    }
 }

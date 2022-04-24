@@ -113,69 +113,34 @@
 
 
                                         <!--start here the container kay dre nag sogod tanan-->
-
+                                        @forelse ($subject->feeds as $feed)
                                         <div class="col-lg-12">
                                             <div class="white_card box_shadow">
                                                 <div class="white_card_header border_bottom_1px"><img
                                                         style="display: inline-block"
-                                                        src="{{ asset('pages/img/customers/1.png') }}"><strong>&nbsp;&nbsp;Charles
-                                                        Lydon Abiero</strong></div>
+                                                        src="{{ asset('pages/img/customers/1.png') }}"><strong>&nbsp;&nbsp; {{ $subject->user->fullname }}</strong></div>
                                                 <!--end white_card_header border_bottom_1px-->
                                                 <div class="card-body">
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-10 col-lg-10 col-form-label">Wohooo No work due
-                                                            soon..</label>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <a class="col-xl-12 white_card_header border_bottom_1px"
-                                                            href="#">FileName</a>
+                                                    <div class="mx-4 mb-4">
+                                                        <h4 class="mb-0"><a style="color:#444;" href="/subject/{{$subject->id}}/response?assessment_id={{$feed->assessment->id}}">{{ $feed->title }}</a></h4>
+                                                       <div> <label class="col-xl-10 col-lg-10 col-form-label">{{ $feed->body }}</label></div>
                                                     </div>
 
-
-
-                                                    <div class="form-group row">
+                                                    {{-- <div class="form-group row">
                                                         <div class="col-lg-9 col-xl-8 ">
                                                             <div class="custom-control custom-checkbox">
                                                                 <a href="#"><strong>View all comments</strong></a>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <!--end card-body-->
                                             </div>
                                             <!--end card-->
                                         </div><br><br>
-                                        <div class="col-lg-12  ">
-                                            <div class="white_card box_shadow">
-                                                <div class="white_card_header border_bottom_1px"><img
-                                                        style="display: inline-block"
-                                                        src="{{ asset('pages/img/customers/1.png') }}"><strong>&nbsp;&nbsp;Charles
-                                                        Lydon Abiero</strong></div>
-                                                <!--end white_card_header border_bottom_1px-->
-                                                <div class="card-body">
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-10 col-lg-10 col-form-label">Wohooo No work due
-                                                            soon..</label>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <a class="col-xl-12 white_card_header border_bottom_1px"
-                                                            href="#">FileName</a>
-                                                    </div>
+                                        @empty
 
-
-
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-9 col-xl-8 offset-lg-3 offset-xl-3">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <a href="#"><strong>View All</strong></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end card-body-->
-                                            </div>
-                                            <!--end card-->
-                                        </div>
+                                        @endforelse
 
 
                                     </div>

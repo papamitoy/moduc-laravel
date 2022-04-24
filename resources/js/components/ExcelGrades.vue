@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main_content_iner ">
+  <div class="main_content_iner " style="width:100%">
     <div class="container-fluid p-0">
       <div class="row justify-content-center">
         <div class="col-lg-12">
@@ -16,6 +16,10 @@
                     <a :class="`nav-link`" id="Themes-tab" data-toggle="tab" :href="`#final`" role="tab" aria-controls="Themes" aria-selected="true">Finals</a>
                   </li>
 
+                  <li class="nav-item">
+                    <a :class="`nav-link`" id="Themes-tab" data-toggle="tab" :href="`#summary`" role="tab" aria-controls="Themes" aria-selected="true">Summary of Grades</a>
+                  </li>
+
                 </ul>
 
               </div>
@@ -28,6 +32,10 @@
 
                 <div :class="`tab-pane fade`" id="final" role="tabpanel" aria-labelledby="Themes-tab">
                   <SectionGrades :title="`Final`" :subject="subject" :module_section="module_section" />
+                </div>
+
+                <div :class="`tab-pane fade`" id="summary" role="tabpanel" aria-labelledby="Themes-tab">
+                  <SummaryOfGrades :title="`Summary of Grades`" :subject="subject" :module_section="module_section" />
                 </div>
 
               </div>
@@ -45,12 +53,21 @@
 
 <script>
 import SectionGrades from "./util/SectionGrades.vue";
+import SummaryOfGrades from "./util/SummaryOfGrades.vue";
 export default {
   props: ["subject", "module_section"],
   components: {
     SectionGrades,
+    SummaryOfGrades,
   },
-  methods: {},
+  data: () => ({
+    gettingGrades: false,
+  }),
+  methods: {
+    getGrades() {
+      this.gettingGrades = true;
+    },
+  },
 };
 </script>
 

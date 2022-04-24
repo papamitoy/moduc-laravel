@@ -10,6 +10,7 @@ use App\Models\Module;
 use App\Models\ModuleSection;
 use App\Models\Notification;
 use App\Models\Subject;
+use App\Models\SubjectFeed;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -72,13 +73,7 @@ class ClassController extends Controller
                     "description" => "",
                     "status" => false
 
-                ],
-                [
-                    "subject_id" => $created->id,
-                    "title" => "Summer Class",
-                    "description" => "",
-                    "status" => false
-                ],
+                ]
             ]);
         }
 
@@ -185,7 +180,9 @@ class ClassController extends Controller
 
             ]);
             try{
-                if($request->published){
+                if($request->published && !$assessment->broadcasted){
+                    $assessment->broadcasted = true;
+                    $assessment->save();
                     foreach($assessment->subject->enroll as $enroll){
                         Notification::create([
                         "from" => $assessment->subject-> user_id,
@@ -193,6 +190,14 @@ class ClassController extends Controller
                         "title" => $assessment->subject->subject_name .": ".(strlen($assessment->title) > 20 ? substr($assessment->title,0,20)."..." :$assessment->title),
                         "body" => strlen($assessment->description) > 20 ? substr($assessment->description,0,20)."..." : (!empty($assessment->description) ? $assessment->description :  $assessment->subject->subject_name ." new assessment"),
                         "link" => "/subject/".$assessment->subject->id."/response?assessment_id=".$assessment->id
+                        ]);
+
+                        SubjectFeed::create([
+                        "assessment_id" => $assessment->id,
+                        "subject_id" => $assessment->subject->id,
+                        "title" => $assessment->title,
+                        "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
+                        "owner" => $assessment->subject-> user_id,
                         ]);
                     }
                 }
