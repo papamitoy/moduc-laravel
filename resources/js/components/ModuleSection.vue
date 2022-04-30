@@ -94,7 +94,7 @@
                   <div class="border_bottom_1px"></div><br>
                   <div v-if="is_adviser" style="display:flex; justify-content:space-between;">
                     <a :href="`/subject/${subject.id}/assessment/check-response?assessment_id=${assessment.id}`">Check Respond</a>
-                    <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="btn btn-sm  btn-danger rounded-pill" @click="removeAssessment(assessment.id)">Remove</button>
+                    <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="btn btn-sm  btn-danger rounded-pill" @click="removeAssessment(assessment.id,subject.id)">Remove</button>
 
                   </div>
                   <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
@@ -169,7 +169,7 @@ export default {
         )
       );
     },
-    removeAssessment(id) {
+    removeAssessment(id, subject_id) {
       this.$Swal
         .fire({
           title: "Do you want to remove this assessment?",
@@ -182,8 +182,9 @@ export default {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             try {
-              const data = await axios.post("/api/assessment/remove", {
+              const data = await axios.post("/api/class/remove/assessment", {
                 id: id,
+                subject_id: subject_id,
               });
               if (data.data.success) {
                 this.assessmentList = this.assessmentList.filter(
@@ -228,7 +229,7 @@ export default {
       console.log("modu", res[0], res);
     },
     gotoEdit(id) {
-      location.href = `/subject/${this.subject.id}/section/${this.section.id}/assessment/create?u=${id}`;
+      location.href = `/subject/${this.subject.id}/section/${this.section.id}/assessment/update?u=${id}`;
     },
     isShow(published) {
       return this.is_adviser ? true : published;

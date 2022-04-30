@@ -10,7 +10,7 @@
             <input type="text" style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
 
           </div>
-          <div style="padding: 20px; border-top: 1px solid #f2f4ff;">
+          <div style="padding: 20px; border-top: 1px solid #f2f4ff;" v-if="enableEdit">
             <button @click="removeQuestion" style="background-color: #df0000e6;" class="btn btn-primary2"><i style="font-size: 15px; opacity: 1;" class="far fa-trash-alt"></i></button> |
             <button :data-target="`#essayModal${question.id}`" data-toggle="modal" class="btn btn-primary2"><i style="font-size: 15px; opacity: 1;" class="far fa-edit"></i></button>
           </div>
@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  props: ["question", "number"],
+  props: ["question", "number", "enableEdit"],
   data: () => ({
     equestion: "",
   }),

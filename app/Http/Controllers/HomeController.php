@@ -50,27 +50,14 @@ class HomeController extends Controller
 
         return view("pages.subject", compact('assessments','subject', 'adviser', 'students', "moduleSection","grades"));
     }
-    public function createAssessment(Request $request, Subject $subject, ModuleSection $section)
+    public function updateAssessment(Request $request, Subject $subject, ModuleSection $section)
     {
-
         $create =  $request->query("u");
-        if (!$create) {
-            $assessment = $subject->assessments()->create([
-                'module_section_id' => $section->id,
-                'title' => "Untitled Form",
-                'description' => "",
-                'questions' => "[]",
-                'deadline' =>  null,
-                'type' => "assessment",
-                "published" => 0,
-                "shuffle" => false
-            ]);
-            return redirect("/subject/$subject->id/section/$section->id/assessment/create?u=$assessment->id");
+        if ($create) {
+            $assessment = auth()->user()->subjects("id",$subject->id)->first()->assessments()->where("id",$create)->first();
+            return view("pages.updateassesment", compact('subject', "section",'assessment'));
         }
-        // if($create == "new"){
-        //     redirect()
-        // }
-        return view("pages.createassesment", compact('subject', "section"));
+        return abort(404);
     }
     public function viewAssessment(Request $request, Subject $subject)
     {

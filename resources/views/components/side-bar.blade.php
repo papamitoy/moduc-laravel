@@ -8,7 +8,7 @@
     </div>
     <ul id="sidebar_menu">
         <li>
-            <a href="/" aria-expanded="false">
+            <a href="/" aria-expanded="false" @if (Request::route()->getName() == "subject.view" || Request::route()->getName() == "home") class="active"@endif>
                 <div class="nav_icon_small">
                    <div class="fas fa-home"></div>
                 </div>
@@ -17,6 +17,19 @@
                 </div>
             </a>
         </li>
+        @if (Auth::user()->isAdviser())
+        <li>
+            <a href="/assessments"  @if (Request::route()->getName() == "myassessment") class="active"@endif>
+                <div class="nav_icon_small">
+                    <div class="fas fa-file-alt"></div>
+                </div>
+                <div class="nav_title">
+                    <span>My Assessments</span>
+                </div>
+            </a>
+        </li>
+        @endif
+
        @if (Auth::user()->isAdviser())
         <h4 class="menu-text"><span>TEACHING</span> <i class="fas fa-ellipsis-h"></i> </h4>
         @foreach (Auth::user()->subjects as $subject)

@@ -70,4 +70,8 @@ class User extends Authenticatable
     public function notificationCount(){
         return count($this->notifications->where("seen",false));
     }
+
+    public function mainassessments(){
+        return $this->hasMany(MainAssessment::class,"user_id");
+    }
 }

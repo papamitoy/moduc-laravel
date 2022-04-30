@@ -38,4 +38,15 @@ class Assessment extends Model
     public function scopeUpcomming($query){
         return $query->whereDate("deadline",">",Carbon::now())->where("published",true);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updating(function($model){
+            AnswerTimeLimit::where("assessment_id",$model->id)->update([
+                "time_limit"=> $model->time_limit,
+            ]);
+        });
+    }
 }

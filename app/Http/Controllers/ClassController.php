@@ -6,6 +6,7 @@ use App\Models\Assessment;
 use App\Models\AssessmentFiles;
 use App\Models\AssessmentResponse;
 use App\Models\Grade;
+use App\Models\MainAssessment;
 use App\Models\Module;
 use App\Models\ModuleSection;
 use App\Models\Notification;
@@ -85,6 +86,15 @@ class ClassController extends Controller
 
         return redirect("/");
     }
+    public function removeAssessment(Request $request){
+        $subject =  Auth::user()->subjects()->where("id",$request->subject_id)->first();
+        $assessment = $subject->assessments()->where("id",$request->id)->first();
+        if(!empty($assessment )){
+            $assessment ->delete();
+            return response(["success"=>true]);
+        }
+        return response(["success"=>false]);
+    }
     public function updateClass(Request $request)
     {
          Auth::user()->subjects()->where("id",$request->id)->update(
@@ -113,7 +123,7 @@ class ClassController extends Controller
 
         return response()->json(['success' => true, "message" => "Enrolled Successfully"]);
     }
-    public function createAssessment(Request $request)
+    public function updateAssessment(Request $request)
     {
         $subject =   Subject::where("id", $request->id)->first();
         if (empty($subject)) return response()->json(['success' => false, "message" => "No Subject found"]);
@@ -131,8 +141,42 @@ class ClassController extends Controller
                     'type' => $request->assessmentType,
                     "published" =>  $selectedSubject->published,
                     "shuffle" => $request->shuffle,
-                    "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
+                    "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : '',
+                    "time_limit" =>  $request->timeLimit,
+                    "has_time_limit"=> $request->hasTimeLimit,
+                    "published" =>$request->publish
                 ]);
+
+                try{
+                    if($selectedSubject->published && !$selectedSubject->broadcasted){
+                        $selectedSubject->broadcasted = true;
+                        $selectedSubject->save();
+
+                        SubjectFeed::create([
+                        "assessment_id" => $selectedSubject->id,
+                        "subject_id" => $selectedSubject->subject->id,
+                        "title" => $selectedSubject->title,
+                        "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
+                        "student_link"=> "/subject/".$selectedSubject->subject->id."/response?assessment_id=$selectedSubject->id",
+                        "adviser_link"=> "/subject/".$selectedSubject->subject->id."/section/$selectedSubject->module_section_id/assessment/update?u=$selectedSubject->id",
+                        "owner" => $selectedSubject->subject-> user_id,
+                        ]);
+
+                        foreach($selectedSubject->subject->enroll as $enroll){
+                            Notification::create([
+                            "from" => $selectedSubject->subject-> user_id,
+                            "to" =>$enroll-> student_id,
+                            "title" => $selectedSubject->subject->subject_name .": ".(strlen($selectedSubject->title) > 20 ? substr($selectedSubject->title,0,20)."..." :$selectedSubject->title),
+                            "body" => strlen($selectedSubject->description) > 20 ? substr($selectedSubject->description,0,20)."..." : (!empty($selectedSubject->description) ? $selectedSubject->description :  $selectedSubject->subject->subject_name ." new assessment"),
+                            "link" => "/subject/".$selectedSubject->subject->id."/response?assessment_id=".$selectedSubject->id
+                        ]);
+
+
+                        }
+                    }
+                }catch(Exception $er){
+                    dd($er);
+                }
 
                 if (collect(json_decode($selectedSubject->questions))->count() == 0) {
                     $selectedSubject->published = false;
@@ -167,56 +211,7 @@ class ClassController extends Controller
             return response()->json(['success' => true,  "data" => $assessment]);
         return response()->json(['success' => false]);
     }
-    public function postAssessment(Request $request)
-    {
-        $assessment = Assessment::where("id", $request->selectedId)->first();
 
-        if (!empty($assessment)) {
-            $assessment->load("subject");
-            $assessment->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'questions' => json_encode($request->questions),
-                'deadline' => $request->deadline,
-                'type' => $request->assessmentType,
-                "published" => $request->published,
-                "shuffle" => $request->shuffle,
-
-            ]);
-            try{
-                if($request->published && !$assessment->broadcasted){
-                    $assessment->broadcasted = true;
-                    $assessment->save();
-
-                    SubjectFeed::create([
-                    "assessment_id" => $assessment->id,
-                    "subject_id" => $assessment->subject->id,
-                    "title" => $assessment->title,
-                    "body" => "An ".(ucfirst($request->assessmentType))." has been created.",
-                    "student_link"=> "/subject/".$assessment->subject->id."/response?assessment_id=$assessment->id",
-                    "adviser_link"=> "/subject/".$assessment->subject->id."/section/$assessment->module_section_id/assessment/create?u=$assessment->id",
-                    "owner" => $assessment->subject-> user_id,
-                    ]);
-
-                    foreach($assessment->subject->enroll as $enroll){
-                        Notification::create([
-                        "from" => $assessment->subject-> user_id,
-                        "to" =>$enroll-> student_id,
-                        "title" => $assessment->subject->subject_name .": ".(strlen($assessment->title) > 20 ? substr($assessment->title,0,20)."..." :$assessment->title),
-                        "body" => strlen($assessment->description) > 20 ? substr($assessment->description,0,20)."..." : (!empty($assessment->description) ? $assessment->description :  $assessment->subject->subject_name ." new assessment"),
-                        "link" => "/subject/".$assessment->subject->id."/response?assessment_id=".$assessment->id
-                    ]);
-
-
-                    }
-                }
-            }catch(Exception $er){
-                dd($er);
-            }
-            return response()->json(['success' => true, "redirect" => "/subject/" . $assessment->subjectId(), "data" => $assessment]);
-        }
-        return response()->json(['success' => false]);
-    }
     public function updateSection(Request $request)
     {
         $section = ModuleSection::where("id", $request->section_id)->first();
@@ -302,14 +297,7 @@ class ClassController extends Controller
         $subject->load(["user", "enroll", "assessments",'moduleFiles']);
         return response()->json(['success'=>true,'data'=>$subject]);
     }
-    public function removeAssessment(Request $request){
-        $assessment = Assessment::where("id",$request->id)->first();
-        if(!empty($assessment)){
-            $assessment->delete();
-            return response()->json(['success'=>true]);
-        }
-        return response()->json(['success'=>false]);
-    }
+
     public function saveGrades(Request $request){
         $subject =  Subject::where("id", $request->subject_id)->first();
         $user = User::where("id", $request->user_id)->first();

@@ -76,13 +76,21 @@
                                     @if (Request::route()->getName() == "student.response" || Request::route()->getName() == "subject.view")
                                        <h3 class="f_s_25 f_w_700 dark_text"><a href="/subject/{{$subject->id}}" style="color:#444">{{ $subject->subject_name }}</a> </h3>
                                     @else
-                                        @if(Request::route()->getName() != "check.responses")
-                                        <h3 class="f_s_25 f_w_700 dark_text"><a href="/" style="color:#444">Subjects</a></h3>
+                                        @if(Request::route()->getName() != "check.responses" )
+                                          @if(Request::route()->getName() == "myassessment" || Request::route()->getName() == "create.myassessment"  || Request::route()->getName() == "update.myassessment")
+                                             <h3 class="f_s_25 f_w_700 dark_text"><a href="/" style="color:#444">Assessments</a></h3>
+                                          @else
+                                             <h3 class="f_s_25 f_w_700 dark_text"><a href="/" style="color:#444">Subjects</a></h3>
+                                          @endif
                                         @endif
                                     @endif
                                     <ol class="breadcrumb page_bradcam mb-0">
                                         <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                        @if(Request::route()->getName() == "myassessment" || Request::route()->getName() == "create.myassessment"  || Request::route()->getName() == "update.myassessment")
+                                        <li class="breadcrumb-item"><a href="/assessments">Assessments</a></li>
+                                        @else
                                         <li class="breadcrumb-item"><a href="/">Subjects</a></li>
+                                        @endif
                                         @if (Request::route()->getName() == "subject.view")
                                         <li class="breadcrumb-item active"><a href="/subject/{{$subject->id}}" style="color:#444">  {{ $subject->subject_name }} </a></li>
                                         @endif
@@ -128,6 +136,10 @@
             <x-create-class></x-create-class>
             @if (Request::route()->getName() == "subject.view")
             <x-update-class :subject="$subject"></x-update-class>
+            @endif
+            @if(Request::route()->getName() == "myassessment")
+            {{-- <share-assessment :subjects="{{$subjects}}"></share-assessment> --}}
+            <div id="share-assessment"></div>
             @endif
     </div>
     <!-- footer part -->
