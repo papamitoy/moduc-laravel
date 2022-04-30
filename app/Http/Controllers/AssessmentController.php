@@ -32,7 +32,6 @@ class AssessmentController extends Controller
                 'shuffle' => $request->shuffle,
                 "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
-            return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire", "data" => $newAssessment, "request" => $request->all()]);
         }else{
             $newAssessment = Auth::user()->mainassessments()->updateOrCreate(
                 ['id'=>$request->selectedId],
@@ -45,8 +44,30 @@ class AssessmentController extends Controller
                 'shuffle' => $request->shuffle,
                 "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
-            return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire", "data" => $newAssessment, "request" => $request->all()]);
         }
+
+        if(isset($request->subject_id) && isset($request->section_id)){
+            $subject = Auth::user()->subjects()->where("id",$request->subject_id)->first();
+            $moduleSection = $subject->moduleSection()->where("id",$request->section_id)->first();
+
+            if(!empty($subject) && !empty($moduleSection)){
+                    $subject->assessments()->create([
+                        'module_section_id' => $moduleSection->id,
+                        'user_id' => $subject->user_id,
+                        'title' => $newAssessment->title,
+                        'description' => $newAssessment->description,
+                        'questions' => $newAssessment->questions,
+                        'deadline' => isset($request->deadline) ? $request->deadline : null,
+                        'type' => $newAssessment->type,
+                        "published" => 0,
+                        "shuffle" => $newAssessment->shuffle,
+                        "exam_type" => $newAssessment->exam_type,
+                        "main_assessment_id" => $newAssessment->id
+                    ]);
+            }
+        }
+
+        return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire",'subhect'=>$subject,'section'=>$moduleSection, "data" => $newAssessment, "request" => $request->all()]);
     }
 
     public function removeAssessment(Request $request){
@@ -77,7 +98,8 @@ class AssessmentController extends Controller
                         "published" => 0,
                         "shuffle" => $mainassessment->shuffle,
                         "exam_type" => $mainassessment->exam_type,
-                        "main_assessment_id" => $mainassessment->id
+                        "main_assessment_id" => $mainassessment->id,
+                        'user_id' =>$mainassessment->user_id
                     ]);
                     return response()->json(["success"=>!!$create]);
                 }else{

@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="{{ asset('pages/css/colors/default.css') }}" id="colorSkinCSS">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield("pagesStyles")
+    @livewireStyles
 </head>
 
 <body class="crm_body_bg">
@@ -359,7 +360,7 @@
     <!-- custom js -->
     <script src="{{ asset('pages/js/dashboard_init.js') }}"></script>
     <script src="{{ asset('pages/js/custom.js') }}"></script>
-
+    @livewireScripts
 </body>
 
 <!-- Mirrored from demo.dashboardpack.com/analytic-html/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Aug 2021 13:40:30 GMT -->

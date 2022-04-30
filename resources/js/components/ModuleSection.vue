@@ -19,7 +19,15 @@
         <div class="main-title2 position-relative" style="width:100%">
 
           <div v-if="is_adviser" class="position-absolute" style="right:0;">
-            <a :href="`/subject/${subject.id}/section/${section.id}/assessment/create`" class="btn-sm btn-primary rounded-pill px-3 py-1 text-sm">Add Assessment</a>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Create Or Repost
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" :href="`/assessments/create?subject_id=${subject1.id}&section_id=${section1.id}`">Create Assessment</a>
+                <a class="dropdown-item" href="/assessments">Repost Assessment</a>
+              </div>
+            </div>
           </div>
           <!-- <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

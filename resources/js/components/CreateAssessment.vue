@@ -52,9 +52,7 @@
               </nav>
 
             </div>
-            <!-- lol  -->
-            <!-- <button class="btn btn-primary" @click="postAssessment(true)" v-if="!published">Publish</button>
-          <button class="btn btn-primary" @click="postAssessment(false)" v-else>Unpublish</button> -->
+
           </div>
         </div>
       </div>
@@ -341,56 +339,31 @@ export default {
       this.choices = this.choices.filter((choice) => choice.choice != selected);
       this.questionMC.choices = this.choices;
     },
-    postAssessment(published) {
-      if (this.questions.length == 0) return alert("Please add a questions");
-      axios
-        .post("/api/assessment/create", {
-          id: this.subject.id,
-          questions: this.questions,
-          module_section_id: this.section.id,
-          title: this.title,
-          description: this.description,
-          assessmentType: this.assessmentType,
-          shuffle: this.shuffle,
-          selectedId: this.selectedId,
-          published: published,
-        })
-        .then((res) => {
-          if (res.data.success) {
-            this.$Swal
-              .fire("Success", "You've successfully posted.", "success")
-              .then(() => {
-                location.href = res.data.redirect;
-              });
-          }
-        })
-        .catch((err) => {
-          conosle.log(err);
-          this.$Swal
-            .fire("Warning", "An error occur please try again later", "warning")
-            .then(() => {
-              console.log(err);
-            });
-        });
-    },
+
     save() {
       this.saveAssessment();
       this.$Swal.fire("Success", "Saved successfully", "success");
     },
     saveAssessment() {
       let that = this;
+      var url = new URL(location.href);
+      var subid = url.searchParams.get("subject_id");
+      var secid = url.searchParams.get("section_id");
+      const payload = {
+        questions: this.questions,
+        title: this.title,
+        description: this.description,
+        assessmentType: this.assessmentType,
+        shuffle: this.shuffle,
+        selectedId: this.selectedId,
+        examType: this.examType,
+        max_score: this.max_score,
+      };
+      if (subid != null) payload["subject_id"] = subid;
+      if (secid != null) payload["section_id"] = secid;
 
       axios
-        .post("/api/assessment/create", {
-          questions: this.questions,
-          title: this.title,
-          description: this.description,
-          assessmentType: this.assessmentType,
-          shuffle: this.shuffle,
-          selectedId: this.selectedId,
-          examType: this.examType,
-          max_score: this.max_score,
-        })
+        .post("/api/assessment/create", payload)
         .then((res) => {
           console.log(res);
           if (res.data.success) {

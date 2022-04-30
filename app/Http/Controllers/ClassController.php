@@ -325,4 +325,40 @@ class ClassController extends Controller
         return response()->json(['success'=>false]);
 
     }
+
+    public function getTimeExpended(Request $request){
+        $assessment = Assessment::where("id",$request->id)->first();
+        if(!empty($assessment)){
+            $answerTimer = auth()->user()->answerTimeLimits()->where([
+                'assessment_id' => $assessment->id
+            ])->first();
+            if(!empty($answerTimer)){
+                return ['success'=>true,'data'=>$answerTimer->time_expended];
+            }
+        }
+        return ['success'=>true,'data'=>0];
+
+    }
+
+    public function saveTimeExpended(Request $request){
+        $assessment = Assessment::where("id",$request->id)->first();
+        if(!empty($assessment)){
+            $answerTimer = auth()->user()->answerTimeLimits()->where([
+                'assessment_id' => $assessment->id
+            ])->first();
+            if(!empty($answerTimer)){
+                $answerTimer->update(['time_expended' => $request->time_expended]);
+            }else{
+                auth()->user()->answerTimeLimits()->create([
+                    'assessment_id' =>$assessment->id,
+                    'time_expended' =>$request->time_expended,
+                    'time_limit' => $assessment->time_limit * 60,
+                ]);
+            }
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
+
+
+    }
 }

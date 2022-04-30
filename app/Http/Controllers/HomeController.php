@@ -6,6 +6,7 @@ use App\Models\Assessment;
 use App\Models\Grade;
 use App\Models\ModuleSection;
 use App\Models\Subject;
+use Astatroth\LaravelTimer\Timer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -70,8 +71,6 @@ class HomeController extends Controller
         $subject->load(["enroll","assessments"]);
 
 
-
-
         if(empty($subject->enroll->where("student_id",Auth::user()->id)->first())){
             return abort(404);
         }
@@ -87,7 +86,9 @@ class HomeController extends Controller
             $assessment->questions = json_encode(collect(json_decode($assessment->questions))->shuffle());
         }
 
-        return view("pages.assessmentresponse",compact('assessment','responseSubmission','subject'));
+        $timeExpended = auth()->user()->answerTimeLimits()->where("assessment_id",$assessment->id)->first();
+
+        return view("pages.assessmentresponse",compact('assessment','responseSubmission','subject','timeExpended'));
     }
     public function subjectCheckResponse(Request $request,$subject){
         $subject =  Subject::where("id", $subject)->where("user_id",Auth::user()->id)->first();

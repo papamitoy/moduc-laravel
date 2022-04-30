@@ -35,6 +35,10 @@ class Assessment extends Model
         return $this->belongsTo(ModuleSection::class,"module_section_id","id");
     }
 
+    public function owner(){
+        return $this->belongsTo(User::class,"user_id");
+    }
+
     public function scopeUpcomming($query){
         return $query->whereDate("deadline",">",Carbon::now())->where("published",true);
     }

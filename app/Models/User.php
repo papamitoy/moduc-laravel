@@ -74,4 +74,10 @@ class User extends Authenticatable
     public function mainassessments(){
         return $this->hasMany(MainAssessment::class,"user_id");
     }
+    public function answerTimeLimits(){
+        return $this->hasMany(AnswerTimeLimit::class,"user_id");
+    }
+    public function assessments(){
+        return $this->hasMany(Assessment::class, "user_id");
+    }
 }

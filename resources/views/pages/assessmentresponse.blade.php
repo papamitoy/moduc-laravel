@@ -1,6 +1,6 @@
 @extends("layouts.home")
 @section('content')
-<div class="col-12">
+<div class="col-12" >
 @if($responseSubmission)
 <div class="container-fluid p-0">
 <div class="row justify-content-center">
@@ -34,7 +34,9 @@
 </div>
 </div>
 @else
-<assessment-response :assessment="{{ $assessment }}" :user="{{ Auth::user() }}" ></assessment-response>
+<assessment-response :assessment="{{ $assessment }}" :user="{{ Auth::user() }}" >
+    {{-- @livewire('response-timer', ['assessment'=>$assessment]) --}}
+</assessment-response>
 @endif
 </div>
 @endsection
