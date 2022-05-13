@@ -3,7 +3,7 @@
     <div class="container-fluid p-0">
       <div class="row justify-content-center">
         <div class="col-lg-2 px-0 justify-content-center">
-          <div class="card" id="timer-and-question">
+          <div class="card" id="timer-and-question" v-if="has_time_limit">
             <div class="card-body">
               <span>Time Remaining: {{ timer }}</span>
               <hr>
