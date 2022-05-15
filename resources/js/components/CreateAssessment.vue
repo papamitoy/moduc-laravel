@@ -76,11 +76,6 @@
               <input v-model="description" type="text" class="form-control" id="inputAddress" placeholder="Description" style="font-size: 15px;">
             </div>
 
-            <div class="form-group">
-              <label for="">Max Score</label>
-              <input class="form-control" type="text" v-model="max_score" placeholder="Max Score">
-            </div>
-
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label for="inputState">Questioner Type</label>
@@ -103,12 +98,16 @@
 
               <div class="form-group">
                 <h5>Short Answer</h5>
-                <label for="inputAddress">Question 1</label>
+                <label for="inputAddress">Question</label>
                 <textarea v-model="questionSA.question" class="form-control" id="" placeholder="Your Question here.."></textarea>
               </div>
               <div class="form-group">
                 <small for="inputAddress">Oprional Question</small>
                 <textarea v-model="questionSA.optional" style="font-size: 15px;" class="form-control" id="" placeholder="Your Question here.."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="">Points</label>
+                <input class="form-control" type="number" v-model="questionE.points" placeholder="Points">
               </div>
               <!-- to design start-->
               <!-- <div>
@@ -134,13 +133,17 @@
 
               <div class="form-group">
                 <h5>Long Answer / Essay</h5>
-                <label for="inputAddress">Question 1</label>
+                <label for="inputAddress">Question</label>
                 <textarea v-model="questionE.question" class="form-control" id="" placeholder="Your Question here.."></textarea>
               </div>
 
               <div class="form-group">
                 <small for="inputAddress">Oprional Question</small>
                 <textarea v-model="questionE.optional" style="font-size: 15px;" class="form-control" id="" placeholder="Your Question here.."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="">Points</label>
+                <input class="form-control" type="number" v-model="questionE.points" placeholder="Points">
               </div>
               <!-- to design start-->
               <!-- <div>
@@ -156,12 +159,16 @@
 
               <div class="form-group">
                 <h5>Multiple Choice</h5>
-                <label for="inputAddress">Question 1</label>
+                <label for="inputAddress">Question</label>
                 <textarea v-model="questionMC.question" class="form-control" id="" placeholder="Your Question here.."></textarea>
               </div>
               <div class="form-group">
-                <small for="inputAddress">Oprional Question</small>
+                <small for="inputAddress">Optional Question</small>
                 <textarea v-model="questionMC.optional" style="font-size: 15px;" class="form-control" id="" placeholder="Your Question here.."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="">Points</label>
+                <input class="form-control" type="number" v-model="questionMC.points" placeholder="Points">
               </div>
               <!-- to design start-->
               <!-- <div>
@@ -249,7 +256,6 @@ export default {
             that.title = res.data.data.title;
             that.published = res.data.data.published;
             that.assessmentType = res.data.data.type;
-            that.max_score = res.data.data.max_score;
             that.examType = res.data.data.exam_type;
           }
           this.loading = false;
@@ -264,16 +270,15 @@ export default {
       description: "",
       questionType: "e",
       questions: [],
-      questionE: {},
-      questionMC: {},
-      questionSA: {},
+      questionE: { points: 2 },
+      questionMC: { points: 2 },
+      questionSA: { points: 2 },
       setChoice: {},
       choices: [],
       assessmentType: "exam",
       shuffle: false,
       published: false,
       examType: "prelim",
-      max_score: 10,
     };
   },
   methods: {
@@ -300,9 +305,9 @@ export default {
         type: "essay",
       };
       this.questions.push(this.questionE);
-      this.questionE = {};
+      this.questionE = { points: 2 };
       console.log(this.questions);
-      //   this.saveAssessment();
+      this.saveAssessment();
     },
     submitMultipleChoice() {
       this.questionMC = {
@@ -311,11 +316,11 @@ export default {
         type: "multiple-choice",
       };
       this.questions.push(this.questionMC);
-      this.questionMC = {};
+      this.questionMC = { points: 2 };
       this.choices = [];
       this.setChoice = {};
       console.log(this.questions);
-      //   this.saveAssessment();
+      this.saveAssessment();
     },
     submitShortAnswer() {
       this.questionSA = {
@@ -324,9 +329,9 @@ export default {
         type: "short-answer",
       };
       this.questions.push(this.questionSA);
-      this.questionSA = {};
+      this.questionSA = { points: 2 };
       console.log(this.questions);
-      //   this.saveAssessment();
+      this.saveAssessment();
     },
     addChoice() {
       if (this.choices.find((choice) => choice.choice == this.setChoice.choice))
@@ -357,7 +362,6 @@ export default {
         shuffle: this.shuffle,
         selectedId: this.selectedId,
         examType: this.examType,
-        max_score: this.max_score,
       };
       if (subid != null) payload["subject_id"] = subid;
       if (secid != null) payload["section_id"] = secid;

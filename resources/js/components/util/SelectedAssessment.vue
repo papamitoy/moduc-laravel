@@ -19,6 +19,7 @@
               <th scope="col">Question</th>
               <th scope="col">Correct Answer</th>
               <th scope="col">Student Answer</th>
+              <th scope="col">Max Points</th>
               <th style="width: 30px;" scope="col">Score</th>
             </tr>
           </thead>
@@ -37,8 +38,9 @@
               <td style="width: 600px;">
                 <strong>{{JSON.parse(response.answers)[question.id]}}</strong>
               </td>
+              <td>{{ question.points }}</td>
               <td>
-                <input :name="question.id" v-model="scoreArray[question.id] " type="text" style="background: transparent;                                                   border: none;
+                <input @input="(e)=>{onKeydown(question.points, question.id)}" :max="question.points" min="0" :name="question.id" v-model="scoreArray[question.id]" type="number" style="background: transparent;                                                   border: none;
                                                     border-bottom: 1px solid #949494;
                                                     outline:none; font-size: 20px; -moz-appearance: textfield;
                                                     box-shadow:none; width: 50px;">
@@ -85,6 +87,7 @@ export default {
   watch: {
     response() {
       if (!this.response.score) {
+        console.log("CHECK SCORE", this.response.score);
         return this.autoChecker();
       }
       console.log("response updated", this.response.score);
@@ -104,9 +107,28 @@ export default {
     },
   },
   methods: {
+    onKeydown(max, id) {
+      this.scoreArray[id] =
+        this.scoreArray[id] > max ? max : this.scoreArray[id];
+
+      this.scoreArray[id] = this.scoreArray[id] < 0 ? 0 : this.scoreArray[id];
+    },
     autoChecker() {
       JSON.parse(this.assessment.questions).map((question) => {
-        if (question.type == "multiple-choice" && question.choices[0].correct) {
+        if (question.type == "short-answer") {
+          if (
+            question.correctAnswer &&
+            question.correctAnswer.toLowerCase() ==
+              JSON.parse(this.response.answers)[question.id].toLowerCase()
+          ) {
+            this.scoreArray[question.id] = 1;
+          } else {
+            this.scoreArray[question.id] = 0;
+          }
+        } else if (
+          question.type == "multiple-choice" &&
+          question.choices[0].correct
+        ) {
           this.scoreArray[question.id] =
             JSON.parse(this.response.answers)[question.id] ==
             question.choices[0].choice

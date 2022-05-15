@@ -80,8 +80,15 @@
               </div>
               <div class="collapse" :id="`collapseOne${section.id+''+assessment.id}`" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
+
                   <div style="display:flex; justify-content:space-between;">
-                    <p style="font-size: 10px;">Posted {{ getDate(assessment.created_at,"ll") }}</p><br>
+                    <div style="font-size: 10px;">
+                      <span>Posted {{ getDate(assessment.created_at,"ll") }}</span>
+                      <div v-if="is_adviser" style="display:flex; justify-content: flex-end; align-items:center; margin-top:10px;">
+                        <input :checked="assessment.allow_response" @change="allowResponse(assessment,assessment.allow_response)" :id="`allowResponse${i}`" type="checkbox">
+                        <label style="margin-bottom: 0; margin-left:8px;" :for="`allowResponse${i}`"> Allow Response</label>
+                      </div>
+                    </div>
                     <div style="padding: 10px; display:flex;" v-if="is_adviser">
                       <div class="border-left">
                         <h3>{{ getResponseCount(assessment.response,"pending") }}</h3><small>Pending Responses</small>
@@ -161,6 +168,24 @@ export default {
     },
   },
   methods: {
+    async allowResponse(assessment, isAllowed) {
+      try {
+        const response = await axios.post("/api/assessment/allowedresponse", {
+          assessment_id: assessment.id,
+          allow_response: !isAllowed,
+        });
+        if (response.data.success) {
+          this.assessmentList = this.assessmentList.map((a) => {
+            if (a.id == assessment.id) {
+              a.allow_response = !isAllowed;
+            }
+            return a;
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     getScore(response) {
       const hasResponse =
         response &&

@@ -88,6 +88,7 @@ class HomeController extends Controller
 
         $timeExpended = auth()->user()->answerTimeLimits()->where("assessment_id",$assessment->id)->first();
 
+
         return view("pages.assessmentresponse",compact('assessment','responseSubmission','subject','timeExpended'));
     }
     public function subjectCheckResponse(Request $request,$subject){

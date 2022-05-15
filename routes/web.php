@@ -40,9 +40,12 @@ Route::middleware("auth")->group(function(){
         Route::post("/api/assessment/remove",[AssessmentController::class,"removeAssessment"]);
         Route::post("/api/assessment/create", [AssessmentController::class, "createMyAssessment"]);
         Route::post("/api/assessment/send", [AssessmentController::class, "sendAssessment"]);
+        Route::post("/api/assessment/allowedresponse", [AssessmentController::class, "allowedResponse"]);
         Route::get("/assessments",[AssessmentController::class,"assessmentList"])->name("myassessment");
         Route::get("/assessments/create",[AssessmentController::class,"createAssessment"])->name("create.myassessment");
         Route::get("/assessments/update",[AssessmentController::class,"updateAssessment"])->name("update.myassessment");
+
+        Route::post("/api/subject/removestudent",[ClassController::class,"removeStudent"]);
     });
 
     Route::get("/subject/{subject}/section/{section}/assessment/view", [HomeController::class, "viewAssessment"]);

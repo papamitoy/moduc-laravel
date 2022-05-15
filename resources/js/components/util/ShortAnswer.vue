@@ -5,7 +5,10 @@
       <div class="col-lg-12 justify-content-center">
         <div class="card_box position-relative  mb_30 white_bg ">
           <div class="box_body ">
-            <h5 class="">{{ number }}. {{ question.question }}</h5>
+            <div class="flex">
+              <h5 class="">{{ number }}. {{ question.question }}</h5>
+              <div>{{question.points}} pts.</div>
+            </div>
             <p class="f-w-400 ">{{ question.optional }}</p>
             <input type="text" :value="question.correctAnswer" readonly style="border: 0; outline: 0; border-bottom: 1px solid #03a8f45e; font-size: 1rem;  color: #000; width: 50%; padding-top: 15px;" placeholder="Your Answer">
 
@@ -34,6 +37,10 @@
               <label for="exampleFormControlTextarea1" class="form-label">Question</label>
               <textarea v-model="equestion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
+            <div class="form-group">
+              <label for="">Points</label>
+              <input class="form-control" type="number" v-model="points" placeholder="Points">
+            </div>
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Answer</label>
               <input v-model="ecorrectAnswer" class="form-control" id="exampleFormControlInput1">
@@ -57,10 +64,12 @@ export default {
   data: () => ({
     ecorrectAnswer: "",
     equestion: "",
+    points: "",
   }),
   mounted() {
     this.ecorrectAnswer = this.question.correctAnswer;
     this.equestion = this.question.question;
+    this.points = this.question.points;
   },
   methods: {
     removeQuestion() {
@@ -73,6 +82,7 @@ export default {
           ...this.question,
           question: this.equestion,
           correctAnswer: this.ecorrectAnswer,
+          points: this.points,
         },
       });
     },
@@ -80,5 +90,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
 </style>

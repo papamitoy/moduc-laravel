@@ -9,6 +9,7 @@ class MainAssessment extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
     public static function boot()
     {
         parent::boot();
@@ -20,7 +21,6 @@ class MainAssessment extends Model
                 "exam_type" => $model->exam_type,
                 "description" => $model->description,
                 "questions" => $model->questions,
-                "max_score"=> $model->max_score,
                 "shuffle" => $model->shuffle
             ]);
         });

@@ -4,7 +4,10 @@
       <div class="col-lg-12 justify-content-center">
         <div class="card_box position-relative  mb_30 white_bg ">
           <div class="box_body">
-            <h5 class="">{{ number }}. {{ question.question }}</h5>
+            <div class="flex">
+              <h5 class="">{{ number }}. {{ question.question }}</h5>
+              <div>{{question.points}} pts.</div>
+            </div>
             <p class="f-w-400 ">{{ question.optional }}</p>
             <div v-for="choice in question.choices" :key="choice.choice" style="padding-top: 10px;" class="form-check">
               <input class="form-check-input" type="radio" :name="choice.choice" id="exampleRadios1" onclick="return false;" :checked="choice.correct">
@@ -37,6 +40,10 @@
               <div style="width: 100%;" class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Question</label>
                 <textarea v-model="equestion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="">Points</label>
+                <input class="form-control" type="number" v-model="points" placeholder="Points">
               </div>
               <div class="col-auto">
                 <label class="sr-only" for="inlineFormInputGroup"></label>
@@ -85,11 +92,13 @@ export default {
   data: () => ({
     ecorrectAnswer: "",
     equestion: "",
+    points: "",
     choiceToAdd: {},
   }),
   mounted() {
     this.ecorrectAnswer = this.question.correctAnswer;
     this.equestion = this.question.question;
+    this.points = this.question.points;
   },
   methods: {
     addChoice() {
@@ -134,6 +143,7 @@ export default {
           ...this.question,
           question: this.equestion,
           correctAnswer: this.ecorrectAnswer,
+          points: this.points,
         },
       });
     },
@@ -141,5 +151,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
 </style>

@@ -23,7 +23,7 @@
                 <div class="row">
                   <div style="margin-right: 35px;" class=" col- col-sm-4">
                     <a href="" style="font-size: 12px; color: rgb(0, 131, 218) ;">View Response</a>
-                    <h3 class="counter">50</h3>
+                    <h3 class="counter">{{ getResponsesCount(assessment) }}</h3>
                   </div>
                   <div>
                     <button @click="selectAssessment(assessment)" type="button" class="btn btn-primary2" data-toggle="modal" data-target="#shareAssessment" style="padding-left: 10px; margin-top: 12px; margin-left: 5px; font-size: 12px;">Send to</button>
@@ -58,6 +58,20 @@ export default {
     this.assessmentList = this.mainassessments;
   },
   methods: {
+    getResponsesCount(assessment) {
+      const subject = this.subjects
+        .filter((subject) =>
+          subject.assessments.find((a) => a.main_assessment_id == assessment.id)
+        )
+        .map(
+          (subject) =>
+            subject.assessments.find(
+              (a) => a.main_assessment_id == assessment.id
+            ).response
+        )
+        .reduce((result, item) => result + item.length, 0);
+      return subject;
+    },
     selectAssessment(assessment) {
       this.selectedAssessment = assessment;
     },

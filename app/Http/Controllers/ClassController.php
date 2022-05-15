@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assessment;
 use App\Models\AssessmentFiles;
 use App\Models\AssessmentResponse;
+use App\Models\Enroll;
 use App\Models\Grade;
 use App\Models\MainAssessment;
 use App\Models\Module;
@@ -360,5 +361,14 @@ class ClassController extends Controller
         return response()->json(['success'=>false]);
 
 
+    }
+
+    public function removeStudent(Request $request){
+        $enroll = Enroll::where('id', $request->id)->first();
+        if(!empty($enroll)){
+            $enroll->delete();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
     }
 }

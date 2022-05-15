@@ -155,7 +155,12 @@ export default {
       const ave = Math.ceil(
         (total /
           this.assessments(type).reduce(
-            (total, item) => total + Number(item.max_score),
+            (total, item) =>
+              total +
+              JSON.parse(item.questions).reduce(
+                (result, question) => result + Number(question.points || 0),
+                0
+              ),
             0
           )) *
           100

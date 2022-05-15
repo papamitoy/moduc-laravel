@@ -61,7 +61,7 @@
             </tr>
             <tr class="text-center">
               <th></th>
-              <th v-for="count in assessments" :key="count"><strong>{{ count.max_score }}</strong></th>
+              <th v-for="assessment in assessments" :key="assessment"><strong>{{ JSON.parse(assessment.questions).reduce((result,question)=>result + Number(question.points || 0),0) }}</strong></th>
               <th><strong>{{ (this.assessments.length * 10) }}</strong></th>
               <th><strong>60%</strong></th>
               <th style="width: 100px; text-align: center;"><strong>50</strong></th>
@@ -281,7 +281,12 @@ export default {
       const ave = Math.ceil(
         (total /
           this.assessments.reduce(
-            (total, item) => total + Number(item.max_score),
+            (total, item) =>
+              total +
+              JSON.parse(item.questions).reduce(
+                (result, question) => result + Number(question.points || 0),
+                0
+              ),
             0
           )) *
           100

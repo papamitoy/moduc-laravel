@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assessment;
 use App\Models\MainAssessment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,7 @@ class AssessmentController extends Controller
 {
     public function assessmentList(){
         $user = Auth::user()->load(['mainassessments','subjects']);
-        $subjects = $user->subjects;
+        $subjects = $user->subjects->load(['assessments.response']);
         $mainassessments = $user->mainassessments;
         return view("pages.myassessments",compact('mainassessments','subjects'));
     }
@@ -21,6 +22,7 @@ class AssessmentController extends Controller
 
     public function createMyAssessment(Request $request)
     {
+        $reload = false;
         $mainassessment = Auth::user()->mainassessments()->where("id",$request->selectedId)->first();
         if(empty( $mainassessment)){
             $newAssessment = Auth::user()->mainassessments()->create([
@@ -28,10 +30,10 @@ class AssessmentController extends Controller
                 'type' => $request->assessmentType,
                 'description' => $request->description,
                 'questions' => json_encode($request->questions),
-                'max_score' => $request->max_score ? $request->max_score: 10 ,
                 'shuffle' => $request->shuffle,
                 "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
+            $reload = true;
         }else{
             $newAssessment = Auth::user()->mainassessments()->updateOrCreate(
                 ['id'=>$request->selectedId],
@@ -40,12 +42,12 @@ class AssessmentController extends Controller
                 'type' => $request->assessmentType,
                 'description' => $request->description,
                 'questions' => json_encode($request->questions),
-                'max_score' => $request->max_score ? $request->max_score: 10 ,
                 'shuffle' => $request->shuffle,
                 "exam_type" => $request->examType && $request->assessmentType == 'exam' ? $request->examType : ''
             ]);
         }
-
+        $subject = null;
+        $moduleSection = null;
         if(isset($request->subject_id) && isset($request->section_id)){
             $subject = Auth::user()->subjects()->where("id",$request->subject_id)->first();
             $moduleSection = $subject->moduleSection()->where("id",$request->section_id)->first();
@@ -67,7 +69,7 @@ class AssessmentController extends Controller
             }
         }
 
-        return response()->json(['success' => true, "reload" => true, 'message' => "You've successfully created a questionaire",'subhect'=>$subject,'section'=>$moduleSection, "data" => $newAssessment, "request" => $request->all()]);
+        return response()->json(['success' => true, "reload" => $reload, 'message' => "You've successfully created a questionaire",'subject'=>$subject,'section'=>$moduleSection, "data" => $newAssessment, "request" => $request->all()]);
     }
 
     public function removeAssessment(Request $request){
@@ -122,5 +124,15 @@ class AssessmentController extends Controller
         if (!empty($assessment))
             return response()->json(['success' => true,  "data" => $assessment]);
         return response()->json(['success' => false]);
+    }
+
+    public function allowedResponse(Request $request){
+        $assessment = Assessment::where("id", $request->assessment_id)->first();
+        if(!empty($assessment)){
+            $assessment->allow_response = $request->allow_response;
+            $assessment->save();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
     }
 }

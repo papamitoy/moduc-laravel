@@ -255,90 +255,12 @@
 
                                             <div class="QA_table ">
                                                 <!-- table-responsive -->
-                                                <table class="table lms_table_active">
-                                                    <thead>
 
-                                                        <tr>
-                                                            <th scope="col">
 
-                                                            </th>
-                                                            <th scope="col"></th>
-                                                            <th scope="col">Name</th>
+                                                        <manage-people :students="{{$students}}" :adviser="{{$adviser}}"></manage-people>
 
-                                                            <th scope="col">Details</th>
-                                                            <th scope="col">Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <th scope="row">
-                                                            </th>
-                                                            <td> <i class="fas fa-chalkboard-teacher"></i> </td>
-                                                            <td>
-                                                                <div class="media align-items-center">
-                                                                    <img class="circle-rounded mr-3"
-                                                                        src="{{ asset('pages/img/messages/1.png') }}"
-                                                                        alt="" width="30" height="30">
-                                                                    <div class="">
-                                                                        <p>{{ $adviser->fullname }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td></td>
-                                                            <p> Adviser </p>
-                                                            </td>
-                                                            <td>
-                                                                <p class="">{{ $adviser->email }}</p>
-                                                            </td>
-                                                            <td>
 
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
 
-                                                    <thead>
-
-                                                        <tr>
-                                                            <th scope="col">
-
-                                                            </th>
-                                                            <th scope="col"></th>
-                                                            <th scope="col">name</th>
-
-                                                            <th scope="col">details</th>
-                                                            <th scope="col">Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($students as $student)
-                                                            <tr>
-                                                                <th scope="row">
-                                                                </th>
-                                                                <td> <i class="fas fa-user-alt"></i>
-                                                                <td>
-                                                                    <div class="media align-items-center">
-                                                                        <img class="circle-rounded mr-3"
-                                                                            src="{{ asset('pages/img/messages/1.png') }}"
-                                                                            alt="" width="30" height="30">
-                                                                        <div class="">
-                                                                            <p>{{ $student->student->fullname }}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <p> Student</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="">
-                                                                        {{ $student->student->email }}</p>
-                                                                </td>
-                                                                <td>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
                                             </div>
                                         </div><br><br>
                                     </div>
