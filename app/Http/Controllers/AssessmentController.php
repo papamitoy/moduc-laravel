@@ -79,6 +79,10 @@ class AssessmentController extends Controller
     public function removeAssessment(Request $request){
         $assessment = MainAssessment::where("id",$request->id)->first();
         if(!empty($assessment)){
+
+            if($assessment->assessments->count() != 0){
+                return response()->json(['success'=>false,"message"=>"Please remove all assessments associated with this assessment."]);
+            }
             $assessment->delete();
             return response()->json(['success'=>true,"data"=>$assessment]);
         }

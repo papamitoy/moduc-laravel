@@ -98,6 +98,12 @@ export default {
                 );
                 this.$Swal.fire("Removed successfully", "", "success");
                 return;
+              } else {
+                return this.$Swal.fire(
+                  data.data.message || "Please try again later",
+                  "",
+                  "info"
+                );
               }
             } catch (e) {
               console.log(e);

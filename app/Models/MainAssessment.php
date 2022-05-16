@@ -10,6 +10,10 @@ class MainAssessment extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function assessments(){
+        return $this->hasMany(Assessment::class,"main_assessment_id");
+    }
+
     public static function boot()
     {
         parent::boot();

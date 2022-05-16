@@ -20438,7 +20438,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               switch (_context.prev = _context.next) {
                 case 0:
                   if (!result.isConfirmed) {
-                    _context.next = 15;
+                    _context.next = 18;
                     break;
                   }
 
@@ -20452,7 +20452,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   data = _context.sent;
 
                   if (!data.data.success) {
-                    _context.next = 9;
+                    _context.next = 11;
                     break;
                   }
 
@@ -20464,24 +20464,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   return _context.abrupt("return");
 
-                case 9:
-                  _context.next = 14;
+                case 11:
+                  return _context.abrupt("return", _this.$Swal.fire(data.data.message || "Please try again later", "", "info"));
+
+                case 12:
+                  _context.next = 17;
                   break;
 
-                case 11:
-                  _context.prev = 11;
+                case 14:
+                  _context.prev = 14;
                   _context.t0 = _context["catch"](1);
                   console.log(_context.t0);
 
-                case 14:
+                case 17:
                   _this.$Swal.fire("Please try again later", "", "info");
 
-                case 15:
+                case 18:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[1, 11]]);
+          }, _callee, null, [[1, 14]]);
         }));
 
         return function (_x) {
