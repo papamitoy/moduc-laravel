@@ -71,10 +71,15 @@
 
                   <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="`#collapseOne${section.id+''+assessment.id}`" aria-expanded="false" aria-controls="collapseOne">{{ assessment.title }}</button>
                   <span style="font-size: 12px; font-weight: normal; ">{{ assessment.deadline ? "Due "+getDate(assessment.deadline,"LL") : "" }}</span>
-                  <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="float-right btn btn-sm  btn-primary rounded-pill" @click="gotoEdit(assessment.id)">Update</button>
 
+                  <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="float-right btn btn-sm  btn-primary rounded-pill" @click="gotoEdit(assessment.id)">Update</button>
                   <p style="margin-top: 12px;" class="badge badge-warning float-right" v-if="is_adviser && !assessment.published">Unpublished</p>
                   <p style="margin-top: 12px;" class="badge badge-warning float-right" v-else-if="is_adviser && assessment.published">Published</p>
+                  <div v-if="!is_adviser" class="float-right" style="margin-top: 12px;">
+                    <p class="badge badge-success " v-if="checkIfResponded(assessment.id) == 1">Responded</p>
+                    <p class="badge badge-warning " v-else-if="checkIfResponded(assessment.id) == 0">Pending</p>
+
+                  </div>
 
                 </h5>
               </div>
@@ -84,9 +89,13 @@
                   <div style="display:flex; justify-content:space-between;">
                     <div style="font-size: 10px;">
                       <span>Posted {{ getDate(assessment.created_at,"ll") }}</span>
-                      <div v-if="is_adviser" style="display:flex; justify-content: flex-end; align-items:center; margin-top:10px;">
+                      <div v-if="is_adviser" style="display:flex;  align-items:center; margin-top:10px;">
                         <input :checked="assessment.allow_response" @change="allowResponse(assessment,assessment.allow_response)" :id="`allowResponse${i}`" type="checkbox">
                         <label style="margin-bottom: 0; margin-left:8px;" :for="`allowResponse${i}`"> Allow Response</label>
+                      </div>
+                      <div v-if="is_adviser" style="display:flex;  align-items:center; margin-top:10px;">
+                        <input :checked="assessment.show_results" @change="showResults(assessment,assessment.show_results)" :id="`showResults${i}`" type="checkbox">
+                        <label style="margin-bottom: 0; margin-left:8px;" :for="`showResults${i}`"> Show students the results</label>
                       </div>
                     </div>
                     <div style="padding: 10px; display:flex;" v-if="is_adviser">
@@ -112,7 +121,24 @@
                     <button v-if="is_adviser" style="padding-left: 10px; margin-top:5px; font-size:12px" class="btn btn-sm  btn-danger rounded-pill" @click="removeAssessment(assessment.id,subject.id)">Remove</button>
 
                   </div>
-                  <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" v-else target="_BLANK">Respond</a>
+                  <div v-else>
+                    <a :href="`/subject/${subject.id}/response?assessment_id=${assessment.id}`" target="_BLANK">Respond</a>
+                    <a v-if="assessment.show_results && checkIfResponded(assessment.id) == 1" href="#" :data-target="`#assessment_results${assessment.id}`" data-toggle="modal" class="ml-4 text-danger">View Result</a>
+                    <!-- start modal for results -->
+                    <Teleport to="#student_show_results" v-if="assessment.show_results && checkIfResponded(assessment.id) == 1">
+                      <div class="modal fade" :id="`assessment_results${assessment.id}`" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document" style="z-index:10000000;">
+                          <div class="modal-content">
+
+                            <AssessmentResults :assessment="assessment" :user_id="user_id" />
+
+                          </div>
+                        </div>
+                      </div>
+                    </Teleport>
+
+                    <!--end modal for results -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -125,6 +151,7 @@
 </template>
 
 <script>
+import AssessmentResults from "./modals/AssessmentResults.vue";
 import moment from "moment";
 export default {
   props: [
@@ -134,7 +161,11 @@ export default {
     "assessments",
     "grades",
     "user_id",
+    "responses",
   ],
+  components: {
+    AssessmentResults,
+  },
   data() {
     return {
       section: {},
@@ -168,6 +199,33 @@ export default {
     },
   },
   methods: {
+    checkIfResponded(assessment_id) {
+      const response = this.responses.find(
+        (response) => response.assessment_id == assessment_id
+      );
+      if (response) {
+        return response.status;
+      }
+      return null;
+    },
+    async showResults(assessment, isShow) {
+      try {
+        const response = await axios.post("/api/assessment/showresults", {
+          assessment_id: assessment.id,
+          show_results: !isShow,
+        });
+        if (response.data.success) {
+          this.assessmentList = this.assessmentList.map((a) => {
+            if (a.id == assessment.id) {
+              a.show_results = !isShow;
+            }
+            return a;
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async allowResponse(assessment, isAllowed) {
       try {
         const response = await axios.post("/api/assessment/allowedresponse", {

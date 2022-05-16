@@ -58,11 +58,11 @@
         <div class="card-body">
           <div class="form-group">
             <label for="inputAddress">Form Title</label>
-            <input readonly :value="title" type="text" class="form-control" id="inputAddress" placeholder="Untitled Form" style="font-size: 25px;">
+            <input readonly :value="title" type="text" class="form-control" id="inputAddress" style="font-size: 25px;">
           </div>
           <div class="form-group">
             <label for="inputAddress">Form Description</label>
-            <input readonly :value="description" type="text" class="form-control" id="inputAddress" placeholder="Description" style="font-size: 15px;">
+            <input readonly :value="description" type="text" class="form-control" id="inputAddress" style="font-size: 15px;">
           </div>
           <div class="form-group mb-0">
             <label for="date">Due Date</label>
@@ -75,7 +75,7 @@
                 <label class="ml-2" for="timelimit">Enable Time Limit</label>
               </div>
               <div v-if="hasTimeLimit" class="form-group mb-0">
-                <input class="form-control" placeholder="Enter time limit in minutes" type="text" v-model="timeLimit">
+                <input class="form-control" placeholder="Enter time limit in minutes" type="number" v-model="timeLimit">
               </div>
             </div>
             <div class="col-md-6">
@@ -87,7 +87,7 @@
 
           </div>
           <div style="display:flex;justify-content:space-between">
-            <a :href="`/assessments/update?id=${assessment.main_assessment_id}`" class="btn btn-primary mt-5">Update Main Questionnaire</a>
+            <a :href="`/assessments/update?id=${assessment.main_assessment_id}&redirect=${subject.id}`" class="btn btn-primary mt-5">Update Main Questionnaire</a>
             <button class="btn btn-primary mt-5" @click="save()">Save</button>
           </div>
         </div>
@@ -143,6 +143,7 @@ export default {
   mounted() {
     this.selectedId = this.assessment.id;
     this.questions = JSON.parse(this.assessment.questions);
+    this.description = this.assessment.description;
     this.deadline = this.assessment.deadline;
     this.shuffle = this.assessment.shuffle == 1;
     this.title = this.assessment.title;
@@ -173,7 +174,6 @@ export default {
   methods: {
     save() {
       this.saveAssessment();
-      this.$Swal.fire("Success", "Saved successfully", "success");
     },
     saveAssessment() {
       let that = this;
@@ -198,6 +198,11 @@ export default {
           console.log(res);
           if (res.data.success) {
             that.selectedId = res.data.data.id;
+            if (res.data.success) {
+              this.$Swal
+                .fire("Success", "Saved successfully", "success")
+                .then(() => (location.href = "/subject/" + this.subject.id));
+            }
             if (res.data.reload) {
               var url = new URL(location.href);
               //   url.searchParams.set("id", res.data.data.id);

@@ -20,7 +20,7 @@
                    </div>
               <div class="white_box_tittle">
                   <div class="main-title2 ">
-                      <h1 class="mb-2 nowrap">Midterm Exam</h1>
+                      <h1 class="mb-2 nowrap">{{ $assessment->title }}</h1>
                       <small>You already responded</small>
                   </div>
               </div>
@@ -52,7 +52,7 @@
                        </div>
                   <div class="white_box_tittle">
                       <div class="main-title2 ">
-                          <h1 class="mb-2 nowrap">Midterm Exam</h1>
+                          <h1 class="mb-2 nowrap">{{ $assessment->title }}</h1>
                           <small>Accepting response is close</small>
                       </div>
                   </div>

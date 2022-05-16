@@ -121,7 +121,7 @@ export default {
             question.correctAnswer.toLowerCase() ==
               JSON.parse(this.response.answers)[question.id].toLowerCase()
           ) {
-            this.scoreArray[question.id] = 1;
+            this.scoreArray[question.id] = question.points || 1;
           } else {
             this.scoreArray[question.id] = 0;
           }

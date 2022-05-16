@@ -176,7 +176,7 @@ class ClassController extends Controller
                         }
                     }
                 }catch(Exception $er){
-                    dd($er);
+
                 }
 
                 if (collect(json_decode($selectedSubject->questions))->count() == 0) {

@@ -135,4 +135,14 @@ class AssessmentController extends Controller
         }
         return response()->json(['success'=>false]);
     }
+    public function showResults(Request $request){
+        $assessment = Assessment::where("id", $request->assessment_id)->first();
+        if(!empty($assessment)){
+            $assessment->show_results = $request->show_results;
+            $assessment->save();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
+    }
+
 }

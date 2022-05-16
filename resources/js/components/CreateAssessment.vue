@@ -251,7 +251,7 @@ export default {
           if (res.data.success) {
             that.selectedId = res.data.data.id;
             that.questions = JSON.parse(res.data.data.questions);
-
+            that.description = res.data.data.description;
             that.shuffle = res.data.data.shuffle == 1;
             that.title = res.data.data.title;
             that.published = res.data.data.published;
@@ -347,7 +347,6 @@ export default {
 
     save() {
       this.saveAssessment();
-      this.$Swal.fire("Success", "Saved successfully", "success");
     },
     saveAssessment() {
       let that = this;
@@ -371,6 +370,13 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.data.success) {
+            this.$Swal.fire("Success", "Saved successfully", "success");
+            var url = new URL(location.href);
+            var redirect = url.searchParams.get("redirect");
+            console.log(redirect);
+            if (redirect) {
+              return (location.href = "/subject/" + redirect);
+            }
             that.selectedId = res.data.data.id;
             if (res.data.reload) {
               var url = new URL(location.href);
@@ -380,13 +386,13 @@ export default {
           }
         })
         .catch((err) => {
-          conosle.log(err);
-          return;
+          console.log(err);
           this.$Swal
             .fire("Warning", "An error occur please try again later", "warning")
             .then(() => {
               location.reload();
             });
+          return;
         });
     },
   },

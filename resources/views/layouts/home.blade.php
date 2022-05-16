@@ -141,6 +141,8 @@
             {{-- <share-assessment :subjects="{{$subjects}}"></share-assessment> --}}
             <div id="share-assessment"></div>
             @endif
+
+            <div id="student_show_results"></div>
     </div>
     <!-- footer part -->
     <div class="footer_part">

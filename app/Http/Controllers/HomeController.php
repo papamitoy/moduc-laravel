@@ -48,7 +48,6 @@ class HomeController extends Controller
         }
         $grades = Grade::where("subject_id",$subject->id)->get();
         $grades->load(["subject","student"]);
-
         return view("pages.subject", compact('assessments','subject', 'adviser', 'students', "moduleSection","grades"));
     }
     public function updateAssessment(Request $request, Subject $subject, ModuleSection $section)

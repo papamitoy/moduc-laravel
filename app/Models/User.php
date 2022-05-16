@@ -80,4 +80,7 @@ class User extends Authenticatable
     public function assessments(){
         return $this->hasMany(Assessment::class, "user_id");
     }
+    public function responses(){
+        return $this->hasMany(AssessmentResponse::class,"user_id");
+    }
 }

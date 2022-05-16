@@ -157,8 +157,8 @@
                     <div class="tab-pane fade" id="page" role="tabpanel" aria-labelledby="page-tab">
                         <div class="row justify-content-center">
                             @foreach ($moduleSection as $section)
-                                <module-section :user_id="{{ Auth::user()->id }}" :grades="{{  $grades }}" :assessments="{{ $section->assessments }}" :subject1="{{ json_encode($subject) }}"
-                                    :is_adviser="{{ $adviser->id == Auth::user()->id }}" :section1="{{ $section }}">
+                                <module-section :responses="{{Auth::user()->responses}}" :user_id="{{ Auth::user()->id }}" :grades="{{  $grades }}" :assessments="{{ $section->assessments }}" :subject1="{{ json_encode($subject) }}"
+                                     :is_adviser="{{ $adviser->id == Auth::user()->id ? 1 : 0 }}" :section1="{{ $section }}">
                                 </module-section>
                             @endforeach
                             <!--
