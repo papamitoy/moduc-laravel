@@ -113,7 +113,7 @@
 
 
                                         <!--start here the container kay dre nag sogod tanan-->
-                                        @forelse ($subject->feeds as $feed)
+                                        @forelse ($feeds as $feed)
                                         <div class="col-lg-12">
                                             <div class="white_card box_shadow">
                                                 <div class="white_card_header border_bottom_1px"><img
@@ -257,7 +257,7 @@
                                                 <!-- table-responsive -->
 
 
-                                                        <manage-people :students="{{$students}}" :adviser="{{$adviser}}"></manage-people>
+                                                        <manage-people :is_adviser="{{ $adviser->id == Auth::user()->id ? 1 : 0 }}" :students="{{$students}}" :adviser="{{$adviser}}"></manage-people>
 
 
 

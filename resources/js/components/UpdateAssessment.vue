@@ -65,13 +65,13 @@
             <input readonly :value="description" type="text" class="form-control" id="inputAddress" style="font-size: 15px;">
           </div>
           <div class="form-group mb-0">
-            <label for="date">Due Date</label>
-            <input v-model="deadline" type="date" :min="`${new Date().toISOString().split('T')[0]}`" class=" form-control" name="inputDate" id="inputDate">
+            <label for="date">Due Date : {{getDate(deadline,"lll")}}</label>
+            <input v-model="deadline" type="datetime-local" :min="`${new Date()}`" class=" form-control" name="inputDate" id="inputDate">
           </div>
           <div class="row mt-3">
             <div class="col-md-6">
               <div class="form-group mb-0">
-                <input v-model="hasTimeLimit" :checked="hasTimeLimit == 1" type="checkbox" name="inputDate" id="timelimit">
+                <input v-model="hasTimeLimit" :checked="hasTimeLimit == 1" type="checkbox">
                 <label class="ml-2" for="timelimit">Enable Time Limit</label>
               </div>
               <div v-if="hasTimeLimit" class="form-group mb-0">
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Essay from "./util/Essay.vue";
 import MultipleChoice from "./util/MultipleChoice.vue";
 import ShortAnswer from "./util/ShortAnswer.vue";
@@ -142,7 +143,10 @@ export default {
   },
   mounted() {
     this.selectedId = this.assessment.id;
-    this.questions = JSON.parse(this.assessment.questions);
+    this.questions =
+      this.assessment && this.assessment.questions
+        ? JSON.parse(this.assessment.questions)
+        : [];
     this.description = this.assessment.description;
     this.deadline = this.assessment.deadline;
     this.shuffle = this.assessment.shuffle == 1;
@@ -172,6 +176,9 @@ export default {
     };
   },
   methods: {
+    getDate(date, format) {
+      return moment(date).format(format);
+    },
     save() {
       this.saveAssessment();
     },

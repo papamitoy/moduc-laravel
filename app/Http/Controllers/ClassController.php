@@ -117,16 +117,23 @@ class ClassController extends Controller
 
         $subject = Subject::where("subject_code", $request->subject_code)->first();
         if (empty($subject)) return response()->json(['success' => false, "message" => "No Subject found"]);
-        $enrolled =  Auth::user()->enroll()->create([
-            "subject_id" => $subject->id
-        ]);
-        if (empty($enrolled)) return response()->json(['success' => false, "message" => "Failed to enroll"]);
+        //check if already enroll
+       $isEnrolled =  Auth::user()->enroll()->where("subject_id", $subject->id)->first();
+       if(empty($isEnrolled)){
+            $enrolled =  Auth::user()->enroll()->create([
+                "subject_id" => $subject->id
+            ]);
+            if (empty($enrolled)) return response()->json(['success' => false, "message" => "Failed to enroll"]);
+            return response()->json(['success' => true, "message" => "Enrolled Successfully"]);
+        }else{
+            return response()->json(['success' => false, "message" => "You already enrolled to this subject."]);
+        }
 
-        return response()->json(['success' => true, "message" => "Enrolled Successfully"]);
     }
     public function updateAssessment(Request $request)
     {
-        $subject =   Subject::where("id", $request->id)->first();
+
+        $subject =   Auth::user()->subjects()->where("id", $request->id)->first();
         if (empty($subject)) return response()->json(['success' => false, "message" => "No Subject found"]);
 
         $subject->load("assessments","enroll");

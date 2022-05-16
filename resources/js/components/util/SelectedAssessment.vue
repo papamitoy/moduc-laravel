@@ -132,7 +132,7 @@ export default {
           this.scoreArray[question.id] =
             JSON.parse(this.response.answers)[question.id] ==
             question.choices[0].choice
-              ? 1
+              ? question.points || 1
               : 0;
         } else {
           this.scoreArray[question.id] = "";

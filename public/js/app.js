@@ -19756,7 +19756,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       assessmentType: "exam",
       shuffle: false,
       published: false,
-      examType: "prelim"
+      examType: "prelim",
+      saving: false
     };
   },
   methods: {
@@ -19769,12 +19770,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         return question;
-      }); //   this.saveAssessment();
+      });
+      this.saveAssessment(false);
     },
     removeQuestion: function removeQuestion(pquestion) {
       this.questions = this.questions.filter(function (question) {
         return question.id != pquestion.id;
-      }); //   this.saveAssessment();
+      });
+      this.saveAssessment(false);
     },
     submitEssay: function submitEssay() {
       this.questionE = _objectSpread(_objectSpread({
@@ -19787,7 +19790,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         points: 2
       };
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     submitMultipleChoice: function submitMultipleChoice() {
       this.questionMC = _objectSpread(_objectSpread({
@@ -19802,7 +19805,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.choices = [];
       this.setChoice = {};
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     submitShortAnswer: function submitShortAnswer() {
       this.questionSA = _objectSpread(_objectSpread({
@@ -19815,7 +19818,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         points: 2
       };
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     addChoice: function addChoice() {
       var _this2 = this;
@@ -19834,11 +19837,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.questionMC.choices = this.choices;
     },
     save: function save() {
-      this.saveAssessment();
+      this.saveAssessment(true);
     },
     saveAssessment: function saveAssessment() {
       var _this3 = this;
 
+      var isReroute = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (this.saving) {
+        return;
+      }
+
+      this.saving = true;
       var that = this;
       var url = new URL(location.href);
       var subid = url.searchParams.get("subject_id");
@@ -19858,24 +19868,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(res);
 
         if (res.data.success) {
-          _this3.$Swal.fire("Success", "Saved successfully", "success");
-
           var url = new URL(location.href);
           var redirect = url.searchParams.get("redirect");
           console.log(redirect);
 
-          if (redirect) {
+          if (isReroute) {
+            _this3.$Swal.fire("Success", "Saved successfully", "success");
+          }
+
+          if (redirect && isReroute) {
             return location.href = "/subject/" + redirect;
           }
 
           that.selectedId = res.data.data.id;
+          var url = new URL(location.href);
+          url.searchParams.set("id", res.data.data.id); //   location.href = url;
 
-          if (res.data.reload) {
-            var url = new URL(location.href);
-            url.searchParams.set("id", res.data.data.id);
-            location.href = url;
-          }
+          window.history.pushState({
+            path: url
+          }, "", url);
         }
+
+        _this3.saving = false;
       })["catch"](function (err) {
         console.log(err);
 
@@ -19883,6 +19897,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           location.reload();
         });
 
+        _this3.saving = false;
         return;
       });
     }
@@ -19946,7 +19961,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["students", "adviser"],
+  props: ["students", "adviser", "is_adviser"],
   data: function data() {
     return {
       studentList: []
@@ -20490,18 +20505,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _util_Essay_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/Essay.vue */ "./resources/js/components/util/Essay.vue");
-/* harmony import */ var _util_MultipleChoice_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/MultipleChoice.vue */ "./resources/js/components/util/MultipleChoice.vue");
-/* harmony import */ var _util_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/ShortAnswer.vue */ "./resources/js/components/util/ShortAnswer.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_Essay_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/Essay.vue */ "./resources/js/components/util/Essay.vue");
+/* harmony import */ var _util_MultipleChoice_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/MultipleChoice.vue */ "./resources/js/components/util/MultipleChoice.vue");
+/* harmony import */ var _util_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util/ShortAnswer.vue */ "./resources/js/components/util/ShortAnswer.vue");
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["subject", "section", "assessment"],
   components: {
-    Essay: _util_Essay_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    MultipleChoice: _util_MultipleChoice_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    ShortAnswer: _util_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Essay: _util_Essay_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    MultipleChoice: _util_MultipleChoice_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ShortAnswer: _util_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   computed: {
     getExamType: function getExamType() {
@@ -20541,7 +20559,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.selectedId = this.assessment.id;
-    this.questions = JSON.parse(this.assessment.questions);
+    this.questions = this.assessment && this.assessment.questions ? JSON.parse(this.assessment.questions) : [];
     this.description = this.assessment.description;
     this.deadline = this.assessment.deadline;
     this.shuffle = this.assessment.shuffle == 1;
@@ -20571,6 +20589,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getDate: function getDate(date, format) {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format(format);
+    },
     save: function save() {
       this.saveAssessment();
     },
@@ -21217,7 +21238,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this.scoreArray[question.id] = 0;
           }
         } else if (question.type == "multiple-choice" && question.choices[0].correct) {
-          _this.scoreArray[question.id] = JSON.parse(_this.response.answers)[question.id] == question.choices[0].choice ? 1 : 0;
+          _this.scoreArray[question.id] = JSON.parse(_this.response.answers)[question.id] == question.choices[0].choice ? question.points || 1 : 0;
         } else {
           _this.scoreArray[question.id] = "";
         }
@@ -22508,10 +22529,28 @@ var _hoisted_84 = /*#__PURE__*/_withScopeId(function () {
 
 var _hoisted_85 = [_hoisted_84];
 var _hoisted_86 = {
-  key: 1
+  key: 0,
+  "class": "spinner-border text-sm",
+  role: "status"
 };
 
 var _hoisted_87 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    "class": "sr-only"
+  }, "Loading...", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_88 = [_hoisted_87];
+var _hoisted_89 = {
+  key: 1
+};
+var _hoisted_90 = {
+  key: 1
+};
+
+var _hoisted_91 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "col-12"
   }, "Loading", -1
@@ -22519,7 +22558,7 @@ var _hoisted_87 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_88 = [_hoisted_87];
+var _hoisted_92 = [_hoisted_91];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Essay = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Essay");
 
@@ -22814,7 +22853,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[22] || (_cache[22] = function ($event) {
       return $options.save();
     })
-  }, "Save")])])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_86, _hoisted_88));
+  }, [$data.saving ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_86, _hoisted_88)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_89, "Save"))])])])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_90, _hoisted_92));
 }
 
 /***/ }),
@@ -23078,14 +23117,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     )])])]), _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(student.student.email), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [$props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+      key: 0,
       "class": "btn btn-danger",
       onClick: function onClick($event) {
         return $options.removeStudent(student);
       }
     }, "remove", 8
     /* PROPS */
-    , _hoisted_18)])]);
+    , _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])]);
@@ -23498,7 +23538,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* HYDRATE_EVENTS, NEED_PATCH */
   )), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showBtn]]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [$props.is_adviser ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
     "class": "dropdown-item",
-    href: "/assessments/create?subject_id=".concat($props.subject1.id, "&section_id=").concat($props.section1.id)
+    href: "/assessments/create?subject_id=".concat($props.subject1.id, "&section_id=").concat($props.section1.id, "&redirect=").concat($props.subject1.id)
   }, "Create Assessment", 8
   /* PROPS */
   , _hoisted_10), _hoisted_11])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"dropdown\">\n  <button class=\"btn btn-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n      <i class=\"fa fa-ellipsis-v\" aria-hidden=\"true\"></i>\n  </button>\n  <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n    <a class=\"dropdown-item\" href=\"#\">Disable Section</a>\n    <a class=\"dropdown-item\" href=\"#\">Delete</a>\n  </div>\n</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.section.title), 1
@@ -23995,15 +24035,9 @@ var _hoisted_26 = ["value"];
 var _hoisted_27 = {
   "class": "form-group mb-0"
 };
-
-var _hoisted_28 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-    "for": "date"
-  }, "Due Date", -1
-  /* HOISTED */
-  );
-});
-
+var _hoisted_28 = {
+  "for": "date"
+};
 var _hoisted_29 = ["min"];
 var _hoisted_30 = {
   "class": "row mt-3"
@@ -24126,12 +24160,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }
   }, null, 8
   /* PROPS */
-  , _hoisted_26)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [_hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  , _hoisted_26)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_28, "Due Date : " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getDate($data.deadline, "lll")), 1
+  /* TEXT */
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.deadline = $event;
     }),
-    type: "date",
-    min: "".concat(new Date().toISOString().split('T')[0]),
+    type: "datetime-local",
+    min: "".concat(new Date()),
     "class": "form-control",
     name: "inputDate",
     id: "inputDate"
@@ -24142,9 +24178,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.hasTimeLimit = $event;
     }),
     checked: $data.hasTimeLimit == 1,
-    type: "checkbox",
-    name: "inputDate",
-    id: "timelimit"
+    type: "checkbox"
   }, null, 8
   /* PROPS */
   , _hoisted_33), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $data.hasTimeLimit]]), _hoisted_34]), $data.hasTimeLimit ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {

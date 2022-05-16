@@ -24,7 +24,7 @@
                 Create Or Repost
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" :href="`/assessments/create?subject_id=${subject1.id}&section_id=${section1.id}`">Create Assessment</a>
+                <a class="dropdown-item" :href="`/assessments/create?subject_id=${subject1.id}&section_id=${section1.id}&redirect=${subject1.id}`">Create Assessment</a>
                 <a class="dropdown-item" href="/assessments">Repost Assessment</a>
               </div>
             </div>

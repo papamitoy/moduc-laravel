@@ -48,13 +48,16 @@ class HomeController extends Controller
         }
         $grades = Grade::where("subject_id",$subject->id)->get();
         $grades->load(["subject","student"]);
-        return view("pages.subject", compact('assessments','subject', 'adviser', 'students', "moduleSection","grades"));
+        $feeds = $subject->feeds()->orderBy("id","desc")->get();
+
+        return view("pages.subject", compact('feeds','assessments','subject', 'adviser', 'students', "moduleSection","grades"));
     }
     public function updateAssessment(Request $request, Subject $subject, ModuleSection $section)
     {
         $create =  $request->query("u");
         if ($create) {
-            $assessment = auth()->user()->subjects("id",$subject->id)->first()->assessments()->where("id",$create)->first();
+            $assessment = auth()->user()->subjects()->where("id",$subject->id)->first()->assessments()->where("id",$create)->first();
+
             return view("pages.updateassesment", compact('subject', "section",'assessment'));
         }
         return abort(404);

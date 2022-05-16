@@ -214,7 +214,12 @@
             </div>
 
           </div>
-          <button type="submit" class="btn btn-primary" @click="save()">Save</button>
+          <button type="submit" class="btn btn-primary" @click="save()">
+            <div class="spinner-border text-sm" role="status" v-if="saving">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <span v-else>Save</span>
+          </button>
         </div>
       </div>
 
@@ -279,6 +284,7 @@ export default {
       shuffle: false,
       published: false,
       examType: "prelim",
+      saving: false,
     };
   },
   methods: {
@@ -290,13 +296,13 @@ export default {
         }
         return question;
       });
-      //   this.saveAssessment();
+      this.saveAssessment(false);
     },
     removeQuestion(pquestion) {
       this.questions = this.questions.filter((question) => {
         return question.id != pquestion.id;
       });
-      //   this.saveAssessment();
+      this.saveAssessment(false);
     },
     submitEssay() {
       this.questionE = {
@@ -307,7 +313,7 @@ export default {
       this.questions.push(this.questionE);
       this.questionE = { points: 2 };
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     submitMultipleChoice() {
       this.questionMC = {
@@ -320,7 +326,7 @@ export default {
       this.choices = [];
       this.setChoice = {};
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     submitShortAnswer() {
       this.questionSA = {
@@ -331,7 +337,7 @@ export default {
       this.questions.push(this.questionSA);
       this.questionSA = { points: 2 };
       console.log(this.questions);
-      this.saveAssessment();
+      this.saveAssessment(false);
     },
     addChoice() {
       if (this.choices.find((choice) => choice.choice == this.setChoice.choice))
@@ -346,9 +352,14 @@ export default {
     },
 
     save() {
-      this.saveAssessment();
+      this.saveAssessment(true);
     },
-    saveAssessment() {
+    saveAssessment(isReroute = true) {
+      if (this.saving) {
+        return;
+      }
+
+      this.saving = true;
       let that = this;
       var url = new URL(location.href);
       var subid = url.searchParams.get("subject_id");
@@ -370,20 +381,23 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.data.success) {
-            this.$Swal.fire("Success", "Saved successfully", "success");
             var url = new URL(location.href);
             var redirect = url.searchParams.get("redirect");
             console.log(redirect);
-            if (redirect) {
+            if (isReroute) {
+              this.$Swal.fire("Success", "Saved successfully", "success");
+            }
+            if (redirect && isReroute) {
               return (location.href = "/subject/" + redirect);
             }
             that.selectedId = res.data.data.id;
-            if (res.data.reload) {
-              var url = new URL(location.href);
-              url.searchParams.set("id", res.data.data.id);
-              location.href = url;
-            }
+
+            var url = new URL(location.href);
+            url.searchParams.set("id", res.data.data.id);
+            //   location.href = url;
+            window.history.pushState({ path: url }, "", url);
           }
+          this.saving = false;
         })
         .catch((err) => {
           console.log(err);
@@ -392,6 +406,7 @@ export default {
             .then(() => {
               location.reload();
             });
+          this.saving = false;
           return;
         });
     },

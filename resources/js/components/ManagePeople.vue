@@ -59,7 +59,7 @@
             {{ student.student.email }}</p>
         </td>
         <td>
-          <button class="btn btn-danger" @click="removeStudent(student)">remove</button>
+          <button v-if="is_adviser" class="btn btn-danger" @click="removeStudent(student)">remove</button>
         </td>
       </tr>
     </tbody>
@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  props: ["students", "adviser"],
+  props: ["students", "adviser", "is_adviser"],
   data: () => ({
     studentList: [],
   }),

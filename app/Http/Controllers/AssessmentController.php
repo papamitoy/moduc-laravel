@@ -12,7 +12,7 @@ class AssessmentController extends Controller
     public function assessmentList(){
         $user = Auth::user()->load(['mainassessments','subjects']);
         $subjects = $user->subjects->load(['assessments.response']);
-        $mainassessments = $user->mainassessments;
+        $mainassessments = $user->mainassessments()->orderBy("id","desc")->get();
         return view("pages.myassessments",compact('mainassessments','subjects'));
     }
     public function createAssessment(Request $request)
@@ -53,8 +53,11 @@ class AssessmentController extends Controller
             $moduleSection = $subject->moduleSection()->where("id",$request->section_id)->first();
 
             if(!empty($subject) && !empty($moduleSection)){
-                    $subject->assessments()->create([
-                        'module_section_id' => $moduleSection->id,
+                    //check if exist
+
+                    $subject->assessments()->updateOrCreate(
+                        [ 'module_section_id' => $moduleSection->id,"main_assessment_id" => $newAssessment->id]
+                        ,[
                         'user_id' => $subject->user_id,
                         'title' => $newAssessment->title,
                         'description' => $newAssessment->description,
@@ -64,8 +67,9 @@ class AssessmentController extends Controller
                         "published" => 0,
                         "shuffle" => $newAssessment->shuffle,
                         "exam_type" => $newAssessment->exam_type,
-                        "main_assessment_id" => $newAssessment->id
+
                     ]);
+
             }
         }
 
@@ -114,9 +118,13 @@ class AssessmentController extends Controller
     }
 
     public function updateAssessment(Request $request){
-        $mainassessment = auth()->user()->mainassessments()->where("id",$request->query("id"))->first();
-        if(empty($mainassessment)) return abort(404);
-        return view("pages.updatemainassessment",compact("mainassessment"));
+        $id = $request->query("id");
+        if(!empty($id)){
+            $mainassessment = auth()->user()->mainassessments()->where("id",$id)->first();
+            if(empty($mainassessment)) return abort(404);
+            return view("pages.updatemainassessment",compact("mainassessment"));
+        }
+        return abort(404);
     }
     public function getAssessment(Request $request)
     {
