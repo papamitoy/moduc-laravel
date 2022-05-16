@@ -65,7 +65,7 @@
             <input readonly :value="description" type="text" class="form-control" id="inputAddress" style="font-size: 15px;">
           </div>
           <div class="form-group mb-0">
-            <label for="date">Due Date : {{getDate(deadline,"lll")}}</label>
+            <label for="date">Due Date : {{ deadline ? getDate(deadline,"lll") : "No Deadline"}}</label>
             <input v-model="deadline" type="datetime-local" :min="`${new Date()}`" class=" form-control" name="inputDate" id="inputDate">
           </div>
           <div class="row mt-3">
