@@ -5,7 +5,7 @@
     <!-- Brand Box -->
     <div class="col-sm-6 brand" style="z-index:10">
 
-      <img style=" width: 100%;" src="img/banner log in.jpg">
+      <img style=" width: 100%;" src="img/banner log in 2.jpg">
     </div>
     <!-- Form Box -->
     <div class="col-sm-6 form">
